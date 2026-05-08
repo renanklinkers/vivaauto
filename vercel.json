@@ -1,13 +1,11 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/api/fipe", "destination": "/api/fipe.js" }
-  ],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" }
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" }
       ]
     }
   ]
