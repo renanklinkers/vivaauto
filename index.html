@@ -1395,52 +1395,27 @@ async function buscarPrecoFIPE(marca, modelo, ano) {
   if (!brandCode) return null;
 
   try {
-    // 1. Buscar modelos da marca
-    const modRes = await fetch(`${FIPE_API}?action=models&brandCode=${brandCode}`);
-    if (!modRes.ok) return null;
-    const modData = await modRes.json();
-    const models = modData.models || modData;
-
-    // 2. Encontrar o modelo por nome (match aproximado)
-    const modeloNorm = modelo.toUpperCase().replace(/[^A-Z0-9 ]/g, '');
-    const found = models.find(m => {
-      const name = (m.name || m.nome || '').toUpperCase().replace(/[^A-Z0-9 ]/g, '');
-      return name.includes(modeloNorm) || modeloNorm.includes(name.split(' ')[0]);
+    // Usar o endpoint search que faz o match automático por nome
+    const params = new URLSearchParams({
+      action: 'search',
+      brandCode,
+      modelName: modelo,
+      year: ano,
     });
-    if (!found) return null;
 
-    const modelCode = found.code || found.codigo;
+    const res = await fetch(`${FIPE_API}?${params}`);
+    if (!res.ok) return null;
 
-    // 3. Buscar anos disponíveis
-    const yearsRes = await fetch(`${FIPE_API}?action=years&brandCode=${brandCode}&modelCode=${modelCode}`);
-    if (!yearsRes.ok) return null;
-    const years = await yearsRes.json();
+    const data = await res.json();
+    const price = data.priceNumber;
 
-    // 4. Encontrar o ano correspondente (formato FIPE: "2023-1" = gasolina 2023)
-    const yearEntry = years.find(y => {
-      const yearStr = String(y.code || y.codigo || '');
-      return yearStr.startsWith(String(ano));
-    }) || years[0]; // fallback para mais recente
-
-    if (!yearEntry) return null;
-
-    // 5. Buscar preço
-    const priceRes = await fetch(`${FIPE_API}?action=price&brandCode=${brandCode}&modelCode=${modelCode}&year=${yearEntry.code || yearEntry.codigo}`);
-    if (!priceRes.ok) return null;
-    const priceData = await priceRes.json();
-
-    // Converter "R$ 192.861,00" → 192861
-    const priceStr = priceData.price || priceData.valor || '';
-    const priceNum = parseFloat(priceStr.replace('R$','').replace(/\./g,'').replace(',','.').trim());
-
-    if (!isNaN(priceNum) && priceNum > 0) {
-      fipeCache[cacheKey] = priceNum;
-      return priceNum;
+    if (price && price > 0) {
+      fipeCache[cacheKey] = price;
+      return price;
     }
     return null;
 
   } catch (err) {
-    // Falha silenciosa — mantém preço da base
     return null;
   }
 }
