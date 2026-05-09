@@ -499,12 +499,21 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
 
       <div class="field-row">
         <div class="field">
-          <label class="field-label">Marca que não considera <span>(opcional)</span></label>
-          <input class="field-input" id="f-marca-nao" placeholder="Ex: Chery, JAC">
+          <label class="field-label">Marca que não considera <span>(opcional — separe por vírgula)</span></label>
+          <input class="field-input" id="f-marca-nao" placeholder="Ex: Chery, JAC, BYD">
         </div>
         <div class="field">
           <label class="field-label">Marca preferida <span>(opcional)</span></label>
           <input class="field-input" id="f-marca-sim" placeholder="Ex: Toyota, VW">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Considera comprar marca chinesa? *</label>
+        <div class="options-grid cols3" id="grp-chinesa">
+          <button class="opt-btn check-style" data-val="sim" onclick="selectOpt(this,'grp-chinesa')">✅ Sim, considero</button>
+          <button class="opt-btn check-style" data-val="custo_beneficio" onclick="selectOpt(this,'grp-chinesa')">💰 Se tiver bom custo-benefício</button>
+          <button class="opt-btn check-style" data-val="nao" onclick="selectOpt(this,'grp-chinesa')">❌ Prefiro evitar</button>
         </div>
       </div>
 
@@ -804,6 +813,20 @@ function scoreCard(car, params) {
   // JAC: pós-venda fraco e escassez de peças — penalizar para não ser recomendada como opção principal
   if (car.marca === 'JAC') score -= 25;
 
+  // Bônus marca preferida
+  if (params.marcaSim && params.marcaSim.trim()) {
+    const preferidas = params.marcaSim.split(',').map(m => m.trim().toLowerCase()).filter(Boolean);
+    if (preferidas.some(m => car.marca.toLowerCase().includes(m))) score += 15;
+  }
+
+  // Bônus custo-benefício chinesas (quando aceita se fizer sentido)
+  const MARCAS_CHINESAS_SCORE = ['BYD','CAOA CHERY','GWM','MG','LEAPMOTOR','GAC','GEELY','OMODA','JAECOO','ZEEKR'];
+  if (params.chinesa === 'custo_beneficio' && MARCAS_CHINESAS_SCORE.includes(car.marca)) {
+    // Bônus apenas se tiver bom TCO — a função pontuarTCO já captura isso no score base
+    const tcoScore = pontuarTCO(car, params);
+    if (tcoScore >= 70) score += 8; // só bonifica se TCO for bom
+  }
+
   return Math.round(Math.max(0, score));
 }
 
@@ -850,6 +873,7 @@ function nextStep(from) {
   if (from === 3) {
     if (!getSelected('grp-cambio')) { alert('Selecione sua preferência de câmbio.'); return; }
     if (!getSelected('grp-propulsao')) { alert('Selecione sua preferência de motorização.'); return; }
+    if (!getSelected('grp-chinesa')) { alert('Informe sua preferência sobre marcas chinesas.'); return; }
   }
   goToStep(from + 1);
 }
@@ -990,6 +1014,7 @@ function verRecomendacao() {
     cidade: document.getElementById('f-cidade').value,
     marcaNao: document.getElementById('f-marca-nao').value,
     marcaSim: document.getElementById('f-marca-sim').value,
+    chinesa: getSelected('grp-chinesa') || 'sim',
   };
   lastParams = params;
 
@@ -1005,8 +1030,14 @@ function verRecomendacao() {
       const carroceria = car.carroceria || 'SUV';
       if (!params.tipo.includes(carroceria)) return false;
     }
-    // Marca excluída
-    if (params.marcaNao && car.marca.toLowerCase().includes(params.marcaNao.toLowerCase())) return false;
+    // Marca excluída (suporta múltiplas marcas separadas por vírgula)
+    if (params.marcaNao && params.marcaNao.trim()) {
+      const excluidas = params.marcaNao.split(',').map(m => m.trim().toLowerCase()).filter(Boolean);
+      if (excluidas.some(m => car.marca.toLowerCase().includes(m))) return false;
+    }
+    // Marcas chinesas
+    const MARCAS_CHINESAS = ['BYD','CAOA CHERY','GWM','JAC','MG','LEAPMOTOR','GAC','GEELY','OMODA','JAECOO','ZEEKR','GREAT WALL'];
+    if (params.chinesa === 'nao' && MARCAS_CHINESAS.includes(car.marca)) return false;
     // Viagem frequente → porta-malas mínimo
     const viajaFreq = params.viagem === 'semana' || params.viagem === 'mes';
     if (viajaFreq && car.porta_malas && car.porta_malas < 400) return false;
