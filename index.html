@@ -382,6 +382,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
     <div class="step-card" id="step-1">
       <div class="step-title">Dados básicos</div>
       <div class="step-desc">Precisamos de algumas informações para personalizar sua recomendação.</div>
+
       <div class="field-row">
         <div class="field"><label class="field-label">Nome *</label><input class="field-input" id="f-nome" placeholder="Seu nome completo"></div>
         <div class="field"><label class="field-label">E-mail *</label><input class="field-input" id="f-email" type="email" placeholder="seu@email.com"></div>
@@ -390,6 +391,24 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
         <div class="field"><label class="field-label">WhatsApp *</label><input class="field-input" id="f-whats" placeholder="(11) 99999-9999"></div>
         <div class="field"><label class="field-label">Cidade/Estado *</label><input class="field-input" id="f-cidade" placeholder="Ex: São Paulo/SP"></div>
       </div>
+      <div class="field">
+        <label class="field-label">Você busca carro zero km ou seminovo? *</label>
+        <div class="options-grid cols3" id="grp-zero">
+          <button class="opt-btn check-style" data-val="zero" onclick="selectOpt(this,'grp-zero')">🆕 Zero km</button>
+          <button class="opt-btn check-style" data-val="seminovo" onclick="selectOpt(this,'grp-zero')">🔄 Seminovo (2022–2024)</button>
+          <button class="opt-btn check-style" data-val="ambos" onclick="selectOpt(this,'grp-zero')">🔍 Tanto faz</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Perfil de marca desejado? *</label>
+        <div class="options-grid cols3" id="grp-premium">
+          <button class="opt-btn check-style" data-val="popular" onclick="selectOpt(this,'grp-premium')">💰 Popular / custo-benefício</button>
+          <button class="opt-btn check-style" data-val="premium" onclick="selectOpt(this,'grp-premium')">⭐ Premium / luxo</button>
+          <button class="opt-btn check-style" data-val="ambos" onclick="selectOpt(this,'grp-premium')">🔍 Sem preferência</button>
+        </div>
+      </div>
+
       <div class="step-nav">
         <button class="btn-back" onclick="showPage('home')">← Voltar</button>
         <button class="btn-next" onclick="nextStep(1)">Próximo →</button>
@@ -666,11 +685,14 @@ const PERFIL_PESOS = {
 };
 
 function detectarPerfil(params) {
-  const { uso, trabalho, viagem, pessoas, carac } = params;
+  const { uso, trabalho, viagem, pessoas, carac, perfilMarca } = params;
   const viajaFreq = viagem === 'semana' || viagem === 'mes';
   const familiaNumerosa = pessoas === '5' || pessoas === '6';
   const querConforto = (carac||[]).includes('conforto') || (carac||[]).includes('desempenho');
   const querEconomia = (carac||[]).includes('custo_mensal') || (carac||[]).includes('consumo');
+
+  // Premium explícito → perfil conforto/status independente dos outros filtros
+  if (perfilMarca === 'premium') return 'conforto_status';
 
   // Trabalho/app tem prioridade máxima (TCO é crítico)
   if (trabalho === 'sim') return 'trabalho_app';
@@ -813,6 +835,10 @@ function scoreCard(car, params) {
   // JAC: pós-venda fraco e escassez de peças — penalizar para não ser recomendada como opção principal
   if (car.marca === 'JAC') score -= 25;
 
+  // Bônus premium — quando usuário escolheu perfil premium, bonifica marcas premium no score
+  const IS_PREMIUM = ['BMW','AUDI','MERCEDES-BENZ','PORSCHE','JAGUAR','LEXUS','MASERATI','LAMBORGHINI','VOLVO'].includes(car.marca);
+  if (params.perfilMarca === 'premium' && IS_PREMIUM) score += 12;
+
   // Bônus marca preferida
   if (params.marcaSim && params.marcaSim.trim()) {
     const preferidas = params.marcaSim.split(',').map(m => m.trim().toLowerCase()).filter(Boolean);
@@ -863,6 +889,8 @@ function nextStep(from) {
     if (!document.getElementById('f-nome').value.trim()) { alert('Por favor, informe seu nome.'); return; }
     if (!document.getElementById('f-email').value.trim()) { alert('Por favor, informe seu e-mail.'); return; }
     if (!document.getElementById('f-whats').value.trim()) { alert('Por favor, informe seu WhatsApp.'); return; }
+    if (!getSelected('grp-zero')) { alert('Informe se busca carro zero km ou seminovo.'); return; }
+    if (!getSelected('grp-premium')) { alert('Informe seu perfil de marca desejado.'); return; }
   }
   if (from === 2) {
     if (!getSelected('grp-uso')) { alert('Selecione o uso principal do carro.'); return; }
@@ -1015,6 +1043,9 @@ function verRecomendacao() {
     marcaNao: document.getElementById('f-marca-nao').value,
     marcaSim: document.getElementById('f-marca-sim').value,
     chinesa: getSelected('grp-chinesa') || 'sim',
+    zerouUsado: getSelected('grp-zero') || 'ambos',
+    perfilMarca: getSelected('grp-premium') || 'ambos',
+    premium: getSelected('grp-premium') || 'ambos',
   };
   lastParams = params;
 
@@ -1030,6 +1061,9 @@ function verRecomendacao() {
       const carroceria = car.carroceria || 'SUV';
       if (!params.tipo.includes(carroceria)) return false;
     }
+    // Constantes de marcas (definidas uma vez)
+    const MARCAS_PREMIUM_LIST = ['BMW','AUDI','MERCEDES-BENZ','PORSCHE','JAGUAR','LEXUS','MASERATI','LAMBORGHINI','VOLVO'];
+
     // Marca excluída (suporta múltiplas marcas separadas por vírgula)
     if (params.marcaNao && params.marcaNao.trim()) {
       const excluidas = params.marcaNao.split(',').map(m => m.trim().toLowerCase()).filter(Boolean);
@@ -1038,19 +1072,14 @@ function verRecomendacao() {
     // Marcas chinesas
     const MARCAS_CHINESAS = ['BYD','CAOA CHERY','GWM','JAC','MG','LEAPMOTOR','GAC','GEELY','OMODA','JAECOO','ZEEKR','GREAT WALL'];
     if (params.chinesa === 'nao' && MARCAS_CHINESAS.includes(car.marca)) return false;
-    // Viagem frequente → porta-malas mínimo
-    const viajaFreq = params.viagem === 'semana' || params.viagem === 'mes';
-    if (viajaFreq && car.porta_malas && car.porta_malas < 400) return false;
-    // Passageiros → filtrar por número de lugares real
-    if (params.pessoas === '6') {
-      // Mais de 5 pessoas: exige carro com 7 lugares
-      if ((car.lugares || 5) < 7) return false;
-    } else if (params.pessoas === '5') {
-      // Até 5 pessoas: exige pelo menos 5 lugares (exclui 4 lugares)
-      if ((car.lugares || 5) < 5) return false;
-    } else if (params.pessoas === '1' || params.pessoas === '3') {
-      // 1-3 pessoas: qualquer carro serve, mas penalizar 4 lugares apenas no score
-    }
+
+    // Zero km vs seminovo — filtrar por ano
+    if (params.zerouUsado === 'zero' && car.ano < 2025) return false;
+    if (params.zerouUsado === 'seminovo' && car.ano >= 2025) return false;
+
+    // Perfil de marca premium vs popular
+    if (params.perfilMarca === 'premium' && !MARCAS_PREMIUM_LIST.includes(car.marca)) return false;
+    if (params.perfilMarca === 'popular' && MARCAS_PREMIUM_LIST.includes(car.marca)) return false;
     return true;
   });
 
@@ -1177,16 +1206,17 @@ function gerarJustificativa(car, params, rank) {
 
   // Razão principal baseada no rank e perfil
   if (rank === 0) {
+    const zeroLabel = params.zerouUsado === 'zero' ? ' zero km' : params.zerouUsado === 'seminovo' ? ' seminovo' : '';
     if (perfil === 'trabalho_app') {
       partes.push(`Menor custo operacional da lista — ideal para quem roda muito no trabalho`);
     } else if (perfil === 'familia_misto') {
-      partes.push(`Melhor equilíbrio entre espaço${lugares >= 7 ? ` (${lugares} lugares)` : ''} e custo total`);
+      partes.push(`Melhor equilíbrio entre espaço${lugares >= 7 ? ` (${lugares} lugares)` : ''} e custo total${zeroLabel}`);
     } else if (perfil === 'estrada_freq') {
-      partes.push(`Melhor combinação de conforto em viagem e eficiência no consumo`);
+      partes.push(`Melhor combinação de conforto em viagem e eficiência no consumo${zeroLabel}`);
     } else if (perfil === 'conforto_status') {
-      partes.push(`Melhor relação entre equipamentos, conforto e custo de propriedade`);
+      partes.push(`Melhor relação entre equipamentos, conforto e custo de propriedade${zeroLabel}`);
     } else {
-      partes.push(`Melhor custo-benefício geral para o seu perfil de uso urbano`);
+      partes.push(`Melhor custo-benefício geral para o seu perfil de uso urbano${zeroLabel}`);
     }
   }
 
