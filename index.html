@@ -1448,6 +1448,8 @@ function buildCard(car, i, params) {
 
 // ══ MODAL ESPECIALISTA ══
 function abrirModal() {
+  // Registrar que usuário solicitou especialista
+  marcarEspecialista();
   const body = document.getElementById('modal-body');
   const top3 = lastResults.slice(0,3).map((c,i)=>`${i+1}. ${c.marca} ${c.modelo} ${c.versao||''} (${c.ano||''}) — ${(c.fipe_price||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})} · ~${c._mensal ? c._mensal.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})+'/mês' : '–'}`).join('\n');
   const filtros = lastParams.orcamento
@@ -1635,6 +1637,116 @@ async function atualizarPrecosFIPE(results) {
       }
     }
   }
+}
+
+// ══════════════════════════════════════
+// AIRTABLE — GRAVAÇÃO DE RECOMENDAÇÕES
+// ══════════════════════════════════════
+const AIRTABLE_BASE    = 'app8yKhlEj66udFhR';
+const AIRTABLE_TABLE   = 'tblnnzf3ZXpHUUlxF';
+const AIRTABLE_TOKEN   = 'pat5bSC0KBb7qVMnx.80c036a3f5a047f6205a53aeafb318fa94e25b96e2ced05f8caeda2448138603';
+const AIRTABLE_URL     = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${AIRTABLE_TABLE}`;
+
+function formatCarro(car) {
+  if (!car) return '';
+  return `${car.marca} ${car.modelo} ${car.versao ? car.versao.substring(0,20) : ''} ${car.ano || ''}`.trim();
+}
+
+async function gravarRecomendacao(results, params) {
+  if (!results || results.length === 0) return;
+
+  const perfil = detectarPerfil(params);
+
+  const rec1 = results[0] || null;
+  const rec2 = results[1] || null;
+  const rec3 = results[2] || null;
+
+  const campos = {
+    'Data':                new Date().toISOString(),
+    'Perfil Detectado':    perfil,
+    'Cidade':              params.cidade || '',
+    'Orçamento':           params.orcamento < 1e12 ? params.orcamento : null,
+    'Orç Mensal':          params.orcMensal || null,
+    'km/mês':              params.kmMes || null,
+    'Uso':                 params.uso || '',
+    'Pessoas':             params.pessoas || '',
+    'Viagem':              params.viagem || '',
+    'Trabalho':            params.trabalho || '',
+    'Tipo':                (params.tipo || []).join(', ') || 'todos',
+    'Câmbio':              params.cambio || '',
+    'Propulsão':           params.propulsaoIntencao || '',
+    'Características':     (params.carac || []).join(', '),
+    'Aceita Chinesa':      params.chinesa || '',
+    'Zero ou Usado':       params.zerouUsado || '',
+    'Perfil Marca':        params.perfilMarca || '',
+    '4x4':                 params.tracao4x4 || '',
+    'Marca Excluída':      params.marcaNao || '',
+    'Marca Preferida':     params.marcaSim || '',
+    'Candidatos Filtrados': results.length,
+    'Rec 1 — Carro':       formatCarro(rec1),
+    'Rec 1 — Preço':       rec1 ? (rec1.fipe_price || null) : null,
+    'Rec 1 — Custo Mensal':rec1 ? (rec1._mensal || null) : null,
+    'Rec 1 — Score':       rec1 ? (rec1._score || null) : null,
+    'Rec 2 — Carro':       formatCarro(rec2),
+    'Rec 2 — Preço':       rec2 ? (rec2.fipe_price || null) : null,
+    'Rec 3 — Carro':       formatCarro(rec3),
+    'Rec 3 — Preço':       rec3 ? (rec3.fipe_price || null) : null,
+    'Solicitou Especialista': false,
+  };
+
+  // Remove campos nulos para não gerar erro na API
+  const camposLimpos = {};
+  for (const [k, v] of Object.entries(campos)) {
+    if (v !== null && v !== undefined && v !== '') camposLimpos[k] = v;
+  }
+
+  try {
+    await fetch(AIRTABLE_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ fields: camposLimpos }),
+    });
+  } catch (err) {
+    // Falha silenciosa — não interrompe a experiência do usuário
+    console.warn('Airtable log failed:', err.message);
+  }
+}
+
+// Marca "Solicitou Especialista" como true quando abre o modal
+async function marcarEspecialista() {
+  // Atualiza o registro mais recente com solicitou=true
+  // (simplificado: apenas grava novo registro com flag true)
+  const params = lastParams || {};
+  const results = lastResults || [];
+  if (!results.length) return;
+
+  const rec1 = results[0];
+  const campos = {
+    'Data':                 new Date().toISOString(),
+    'Perfil Detectado':     detectarPerfil(params),
+    'Cidade':               params.cidade || '',
+    'Rec 1 — Carro':        formatCarro(rec1),
+    'Rec 1 — Preço':        rec1.fipe_price || null,
+    'Solicitou Especialista': true,
+    'Observações':          'Veio do botão Falar com Especialista',
+  };
+  const camposLimpos = {};
+  for (const [k, v] of Object.entries(campos)) {
+    if (v !== null && v !== undefined && v !== '') camposLimpos[k] = v;
+  }
+  try {
+    await fetch(AIRTABLE_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ fields: camposLimpos }),
+    });
+  } catch(e) {}
 }
 </script>
 </body>
