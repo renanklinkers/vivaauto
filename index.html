@@ -1218,6 +1218,15 @@ function verRecomendacao() {
       if (custoEst > params.orcMensal * 1.5) return false;
     }
 
+    // Filtro de passageiros — por número real de lugares
+    const _lugares = car.lugares || 5;
+    if (params.pessoas === '6' && _lugares < 7) return false;  // mais de 5 → exige 7 lugares
+    if (params.pessoas === '5' && _lugares < 5) return false;  // até 5 → exige 5 lugares (excl. 4-lugares)
+
+    // Viagem frequente → porta-malas mínimo
+    const _viajaFreqPM = params.viagem === 'semana' || params.viagem === 'mes';
+    if (_viajaFreqPM && car.porta_malas && car.porta_malas < 400) return false;
+
     return true;
   });
 
