@@ -1182,7 +1182,6 @@ function verRecomendacao() {
       if (excluidas.some(m => car.marca.toLowerCase().includes(m))) return false;
     }
     // Marcas chinesas
-    const MARCAS_CHINESAS = ['BYD','CAOA CHERY','GWM','JAC','MG','LEAPMOTOR','GAC','GEELY','OMODA','JAECOO','ZEEKR','GREAT WALL'];
     if (params.chinesa === 'nao' && MARCAS_CHINESAS.includes(car.marca)) return false;
 
     // Zero km vs seminovo — filtrar por ano
@@ -1200,9 +1199,9 @@ function verRecomendacao() {
 
     // Nicho — penalizar fortemente (veremos no score), mas não remover completamente
     // Elétrico 100% para viajante frequente em estrada — remover
-    const viajaFreq = params.viagem === 'semana' || params.viagem === 'mes';
-    const usoEstrada = params.uso === 'estrada' || params.uso === 'misto';
-    if (car.propulsao === 'Elétrico' && viajaFreq && usoEstrada && params.propulsaoIntencao !== 'sim_elet') {
+    const _viajaFreqF = params.viagem === 'semana' || params.viagem === 'mes';
+    const _usoEstradaF = params.uso === 'estrada' || params.uso === 'misto';
+    if (car.propulsao === 'Elétrico' && _viajaFreqF && _usoEstradaF && params.propulsaoIntencao !== 'sim_elet') {
       return false;
     }
 
