@@ -1656,52 +1656,54 @@ async function gravarRecomendacao(results, params) {
   if (!results || results.length === 0) return;
 
   const perfil = detectarPerfil(params);
-
   const rec1 = results[0] || null;
   const rec2 = results[1] || null;
   const rec3 = results[2] || null;
 
+  // Campos simples — compatíveis com qualquer configuração do Airtable
+  // O Airtable aceita campos que não existem na tabela e os ignora silenciosamente
+  // Mas campos de texto sempre funcionam
   const campos = {
-    'Data':                new Date().toISOString(),
-    'Perfil Detectado':    perfil,
-    'Cidade':              params.cidade || '',
-    'Orçamento':           params.orcamento < 1e12 ? params.orcamento : null,
-    'Orç Mensal':          params.orcMensal || null,
-    'km/mês':              params.kmMes || null,
-    'Uso':                 params.uso || '',
-    'Pessoas':             params.pessoas || '',
-    'Viagem':              params.viagem || '',
-    'Trabalho':            params.trabalho || '',
-    'Tipo':                (params.tipo || []).join(', ') || 'todos',
-    'Câmbio':              params.cambio || '',
-    'Propulsão':           params.propulsaoIntencao || '',
-    'Características':     (params.carac || []).join(', '),
-    'Aceita Chinesa':      params.chinesa || '',
-    'Zero ou Usado':       params.zerouUsado || '',
-    'Perfil Marca':        params.perfilMarca || '',
-    '4x4':                 params.tracao4x4 || '',
-    'Marca Excluída':      params.marcaNao || '',
-    'Marca Preferida':     params.marcaSim || '',
-    'Candidatos Filtrados': results.length,
-    'Rec 1 — Carro':       formatCarro(rec1),
-    'Rec 1 — Preço':       rec1 ? (rec1.fipe_price || null) : null,
-    'Rec 1 — Custo Mensal':rec1 ? (rec1._mensal || null) : null,
-    'Rec 1 — Score':       rec1 ? (rec1._score || null) : null,
-    'Rec 2 — Carro':       formatCarro(rec2),
-    'Rec 2 — Preço':       rec2 ? (rec2.fipe_price || null) : null,
-    'Rec 3 — Carro':       formatCarro(rec3),
-    'Rec 3 — Preço':       rec3 ? (rec3.fipe_price || null) : null,
-    'Solicitou Especialista': false,
+    'Nome': params.nome || '',
+    'Data': new Date().toLocaleString('pt-BR'),
+    'Perfil': perfil,
+    'Cidade': params.cidade || '',
+    'Orcamento': params.orcamento < 1e12 ? `R$ ${(params.orcamento||0).toLocaleString('pt-BR')}` : '',
+    'Orc Mensal': params.orcMensal ? `R$ ${(params.orcMensal||0).toLocaleString('pt-BR')}` : '',
+    'Km Mes': String(params.kmMes || ''),
+    'Uso': params.uso || '',
+    'Pessoas': String(params.pessoas || ''),
+    'Viagem': params.viagem || '',
+    'Trabalho': params.trabalho || '',
+    'Tipo': (params.tipo || []).join(', ') || 'todos',
+    'Cambio': params.cambio || '',
+    'Propulsao': params.propulsaoIntencao || '',
+    'Carac': (params.carac || []).join(', '),
+    'Chinesa': params.chinesa || '',
+    'Zero Usado': params.zerouUsado || '',
+    'Perfil Marca': params.perfilMarca || '',
+    'Tracao 4x4': params.tracao4x4 || '',
+    'Marca Nao': params.marcaNao || '',
+    'Marca Sim': params.marcaSim || '',
+    'Rec 1': formatCarro(rec1),
+    'Rec 1 Preco': rec1 ? `R$ ${(rec1.fipe_price||0).toLocaleString('pt-BR')}` : '',
+    'Rec 1 Mensal': rec1 ? `R$ ${(rec1._mensal||0).toLocaleString('pt-BR')}` : '',
+    'Rec 1 Score': String(rec1?._score || ''),
+    'Rec 2': formatCarro(rec2),
+    'Rec 2 Preco': rec2 ? `R$ ${(rec2.fipe_price||0).toLocaleString('pt-BR')}` : '',
+    'Rec 3': formatCarro(rec3),
+    'Rec 3 Preco': rec3 ? `R$ ${(rec3.fipe_price||0).toLocaleString('pt-BR')}` : '',
+    'Especialista': 'Nao',
   };
 
-  // Remove campos nulos para não gerar erro na API
+  // Remove campos vazios
   const camposLimpos = {};
   for (const [k, v] of Object.entries(campos)) {
     if (v !== null && v !== undefined && v !== '') camposLimpos[k] = v;
   }
 
   try {
-    await fetch(AIRTABLE_URL, {
+    const res = await fetch(AIRTABLE_URL, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
@@ -1709,34 +1711,20 @@ async function gravarRecomendacao(results, params) {
       },
       body: JSON.stringify({ fields: camposLimpos }),
     });
+    if (!res.ok) {
+      const err = await res.json();
+      console.warn('Airtable error:', JSON.stringify(err));
+    }
   } catch (err) {
-    // Falha silenciosa — não interrompe a experiência do usuário
     console.warn('Airtable log failed:', err.message);
   }
 }
 
-// Marca "Solicitou Especialista" como true quando abre o modal
 async function marcarEspecialista() {
-  // Atualiza o registro mais recente com solicitou=true
-  // (simplificado: apenas grava novo registro com flag true)
   const params = lastParams || {};
   const results = lastResults || [];
   if (!results.length) return;
-
   const rec1 = results[0];
-  const campos = {
-    'Data':                 new Date().toISOString(),
-    'Perfil Detectado':     detectarPerfil(params),
-    'Cidade':               params.cidade || '',
-    'Rec 1 — Carro':        formatCarro(rec1),
-    'Rec 1 — Preço':        rec1.fipe_price || null,
-    'Solicitou Especialista': true,
-    'Observações':          'Veio do botão Falar com Especialista',
-  };
-  const camposLimpos = {};
-  for (const [k, v] of Object.entries(campos)) {
-    if (v !== null && v !== undefined && v !== '') camposLimpos[k] = v;
-  }
   try {
     await fetch(AIRTABLE_URL, {
       method: 'POST',
@@ -1744,7 +1732,15 @@ async function marcarEspecialista() {
         'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ fields: camposLimpos }),
+      body: JSON.stringify({ fields: {
+        'Nome': params.nome || '',
+        'Data': new Date().toLocaleString('pt-BR'),
+        'Perfil': detectarPerfil(params),
+        'Cidade': params.cidade || '',
+        'Rec 1': formatCarro(rec1),
+        'Rec 1 Preco': rec1.fipe_price ? `R$ ${rec1.fipe_price.toLocaleString('pt-BR')}` : '',
+        'Especialista': 'Sim',
+      }}),
     });
   } catch(e) {}
 }
