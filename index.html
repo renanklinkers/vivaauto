@@ -1653,7 +1653,7 @@ async function atualizarPrecosFIPE(results) {
 // AIRTABLE — GRAVAÇÃO DE RECOMENDAÇÕES
 // ══════════════════════════════════════
 const AIRTABLE_BASE    = 'app8yKhlEj66udFhR';
-const AIRTABLE_TABLE   = 'tblnnzf3ZXpHUUlxF';
+const AIRTABLE_TABLE   = 'Recomendacoes';
 const AIRTABLE_TOKEN   = 'patj9EGgVNK7T6liW.5d252dea70d3162029a447cada60e781293ebc2753bb5b0158db3ebb069f56ee';
 const AIRTABLE_URL     = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${AIRTABLE_TABLE}`;
 
@@ -1675,7 +1675,7 @@ async function gravarRecomendacao(results, params) {
   // Mas campos de texto sempre funcionam
   const campos = {
     'Nome': params.nome || '',
-    'Data': new Date().toLocaleString('pt-BR'),
+    'Data': new Date().toISOString().substring(0,19).replace('T',' '),
     'Perfil': perfil,
     'Cidade': params.cidade || '',
     'Orcamento': params.orcamento < 1e12 ? `R$ ${(params.orcamento||0).toLocaleString('pt-BR')}` : '',
@@ -1723,7 +1723,7 @@ async function gravarRecomendacao(results, params) {
     });
     if (!res.ok) {
       const err = await res.json();
-      console.warn('Airtable error:', JSON.stringify(err));
+      console.warn('Airtable error:', res.status, JSON.stringify(err));
     }
   } catch (err) {
     console.warn('Airtable log failed:', err.message);
@@ -1744,7 +1744,7 @@ async function marcarEspecialista() {
       },
       body: JSON.stringify({ fields: {
         'Nome': params.nome || '',
-        'Data': new Date().toLocaleString('pt-BR'),
+        'Data': new Date().toISOString().substring(0,19).replace('T',' '),
         'Perfil': detectarPerfil(params),
         'Cidade': params.cidade || '',
         'Rec 1': formatCarro(rec1),
