@@ -913,8 +913,8 @@ function scoreCard(car, params) {
   if (car.off_road && _perfilAventureiro) score += 10;
   if (car.is_diesel && _viajaFreq && _usoEstrada) score += 25;
   if (car.is_diesel && params.uso === 'estrada') score += 15;
-  if (car.is_diesel && marcaSim) {
-    const prefsDiesel = marcaSim.toLowerCase().split(',').map(m => m.trim());
+  if (car.is_diesel && params.marcaSim) {
+    const prefsDiesel = params.marcaSim.toLowerCase().split(',').map(m => m.trim());
     if (prefsDiesel.some(p => (car.marca||'').toLowerCase().includes(p))) score += 10;
   }
 
@@ -960,6 +960,8 @@ function scoreCard(car, params) {
   return Math.round(Math.max(0, score));
 }
 
+// ── Constantes globais de marcas ──
+const MARCAS_CHINESAS = ['BYD','CAOA CHERY','GWM','JAC','MG','LEAPMOTOR','GAC','GEELY','OMODA','JAECOO','ZEEKR','GREAT WALL'];
 
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
