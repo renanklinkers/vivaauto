@@ -235,6 +235,45 @@ nav{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 40
 .success-title{font-size:20px;font-weight:800;margin-bottom:8px}
 .success-text{font-size:13px;color:var(--gray-600);line-height:1.6}
 
+/* ══ PLANOS ══ */
+.planos-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:450;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
+.planos-overlay.open{opacity:1;pointer-events:all}
+.planos-box{background:white;border-radius:var(--radius-xl);max-width:900px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.25);transform:translateY(16px);transition:transform .25s}
+.planos-overlay.open .planos-box{transform:translateY(0)}
+.planos-head{padding:28px 32px 20px;border-bottom:1px solid var(--gray-100);display:flex;align-items:flex-start;justify-content:space-between}
+.planos-head h2{font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--gray-800);margin-bottom:4px}
+.planos-head p{font-size:13px;color:var(--gray-600)}
+.planos-close{background:none;border:none;cursor:pointer;font-size:24px;color:var(--gray-400);line-height:1;padding:2px}
+.planos-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px 28px 28px}
+.plano-card{border:2px solid var(--gray-200);border-radius:var(--radius-lg);padding:20px;position:relative;transition:all .2s;cursor:pointer;display:flex;flex-direction:column}
+.plano-card:hover{border-color:var(--navy);box-shadow:var(--shadow)}
+.plano-card.destaque{border-color:var(--green);background:var(--green-light)}
+.plano-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--green);color:white;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.plano-icon{font-size:28px;margin-bottom:10px}
+.plano-nome{font-size:14px;font-weight:800;color:var(--gray-800);margin-bottom:4px;letter-spacing:-.2px}
+.plano-preco{font-size:22px;font-weight:800;color:var(--navy);margin-bottom:2px;letter-spacing:-.5px}
+.plano-preco span{font-size:12px;font-weight:400;color:var(--gray-400)}
+.plano-desc{font-size:12px;color:var(--gray-600);margin-bottom:14px;line-height:1.5;flex:1}
+.plano-items{list-style:none;margin-bottom:16px;display:flex;flex-direction:column;gap:6px}
+.plano-items li{font-size:11px;color:var(--gray-700);display:flex;align-items:flex-start;gap:6px;line-height:1.4}
+.plano-items li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.btn-escolher{width:100%;border:none;border-radius:var(--radius);padding:10px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;margin-top:auto}
+.btn-escolher-green{background:var(--green);color:white}
+.btn-escolher-green:hover{background:var(--green-dark)}
+.btn-escolher-navy{background:var(--navy);color:white}
+.btn-escolher-navy:hover{background:var(--navy2)}
+.btn-escolher-outline{background:white;color:var(--navy);border:1.5px solid var(--gray-200)}
+.btn-escolher-outline:hover{border-color:var(--navy)}
+.planos-nota{padding:0 28px 24px;text-align:center;font-size:11px;color:var(--gray-400)}
+@media(max-width:700px){
+  .planos-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .planos-head{padding:20px}
+  .planos-grid{padding:16px}
+}
+@media(max-width:480px){
+  .planos-grid{grid-template-columns:1fr}
+}
+
 /* ══ FOOTER ══ */
 footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:grid;grid-template-columns:1fr auto auto;gap:60px;font-size:13px}
 .footer-brand{font-size:15px;font-weight:700;color:white;margin-bottom:6px}
@@ -275,7 +314,6 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
   <div class="nav-links">
     <span class="nav-link active" id="nav-home" onclick="showPage('home')">Início</span>
     <span class="nav-link" id="nav-wizard" onclick="showPage('wizard')">Recomendador</span>
-    <span class="nav-link" id="nav-consultoria" onclick="abrirModal()">Consultoria</span>
   </div>
   <button class="btn-nav" onclick="showPage('wizard')">Descobrir meu carro</button>
 </nav>
@@ -294,7 +332,6 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
       <p class="hero-reason">Comprar um carro no Brasil ainda é uma decisão muito emocional, pouco transparente e quase sempre baseada apenas em preço, aparência ou valor de parcela. O Viva Auto nasceu para mudar essa lógica.</p>
       <div class="hero-ctas">
         <button class="btn-primary" onclick="showPage('wizard')">Descobrir meu carro ideal →</button>
-        <button class="btn-secondary" onclick="abrirModal()">💬 Falar com um especialista</button>
       </div>
       <div class="hero-stats">
         <div><div class="hero-stat-val">6+</div><div class="hero-stat-lbl">Critérios analisados</div></div>
@@ -339,7 +376,6 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
     <p>Comece gratuitamente com nossa recomendação automática ou converse com um especialista.</p>
     <div class="cta-btns">
       <button class="btn-primary" onclick="showPage('wizard')">Descobrir meu carro ideal →</button>
-      <button class="btn-secondary" onclick="abrirModal()">💬 Quero ajuda de um especialista</button>
     </div>
   </div>
 
@@ -352,7 +388,6 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
       <h4>Navegação</h4>
       <span class="footer-link" onclick="showPage('home')">Início</span>
       <span class="footer-link" onclick="showPage('wizard')">Recomendador</span>
-      <span class="footer-link" onclick="abrirModal()">Consultoria</span>
     </div>
     <div class="footer-col">
       <h4>Contato</h4>
@@ -594,11 +629,95 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
   <div class="results-wrap" id="results-container"></div>
 </div>
 
+<!-- ══ MODAL PLANOS ══ -->
+<div class="planos-overlay" id="planos-overlay" onclick="closePlanosOverlay(event)">
+  <div class="planos-box">
+    <div class="planos-head">
+      <div>
+        <h2>Escolha seu nível de consultoria</h2>
+        <p>Um especialista com carreira construída no mercado automotivo brasileiro ao seu lado.</p>
+      </div>
+      <button class="planos-close" onclick="fecharPlanos()">×</button>
+    </div>
+
+    <div class="planos-grid">
+
+      <!-- BÁSICO -->
+      <div class="plano-card" onclick="escolherPlano('basico')">
+        <div class="plano-icon">💬</div>
+        <div class="plano-nome">Básico</div>
+        <div class="plano-preco">Grátis</div>
+        <div class="plano-desc">Tire suas dúvidas com um especialista por WhatsApp ou e-mail.</div>
+        <ul class="plano-items">
+          <li>Resposta em até 24h</li>
+          <li>Até 3 perguntas por e-mail ou WhatsApp</li>
+          <li>Validação da recomendação automática</li>
+          <li>Dicas sobre negociação e documentação</li>
+        </ul>
+        <button class="btn-escolher btn-escolher-outline">Começar grátis</button>
+      </div>
+
+      <!-- INTERMEDIÁRIO -->
+      <div class="plano-card" onclick="escolherPlano('intermediario')">
+        <div class="plano-icon">📊</div>
+        <div class="plano-nome">Intermediário</div>
+        <div class="plano-preco">R$ 197 <span>/ sessão</span></div>
+        <div class="plano-desc">Análise completa do seu perfil com recomendação personalizada e curada.</div>
+        <ul class="plano-items">
+          <li>Call de 45 min com especialista</li>
+          <li>Análise profunda de uso e perfil financeiro</li>
+          <li>Relatório com top 3 opções rankeadas</li>
+          <li>Comparativo de TCO entre os finalistas</li>
+          <li>Orientação sobre financiamento e seguro</li>
+        </ul>
+        <button class="btn-escolher btn-escolher-outline">Quero esse</button>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="plano-card destaque" onclick="escolherPlano('premium')">
+        <div class="plano-badge">⭐ Mais escolhido</div>
+        <div class="plano-icon">🔍</div>
+        <div class="plano-nome">Premium</div>
+        <div class="plano-preco">R$ 397 <span>/ sessão</span></div>
+        <div class="plano-desc">Análise completa + ajuda para buscar o carro certo na internet.</div>
+        <ul class="plano-items">
+          <li>Tudo do Intermediário</li>
+          <li>Busca ativa em plataformas (OLX, Webmotors, iCarros)</li>
+          <li>Avaliação de anúncios e alerta de preço</li>
+          <li>Identificação de riscos e pendências</li>
+          <li>Suporte até fechar o negócio</li>
+          <li>Validade: 30 dias</li>
+        </ul>
+        <button class="btn-escolher btn-escolher-green">Quero esse</button>
+      </div>
+
+      <!-- PREMIUM PLUS -->
+      <div class="plano-card" onclick="escolherPlano('premium_plus')">
+        <div class="plano-icon">🤝</div>
+        <div class="plano-nome">Premium Plus</div>
+        <div class="plano-preco">R$ 697 <span>/ sessão</span></div>
+        <div class="plano-desc">Presença física — vou junto ver e avaliar os carros com você.</div>
+        <ul class="plano-items">
+          <li>Tudo do Premium</li>
+          <li>Acompanhamento presencial na visita ao carro</li>
+          <li>Avaliação técnica no local (visual + test drive)</li>
+          <li>Negociação ao vivo com o vendedor</li>
+          <li>Checklist completo antes da compra</li>
+          <li>Região: Grande São Paulo</li>
+        </ul>
+        <button class="btn-escolher btn-escolher-navy">Quero esse</button>
+      </div>
+
+    </div>
+    <div class="planos-nota">💳 Pagamento após a confirmação do agendamento &nbsp;·&nbsp; 100% reembolsável em caso de cancelamento com 24h de antecedência</div>
+  </div>
+</div>
+
 <!-- ══ MODAL ESPECIALISTA ══ -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOverlay(event)">
   <div class="modal">
     <div class="modal-head">
-      <div><h3>Consultoria Personalizada</h3><p>Preencha o formulário e um especialista Viva Auto entrará em contato.</p></div>
+      <div><h3>Fale com um especialista</h3><p>Preencha o formulário e entraremos em contato em breve.</p></div>
       <button class="modal-close" onclick="fecharModal()">×</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
@@ -1339,8 +1458,15 @@ function renderResults(results, params) {
         <div class="expert-sub">Um entusiasta automotivo analisa seu perfil e indica o carro ideal para você.</div>
       </div>
       <button class="btn-restart" onclick="showPage('wizard')">← Refazer busca</button>
-      <button class="btn-expert" onclick="abrirModal()">💬 Falar com especialista</button>
     </div>`;
+
+  // Gravar recomendação no Airtable silenciosamente
+  gravarRecomendacao(results, params);
+
+  // Buscar preços FIPE atualizados em background
+  if (results.length > 0) {
+    setTimeout(() => atualizarPrecosFIPE(results), 500);
+  }
 }
 
 function gerarJustificativa(car, params, rank) {
@@ -1469,6 +1595,7 @@ function buildCard(car, i, params) {
 function abrirModal() {
   // Registrar que usuário solicitou especialista
   marcarEspecialista();
+  const planoLabel = '';
   const body = document.getElementById('modal-body');
   const top3 = lastResults.slice(0,3).map((c,i)=>`${i+1}. ${c.marca} ${c.modelo} ${c.versao||''} (${c.ano||''}) — ${(c.fipe_price||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})} · ~${c._mensal ? c._mensal.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})+'/mês' : '–'}`).join('\n');
   const filtros = lastParams.orcamento
@@ -1518,6 +1645,7 @@ function abrirModal() {
     </div>
     <input type="hidden" name="recomendacao" value="${encodeURIComponent(top3)}">
     <input type="hidden" name="filtros" value="${encodeURIComponent(filtros)}">
+    <input type="hidden" name="plano" value="${planoLabel}">
     <button type="submit" class="btn-submit">📩 Enviar solicitação</button>
   </form>`;
 
