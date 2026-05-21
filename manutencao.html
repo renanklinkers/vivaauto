@@ -559,7 +559,6 @@ db.auth.onAuthStateChange(async (event, session) => {
 });
 
 async function initApp() {
-  // Header
   const nome = currentUser.user_metadata?.full_name || currentUser.email;
   const foto = currentUser.user_metadata?.avatar_url || '';
   document.getElementById('header-auth').innerHTML = `
@@ -569,6 +568,16 @@ async function initApp() {
       <button class="btn-sair" onclick="logout()">Sair</button>
     </div>`;
   document.getElementById('dash-nome').textContent = nome.split(' ')[0];
+
+  // Garantir que perfil existe (caso trigger não tenha rodado no primeiro login)
+  const { data: perfilExiste } = await db.from('perfis').select('id').eq('id', currentUser.id).maybeSingle();
+  if (!perfilExiste) {
+    await db.from('perfis').insert({
+      id: currentUser.id,
+      nome: currentUser.user_metadata?.full_name || currentUser.email,
+      email: currentUser.email,
+    });
+  }
 
   // Show app
   document.getElementById('hero-login').style.display = 'none';
@@ -687,7 +696,7 @@ async function salvarVeiculo() {
     intervalo_revisao_meses: 12,
   }).select().single();
 
-  if (error) { toast('Erro ao cadastrar: ' + error.message, 'error'); return; }
+  if (error) { toast('Erro: ' + error.message, 'error'); console.error('Supabase error:', error); return; }
   toast('Veículo cadastrado com sucesso! 🚗', 'success');
   fecharModalVeiculo();
   await carregarVeiculos();
@@ -985,7 +994,7 @@ async function salvarManutencao() {
     nota_fiscal_nome: notaNome,
   });
 
-  if (error) { toast('Erro ao salvar: ' + error.message, 'error'); return; }
+  if (error) { toast('Erro: ' + error.message, 'error'); console.error('Supabase error:', error); return; }
 
   // Atualizar KM do veículo
   await db.from('veiculos').update({ km_atual: km }).eq('id', veiculoId);
