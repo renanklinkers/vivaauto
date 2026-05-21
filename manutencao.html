@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Viva Auto — Manutenção</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root {
+  --navy:    #0f1f3d;
+  --navy2:   #1a3260;
+  --green:   #22c55e;
+  --green-d: #16a34a;
+  --green-l: #f0fdf4;
+  --amber:   #f59e0b;
+  --red:     #ef4444;
+  --gray-50: #f8fafc;
+  --gray-100:#f1f5f9;
+  --gray-200:#e2e8f0;
+  --gray-400:#94a3b8;
+  --gray-600:#475569;
+  --gray-800:#1e293b;
+  --white:   #ffffff;
+  --radius:  8px;
+  --radius-lg:14px;
+  --radius-xl:20px;
+  --shadow:  0 4px 24px rgba(15,31,61,.10);
+  --shadow-lg:0 8px 40px rgba(15,31,61,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--gray-800);min-height:100vh}
+
+/* ══ HEADER ══ */
+.header{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo span{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:20px}
+.nav-link{color:rgba(255,255,255,.7);font-size:13px;font-weight:500;cursor:pointer;transition:color .15s}
+.nav-link:hover{color:var(--white)}
+.btn-login{background:var(--green);color:var(--white);border:none;border-radius:var(--radius);padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn-login:hover{background:var(--green-d)}
+.user-info{display:flex;align-items:center;gap:10px}
+.user-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid var(--green)}
+.user-name{color:rgba(255,255,255,.85);font-size:13px;font-weight:500}
+.btn-sair{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);border-radius:var(--radius);padding:6px 12px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-sair:hover{border-color:rgba(255,255,255,.5);color:var(--white)}
+
+/* ══ HERO LOGIN ══ */
+.hero-login{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:40px 24px;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%)}
+.login-card{background:var(--white);border-radius:var(--radius-xl);padding:48px 40px;max-width:440px;width:100%;box-shadow:var(--shadow-lg);text-align:center}
+.login-icon{font-size:52px;margin-bottom:16px}
+.login-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--navy);margin-bottom:8px;letter-spacing:-.5px}
+.login-sub{font-size:14px;color:var(--gray-600);margin-bottom:32px;line-height:1.6}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;border:2px solid var(--gray-200);border-radius:var(--radius-lg);padding:14px;font-size:15px;font-weight:600;color:var(--gray-800);background:var(--white);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;margin-bottom:16px}
+.btn-google:hover{border-color:var(--navy);box-shadow:var(--shadow)}
+.btn-google img{width:22px;height:22px}
+.login-features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:28px;text-align:left}
+.login-feat{background:var(--gray-50);border-radius:var(--radius);padding:14px;border:1px solid var(--gray-100)}
+.login-feat-icon{font-size:20px;margin-bottom:6px}
+.login-feat-title{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:2px}
+.login-feat-desc{font-size:11px;color:var(--gray-600);line-height:1.4}
+
+/* ══ APP MAIN ══ */
+.app{display:none;min-height:calc(100vh - 60px)}
+.sidebar{width:240px;background:var(--white);border-right:1px solid var(--gray-200);padding:24px 0;position:fixed;top:60px;bottom:0;overflow-y:auto}
+.sidebar-section{padding:8px 16px;margin-bottom:4px}
+.sidebar-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);padding:0 8px;margin-bottom:8px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);cursor:pointer;transition:all .15s;color:var(--gray-600);font-size:13px;font-weight:500;border:none;background:none;width:100%;text-align:left}
+.sidebar-item:hover{background:var(--gray-50);color:var(--gray-800)}
+.sidebar-item.active{background:var(--green-l);color:var(--green-d);font-weight:600}
+.sidebar-item .icon{font-size:16px;width:20px;text-align:center}
+.sidebar-badge{margin-left:auto;background:var(--amber);color:var(--white);font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px}
+.sidebar-veiculo{padding:12px 16px;border-top:1px solid var(--gray-100);margin-top:8px}
+.sidebar-veiculo-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400);margin-bottom:8px}
+.veiculo-chip{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius);padding:8px 10px;cursor:pointer;transition:all .15s;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.veiculo-chip:hover,.veiculo-chip.active{border-color:var(--green);background:var(--green-l)}
+.veiculo-chip-nome{font-size:12px;font-weight:600;color:var(--gray-800)}
+.veiculo-chip-sub{font-size:11px;color:var(--gray-400)}
+.btn-add-veiculo{display:flex;align-items:center;gap:6px;width:100%;padding:8px 10px;border:1.5px dashed var(--gray-300);border-radius:var(--radius);background:none;color:var(--gray-400);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-add-veiculo:hover{border-color:var(--green);color:var(--green-d)}
+
+.main{margin-left:240px;padding:32px;min-height:calc(100vh - 60px)}
+
+/* ══ PAGES ══ */
+.page{display:none}
+.page.active{display:block}
+
+/* ══ DASHBOARD ══ */
+.page-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--navy);letter-spacing:-.5px;margin-bottom:4px}
+.page-sub{font-size:14px;color:var(--gray-400);margin-bottom:28px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:var(--white);border-radius:var(--radius-lg);padding:20px;border:1px solid var(--gray-100)}
+.stat-icon{font-size:24px;margin-bottom:8px}
+.stat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--navy);letter-spacing:-.5px}
+.stat-label{font-size:12px;color:var(--gray-400);margin-top:2px}
+.stat-card.alert{border-color:var(--amber);background:#fffbeb}
+.stat-card.alert .stat-val{color:var(--amber)}
+
+.section-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.btn-sm{background:var(--navy);color:var(--white);border:none;border-radius:var(--radius);padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn-sm:hover{background:var(--navy2)}
+.btn-sm.green{background:var(--green)}
+.btn-sm.green:hover{background:var(--green-d)}
+.btn-sm.outline{background:none;color:var(--gray-600);border:1px solid var(--gray-200)}
+.btn-sm.outline:hover{border-color:var(--navy);color:var(--navy)}
+
+/* Alertas */
+.alert-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-200);padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:10px;transition:box-shadow .15s}
+.alert-card:hover{box-shadow:var(--shadow)}
+.alert-card.urgente{border-color:var(--red);background:#fef2f2}
+.alert-card.proximo{border-color:var(--amber);background:#fffbeb}
+.alert-icon{font-size:28px;flex-shrink:0}
+.alert-info{flex:1}
+.alert-tipo{font-size:14px;font-weight:700;color:var(--gray-800)}
+.alert-veiculo{font-size:12px;color:var(--gray-400);margin-top:2px}
+.alert-prazo{font-size:12px;font-weight:600;margin-top:4px}
+.alert-prazo.red{color:var(--red)}
+.alert-prazo.amber{color:var(--amber)}
+.alert-actions{display:flex;gap:8px}
+
+/* Histórico */
+.hist-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--gray-200)}
+.hist-table th{background:var(--gray-50);padding:12px 16px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);border-bottom:1px solid var(--gray-200)}
+.hist-table td{padding:14px 16px;font-size:13px;border-bottom:1px solid var(--gray-100)}
+.hist-table tr:last-child td{border-bottom:none}
+.hist-table tr:hover td{background:var(--gray-50)}
+.tipo-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gray-100);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--gray-800)}
+.nota-link{color:var(--green-d);font-size:12px;font-weight:600;cursor:pointer;text-decoration:none}
+.nota-link:hover{text-decoration:underline}
+
+/* ══ FORMS ══ */
+.form-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-200);padding:28px;max-width:640px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:12px;font-weight:600;color:var(--gray-600);letter-spacing:.02em}
+.form-label .req{color:var(--red)}
+.form-input,.form-select,.form-textarea{border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--gray-800);background:var(--white);transition:border-color .15s;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{outline:none;border-color:var(--green)}
+.form-textarea{resize:vertical;min-height:80px}
+.upload-area{border:2px dashed var(--gray-300);border-radius:var(--radius-lg);padding:28px;text-align:center;cursor:pointer;transition:all .2s;background:var(--gray-50)}
+.upload-area:hover,.upload-area.over{border-color:var(--green);background:var(--green-l)}
+.upload-icon{font-size:32px;margin-bottom:8px}
+.upload-title{font-size:14px;font-weight:600;color:var(--gray-700)}
+.upload-sub{font-size:12px;color:var(--gray-400);margin-top:4px}
+.upload-preview{display:flex;align-items:center;gap:10px;background:var(--green-l);border:1px solid var(--green);border-radius:var(--radius);padding:10px 14px;margin-top:12px}
+.upload-preview-nome{font-size:13px;font-weight:600;color:var(--green-d);flex:1}
+.btn-remove-upload{background:none;border:none;cursor:pointer;color:var(--red);font-size:16px}
+.form-actions{display:flex;gap:12px;margin-top:24px}
+.btn-primary{background:var(--green);color:var(--white);border:none;border-radius:var(--radius);padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn-primary:hover{background:var(--green-d)}
+.btn-secondary{background:none;color:var(--gray-600);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-secondary:hover{border-color:var(--gray-400);color:var(--gray-800)}
+
+/* ══ VAZIO ══ */
+.empty-state{text-align:center;padding:60px 20px}
+.empty-icon{font-size:52px;margin-bottom:12px;opacity:.4}
+.empty-title{font-size:16px;font-weight:700;color:var(--gray-600);margin-bottom:6px}
+.empty-sub{font-size:13px;color:var(--gray-400);margin-bottom:20px}
+
+/* ══ MODAL ══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--white);border-radius:var(--radius-xl);max-width:560px;width:100%;box-shadow:var(--shadow-lg);transform:translateY(12px);transition:transform .2s}
+.modal-overlay.open .modal-box{transform:translateY(0)}
+.modal-head{padding:24px 28px 20px;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center}
+.modal-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--navy)}
+.modal-close{background:none;border:none;cursor:pointer;font-size:22px;color:var(--gray-400);line-height:1}
+.modal-body{padding:24px 28px 28px}
+
+/* ══ TRIAL BANNER ══ */
+.trial-banner{background:linear-gradient(135deg,var(--amber),#f97316);color:var(--white);border-radius:var(--radius-lg);padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.trial-text{flex:1}
+.trial-title{font-weight:700;font-size:14px;margin-bottom:2px}
+.trial-sub{font-size:12px;opacity:.85}
+.btn-trial{background:var(--white);color:var(--amber);border:none;border-radius:var(--radius);padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+
+/* ══ KM PROGRESS ══ */
+.km-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:20px}
+.km-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.km-tipo{font-size:13px;font-weight:700;color:var(--gray-800)}
+.km-veiculo{font-size:11px;color:var(--gray-400);margin-top:2px}
+.km-pct{font-size:20px;font-weight:800;font-family:'Syne',sans-serif;color:var(--navy)}
+.progress-bar{height:8px;background:var(--gray-100);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.progress-fill{height:100%;border-radius:10px;transition:width .5s ease}
+.progress-fill.green{background:var(--green)}
+.progress-fill.amber{background:var(--amber)}
+.progress-fill.red{background:var(--red)}
+.km-detail{display:flex;justify-content:space-between;font-size:11px;color:var(--gray-400)}
+
+/* ══ LOADING ══ */
+.loading{display:flex;align-items:center;justify-content:center;padding:60px;color:var(--gray-400);font-size:14px;gap:10px}
+.spinner{width:20px;height:20px;border:2px solid var(--gray-200);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ══ TOAST ══ */
+.toast-container{position:fixed;bottom:24px;right:24px;z-index:1000;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--navy);color:var(--white);border-radius:var(--radius-lg);padding:14px 18px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-lg);animation:slideIn .3s ease;max-width:320px}
+.toast.success{background:#166534}
+.toast.error{background:#991b1b}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding:20px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .form-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a href="/manutencao" class="logo">Viva<span>Auto</span></a>
+  <div class="nav-links">
+    <span class="nav-link" onclick="window.location='/'">← Recomendação</span>
+    <div id="header-auth">
+      <button class="btn-login" onclick="loginGoogle()">Entrar com Google</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO LOGIN (quando não logado) -->
+<div id="hero-login" class="hero-login">
+  <div class="login-card">
+    <div class="login-icon">🔧</div>
+    <h1 class="login-title">Histórico de Manutenção</h1>
+    <p class="login-sub">Registre, acompanhe e comprove todas as manutenções do seu veículo. Na hora da venda, vale ouro.</p>
+    <button class="btn-google" onclick="loginGoogle()">
+      <svg width="22" height="22" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continuar com Google
+    </button>
+    <div class="login-features">
+      <div class="login-feat">
+        <div class="login-feat-icon">📋</div>
+        <div class="login-feat-title">Histórico completo</div>
+        <div class="login-feat-desc">Registre cada manutenção com foto da nota fiscal</div>
+      </div>
+      <div class="login-feat">
+        <div class="login-feat-icon">🔔</div>
+        <div class="login-feat-title">Alertas inteligentes</div>
+        <div class="login-feat-desc">Receba avisos quando chegar a hora da revisão</div>
+      </div>
+      <div class="login-feat">
+        <div class="login-feat-icon">📄</div>
+        <div class="login-feat-title">Relatório de venda</div>
+        <div class="login-feat-desc">Gere PDF profissional com todo o histórico</div>
+      </div>
+      <div class="login-feat">
+        <div class="login-feat-icon">🆓</div>
+        <div class="login-feat-title">Grátis por 30 dias</div>
+        <div class="login-feat-desc">A partir da primeira manutenção registrada</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP (quando logado) -->
+<div id="app" class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Menu</div>
+      <button class="sidebar-item active" onclick="showPage('dashboard')" id="nav-dashboard">
+        <span class="icon">📊</span> Dashboard
+      </button>
+      <button class="sidebar-item" onclick="showPage('registrar')" id="nav-registrar">
+        <span class="icon">➕</span> Registrar Manutenção
+      </button>
+      <button class="sidebar-item" onclick="showPage('historico')" id="nav-historico">
+        <span class="icon">📋</span> Histórico
+      </button>
+      <button class="sidebar-item" onclick="showPage('alertas')" id="nav-alertas">
+        <span class="icon">🔔</span> Alertas
+        <span class="sidebar-badge" id="badge-alertas" style="display:none">0</span>
+      </button>
+      <button class="sidebar-item" onclick="showPage('relatorio')" id="nav-relatorio">
+        <span class="icon">📄</span> Relatório PDF
+      </button>
+    </div>
+    <div class="sidebar-veiculo">
+      <div class="sidebar-veiculo-label">Meus Veículos</div>
+      <div id="sidebar-veiculos"></div>
+      <button class="btn-add-veiculo" onclick="abrirModalVeiculo()">
+        ＋ Adicionar veículo
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TRIAL BANNER -->
+    <div class="trial-banner" id="trial-banner" style="display:none">
+      <span style="font-size:24px">⏳</span>
+      <div class="trial-text">
+        <div class="trial-title" id="trial-title">Período gratuito ativo</div>
+        <div class="trial-sub" id="trial-sub">Seu trial começa na primeira manutenção registrada</div>
+      </div>
+      <button class="btn-trial">Assinar R$19,99/mês</button>
+    </div>
+
+    <!-- PAGE: DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <h1 class="page-title">Olá, <span id="dash-nome">...</span> 👋</h1>
+      <p class="page-sub">Acompanhe a saúde do seu veículo</p>
+      <div class="stats-grid" id="dash-stats">
+        <div class="stat-card"><div class="stat-icon">🚗</div><div class="stat-val" id="stat-veiculos">0</div><div class="stat-label">Veículos cadastrados</div></div>
+        <div class="stat-card"><div class="stat-icon">🔧</div><div class="stat-val" id="stat-manutencoes">0</div><div class="stat-label">Manutenções registradas</div></div>
+        <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-val" id="stat-gasto">R$0</div><div class="stat-label">Total investido</div></div>
+        <div class="stat-card alert"><div class="stat-icon">⚠️</div><div class="stat-val" id="stat-alertas">0</div><div class="stat-label">Alertas pendentes</div></div>
+      </div>
+
+      <!-- KM Progress cards -->
+      <div class="section-title">
+        Próximas manutenções
+        <button class="btn-sm green" onclick="showPage('registrar')">+ Registrar</button>
+      </div>
+      <div id="dash-proximas">
+        <div class="loading"><div class="spinner"></div> Carregando...</div>
+      </div>
+
+      <!-- Últimas manutenções -->
+      <div class="section-title" style="margin-top:28px">
+        Últimas manutenções
+        <button class="btn-sm outline" onclick="showPage('historico')">Ver todas</button>
+      </div>
+      <div id="dash-ultimas">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- PAGE: REGISTRAR -->
+    <div class="page" id="page-registrar">
+      <h1 class="page-title">Registrar Manutenção</h1>
+      <p class="page-sub">Adicione a nota fiscal e os detalhes da manutenção realizada</p>
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Veículo <span class="req">*</span></label>
+            <select class="form-select" id="reg-veiculo">
+              <option value="">Selecione o veículo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tipo de manutenção <span class="req">*</span></label>
+            <select class="form-select" id="reg-tipo">
+              <option value="">Selecione o tipo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data da realização <span class="req">*</span></label>
+            <input type="date" class="form-input" id="reg-data">
+          </div>
+          <div class="form-group">
+            <label class="form-label">KM no momento <span class="req">*</span></label>
+            <input type="number" class="form-input" id="reg-km" placeholder="Ex: 45.000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Valor pago (R$)</label>
+            <input type="number" step="0.01" class="form-input" id="reg-valor" placeholder="Ex: 350,00">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Oficina / Estabelecimento</label>
+            <input type="text" class="form-input" id="reg-oficina" placeholder="Ex: Auto Center São Paulo">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Observações</label>
+            <textarea class="form-textarea" id="reg-obs" placeholder="Detalhes adicionais sobre a manutenção..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Nota Fiscal / Comprovante</label>
+            <div class="upload-area" id="upload-area" onclick="document.getElementById('upload-input').click()" ondragover="dragOver(event)" ondrop="dropFile(event)">
+              <div class="upload-icon">📎</div>
+              <div class="upload-title">Clique ou arraste a nota fiscal aqui</div>
+              <div class="upload-sub">JPG, PNG ou PDF • Máx. 5MB</div>
+            </div>
+            <input type="file" id="upload-input" accept="image/*,.pdf" style="display:none" onchange="fileSelected(this)">
+            <div id="upload-preview" style="display:none" class="upload-preview">
+              <span>📄</span>
+              <span class="upload-preview-nome" id="upload-nome"></span>
+              <button class="btn-remove-upload" onclick="removerUpload()">✕</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" onclick="salvarManutencao()">✓ Salvar manutenção</button>
+          <button class="btn-secondary" onclick="showPage('dashboard')">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: HISTÓRICO -->
+    <div class="page" id="page-historico">
+      <h1 class="page-title">Histórico de Manutenções</h1>
+      <p class="page-sub">Todas as manutenções registradas</p>
+      <div id="hist-content">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- PAGE: ALERTAS -->
+    <div class="page" id="page-alertas">
+      <h1 class="page-title">Alertas de Manutenção</h1>
+      <p class="page-sub">Fique em dia com a manutenção do seu veículo</p>
+      <div id="alertas-content">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- PAGE: RELATÓRIO -->
+    <div class="page" id="page-relatorio">
+      <h1 class="page-title">Relatório de Venda</h1>
+      <p class="page-sub">Gere um PDF profissional com todo o histórico para mostrar ao comprador</p>
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Selecione o veículo</label>
+            <select class="form-select" id="rel-veiculo"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Período — De</label>
+            <input type="date" class="form-input" id="rel-de">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Período — Até</label>
+            <input type="date" class="form-input" id="rel-ate">
+          </div>
+        </div>
+        <div style="background:var(--gray-50);border-radius:var(--radius-lg);padding:20px;margin-top:20px;border:1px solid var(--gray-200)">
+          <div style="font-size:13px;font-weight:700;color:var(--gray-700);margin-bottom:12px">O relatório incluirá:</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="font-size:12px;color:var(--gray-600);display:flex;align-items:center;gap:6px">✓ Dados do veículo</div>
+            <div style="font-size:12px;color:var(--gray-600);display:flex;align-items:center;gap:6px">✓ Lista completa de manutenções</div>
+            <div style="font-size:12px;color:var(--gray-600);display:flex;align-items:center;gap:6px">✓ Valores investidos</div>
+            <div style="font-size:12px;color:var(--gray-600);display:flex;align-items:center;gap:6px">✓ Oficinas utilizadas</div>
+            <div style="font-size:12px;color:var(--gray-600);display:flex;align-items:center;gap:6px">✓ Total de KM rodados</div>
+            <div style="font-size:12px;color:var(--gray-600);display:flex;align-items:center;gap:6px">✓ Indicador de regularidade</div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn-primary" onclick="gerarPDF()">📄 Gerar PDF</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL: CADASTRAR VEÍCULO -->
+<div class="modal-overlay" id="modal-veiculo" onclick="fecharModalVeiculo(event)">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span class="modal-title">🚗 Cadastrar Veículo</span>
+      <button class="modal-close" onclick="fecharModalVeiculo()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Marca <span class="req">*</span></label>
+          <select class="form-select" id="v-marca" onchange="filtrarModelos()">
+            <option value="">Selecione</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Modelo <span class="req">*</span></label>
+          <select class="form-select" id="v-modelo">
+            <option value="">Selecione a marca primeiro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ano <span class="req">*</span></label>
+          <select class="form-select" id="v-ano">
+            <option value="">Ano</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Apelido (opcional)</label>
+          <input type="text" class="form-input" id="v-apelido" placeholder="Ex: Meu Celta">
+        </div>
+        <div class="form-group">
+          <label class="form-label">KM atual <span class="req">*</span></label>
+          <input type="number" class="form-input" id="v-km" placeholder="Ex: 45000">
+        </div>
+        <div class="form-group">
+          <label class="form-label">KM médio por mês</label>
+          <input type="number" class="form-input" id="v-km-mes" placeholder="Ex: 1500" value="1500">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Placa (opcional)</label>
+          <input type="text" class="form-input" id="v-placa" placeholder="ABC-1234" maxlength="8">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cor</label>
+          <input type="text" class="form-input" id="v-cor" placeholder="Ex: Prata">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="salvarVeiculo()">✓ Cadastrar veículo</button>
+        <button class="btn-secondary" onclick="fecharModalVeiculo()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// ══════════════════════════════════════
+// SUPABASE CONFIG
+// ══════════════════════════════════════
+const SUPA_URL  = 'https://yjwmotnpkwojcazmwgkb.supabase.co';
+const SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlqd21vdG5wa3dvamNhem13Z2tiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyNDk0MDAsImV4cCI6MjA5NDgyNTQwMH0.sAI0RSAzQ3KT4l6qPXMDH2gBy0BJrISFcFyONktfQNE';
+const { createClient } = supabase;
+const db = createClient(SUPA_URL, SUPA_ANON);
+
+// ══ STATE ══
+let currentUser = null;
+let veiculos = [];
+let tiposManutencao = [];
+let veiculoAtivo = null;
+let uploadFile = null;
+let manutencoes = [];
+
+// ══════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════
+async function loginGoogle() {
+  const { error } = await db.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.href }
+  });
+  if (error) toast('Erro ao fazer login: ' + error.message, 'error');
+}
+
+async function logout() {
+  await db.auth.signOut();
+  location.reload();
+}
+
+// Auth state listener
+db.auth.onAuthStateChange(async (event, session) => {
+  if (session?.user) {
+    currentUser = session.user;
+    await initApp();
+  } else {
+    currentUser = null;
+    document.getElementById('hero-login').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('header-auth').innerHTML =
+      '<button class="btn-login" onclick="loginGoogle()">Entrar com Google</button>';
+  }
+});
+
+async function initApp() {
+  // Header
+  const nome = currentUser.user_metadata?.full_name || currentUser.email;
+  const foto = currentUser.user_metadata?.avatar_url || '';
+  document.getElementById('header-auth').innerHTML = `
+    <div class="user-info">
+      ${foto ? `<img class="user-avatar" src="${foto}" alt="">` : ''}
+      <span class="user-name">${nome.split(' ')[0]}</span>
+      <button class="btn-sair" onclick="logout()">Sair</button>
+    </div>`;
+  document.getElementById('dash-nome').textContent = nome.split(' ')[0];
+
+  // Show app
+  document.getElementById('hero-login').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+
+  // Load data
+  await Promise.all([carregarVeiculos(), carregarTipos(), verificarAssinatura()]);
+  await carregarDashboard();
+}
+
+// ══════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  document.getElementById(`page-${page}`)?.classList.add('active');
+  document.getElementById(`nav-${page}`)?.classList.add('active');
+  if (page === 'historico') carregarHistorico();
+  if (page === 'alertas') carregarAlertas();
+  if (page === 'relatorio') prepararRelatorio();
+  if (page === 'registrar') prepararFormRegistro();
+}
+
+// ══════════════════════════════════════
+// VEÍCULOS
+// ══════════════════════════════════════
+async function carregarVeiculos() {
+  const { data, error } = await db.from('veiculos')
+    .select('*').eq('ativo', true).order('criado_em');
+  if (error) { console.error(error); return; }
+  veiculos = data || [];
+  veiculoAtivo = veiculos[0] || null;
+  renderSidebarVeiculos();
+  renderSelectVeiculos();
+  document.getElementById('stat-veiculos').textContent = veiculos.length;
+}
+
+function renderSidebarVeiculos() {
+  const el = document.getElementById('sidebar-veiculos');
+  if (!veiculos.length) { el.innerHTML = ''; return; }
+  el.innerHTML = veiculos.map(v => `
+    <div class="veiculo-chip ${veiculoAtivo?.id === v.id ? 'active' : ''}" onclick="selecionarVeiculo('${v.id}')">
+      <div>
+        <div class="veiculo-chip-nome">${v.apelido || v.modelo}</div>
+        <div class="veiculo-chip-sub">${v.marca} ${v.ano} • ${(v.km_atual||0).toLocaleString('pt-BR')} km</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderSelectVeiculos() {
+  ['reg-veiculo','rel-veiculo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '<option value="">Selecione o veículo</option>' +
+      veiculos.map(v => `<option value="${v.id}">${v.apelido || v.modelo} (${v.marca} ${v.ano})</option>`).join('');
+    if (veiculoAtivo) el.value = veiculoAtivo.id;
+  });
+}
+
+function selecionarVeiculo(id) {
+  veiculoAtivo = veiculos.find(v => v.id === id);
+  renderSidebarVeiculos();
+  carregarDashboard();
+}
+
+function abrirModalVeiculo() {
+  // Populate marcas from CARROS_RAW if available, else fetch
+  const marcas = [...new Set((window.CARROS_RAW || []).map(c => c.marca))].sort();
+  const el = document.getElementById('v-marca');
+  el.innerHTML = '<option value="">Selecione</option>' +
+    marcas.map(m => `<option value="${m}">${m}</option>`).join('');
+
+  // Anos
+  const anoEl = document.getElementById('v-ano');
+  const anoAtual = new Date().getFullYear();
+  anoEl.innerHTML = '<option value="">Ano</option>';
+  for (let a = anoAtual; a >= 2000; a--) {
+    anoEl.innerHTML += `<option value="${a}">${a}</option>`;
+  }
+  document.getElementById('modal-veiculo').classList.add('open');
+}
+
+function fecharModalVeiculo(e) {
+  if (!e || e.target === document.getElementById('modal-veiculo')) {
+    document.getElementById('modal-veiculo').classList.remove('open');
+  }
+}
+
+function filtrarModelos() {
+  const marca = document.getElementById('v-marca').value;
+  const modelos = [...new Set((window.CARROS_RAW || [])
+    .filter(c => c.marca === marca).map(c => c.modelo))].sort();
+  const el = document.getElementById('v-modelo');
+  el.innerHTML = '<option value="">Selecione</option>' +
+    modelos.map(m => `<option value="${m}">${m}</option>`).join('');
+}
+
+async function salvarVeiculo() {
+  const marca = document.getElementById('v-marca').value;
+  const modelo = document.getElementById('v-modelo').value;
+  const ano = parseInt(document.getElementById('v-ano').value);
+  const km = parseInt(document.getElementById('v-km').value);
+  if (!marca || !modelo || !ano || !km) { toast('Preencha os campos obrigatórios', 'error'); return; }
+
+  const { data, error } = await db.from('veiculos').insert({
+    usuario_id: currentUser.id,
+    marca, modelo, ano,
+    apelido: document.getElementById('v-apelido').value || null,
+    km_atual: km,
+    km_mensal: parseInt(document.getElementById('v-km-mes').value) || 1500,
+    placa: document.getElementById('v-placa').value || null,
+    cor: document.getElementById('v-cor').value || null,
+    intervalo_revisao_km: 10000,
+    intervalo_revisao_meses: 12,
+  }).select().single();
+
+  if (error) { toast('Erro ao cadastrar: ' + error.message, 'error'); return; }
+  toast('Veículo cadastrado com sucesso! 🚗', 'success');
+  fecharModalVeiculo();
+  await carregarVeiculos();
+  carregarDashboard();
+}
+
+// ══════════════════════════════════════
+// TIPOS DE MANUTENÇÃO
+// ══════════════════════════════════════
+async function carregarTipos() {
+  const { data } = await db.from('tipos_manutencao').select('*').order('id');
+  tiposManutencao = data || [];
+  const el = document.getElementById('reg-tipo');
+  if (el) el.innerHTML = '<option value="">Selecione o tipo</option>' +
+    tiposManutencao.map(t => `<option value="${t.id}">${t.icone} ${t.nome}</option>`).join('');
+}
+
+// ══════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════
+async function carregarDashboard() {
+  if (!veiculos.length) {
+    document.getElementById('dash-proximas').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🚗</div>
+        <div class="empty-title">Nenhum veículo cadastrado</div>
+        <div class="empty-sub">Adicione seu primeiro veículo para começar</div>
+        <button class="btn-primary" onclick="abrirModalVeiculo()">+ Adicionar veículo</button>
+      </div>`;
+    document.getElementById('dash-ultimas').innerHTML = '';
+    return;
+  }
+
+  const veiculoIds = veiculos.map(v => v.id);
+
+  // Buscar manutenções
+  const { data: mans } = await db.from('manutencoes')
+    .select('*, tipos_manutencao(*), veiculos(*)')
+    .in('veiculo_id', veiculoIds)
+    .order('data_realizacao', { ascending: false });
+  manutencoes = mans || [];
+
+  // Stats
+  const totalGasto = manutencoes.reduce((s,m) => s + (m.valor||0), 0);
+  document.getElementById('stat-manutencoes').textContent = manutencoes.length;
+  document.getElementById('stat-gasto').textContent = 'R$' + totalGasto.toLocaleString('pt-BR',{minimumFractionDigits:0});
+
+  // Próximas manutenções (km progress)
+  renderProximas();
+
+  // Últimas manutenções
+  const ultimas = manutencoes.slice(0,5);
+  if (!ultimas.length) {
+    document.getElementById('dash-ultimas').innerHTML = `
+      <div class="empty-state" style="padding:30px">
+        <div class="empty-icon">🔧</div>
+        <div class="empty-title">Nenhuma manutenção registrada ainda</div>
+        <div class="empty-sub">Registre a primeira para começar o histórico</div>
+        <button class="btn-primary" onclick="showPage('registrar')">+ Registrar manutenção</button>
+      </div>`;
+  } else {
+    document.getElementById('dash-ultimas').innerHTML = `
+      <table class="hist-table">
+        <thead><tr>
+          <th>Tipo</th><th>Veículo</th><th>Data</th><th>KM</th><th>Valor</th>
+        </tr></thead>
+        <tbody>${ultimas.map(m => `
+          <tr>
+            <td><span class="tipo-badge">${m.tipos_manutencao?.icone||'🔧'} ${m.tipos_manutencao?.nome||m.tipo_descricao||'-'}</span></td>
+            <td style="font-size:12px;color:var(--gray-600)">${m.veiculos?.marca||''} ${m.veiculos?.modelo||''}</td>
+            <td style="font-size:13px">${new Date(m.data_realizacao).toLocaleDateString('pt-BR')}</td>
+            <td style="font-size:13px">${(m.km_realizacao||0).toLocaleString('pt-BR')} km</td>
+            <td style="font-size:13px;font-weight:600">${m.valor ? 'R$'+m.valor.toLocaleString('pt-BR',{minimumFractionDigits:2}) : '-'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`;
+  }
+}
+
+function renderProximas() {
+  const container = document.getElementById('dash-proximas');
+  if (!veiculos.length) return;
+
+  const cards = veiculos.map(v => {
+    const ultimaRev = manutencoes
+      .filter(m => m.veiculo_id === v.id && m.tipos_manutencao?.intervalo_km_padrao)
+      .sort((a,b) => b.km_realizacao - a.km_realizacao)[0];
+
+    const kmAtual = v.km_atual;
+    const intervalo = v.intervalo_revisao_km || 10000;
+    const kmBase = ultimaRev ? ultimaRev.km_realizacao : Math.max(0, kmAtual - intervalo);
+    const kmProx = kmBase + intervalo;
+    const kmRestante = kmProx - kmAtual;
+    const pct = Math.min(100, Math.round((kmAtual - kmBase) / intervalo * 100));
+    const cor = pct >= 90 ? 'red' : pct >= 70 ? 'amber' : 'green';
+
+    return `
+      <div class="km-card" style="margin-bottom:12px">
+        <div class="km-header">
+          <div>
+            <div class="km-tipo">Revisão — ${v.apelido || v.modelo}</div>
+            <div class="km-veiculo">${v.marca} ${v.ano} • ${kmAtual.toLocaleString('pt-BR')} km atual</div>
+          </div>
+          <div class="km-pct" style="color:var(--${cor})">${pct}%</div>
+        </div>
+        <div class="progress-bar"><div class="progress-fill ${cor}" style="width:${pct}%"></div></div>
+        <div class="km-detail">
+          <span>${kmBase.toLocaleString('pt-BR')} km (última revisão)</span>
+          <span style="color:var(--${cor});font-weight:600">${kmRestante > 0 ? kmRestante.toLocaleString('pt-BR')+' km restantes' : 'Revisão em atraso!'}</span>
+          <span>${kmProx.toLocaleString('pt-BR')} km</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = cards || '<div class="empty-state"><div class="empty-sub">Nenhum veículo</div></div>';
+
+  // Update alert stat
+  const emAtraso = veiculos.filter(v => {
+    const kmBase = v.km_atual - v.intervalo_revisao_km;
+    const kmProx = kmBase + v.intervalo_revisao_km;
+    return v.km_atual >= kmProx;
+  }).length;
+  document.getElementById('stat-alertas').textContent = emAtraso;
+  if (emAtraso > 0) {
+    document.getElementById('badge-alertas').style.display = 'flex';
+    document.getElementById('badge-alertas').textContent = emAtraso;
+  }
+}
+
+// ══════════════════════════════════════
+// HISTÓRICO
+// ══════════════════════════════════════
+async function carregarHistorico() {
+  const veiculoIds = veiculos.map(v => v.id);
+  if (!veiculoIds.length) {
+    document.getElementById('hist-content').innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Nenhum veículo cadastrado</div></div>';
+    return;
+  }
+  const { data } = await db.from('manutencoes')
+    .select('*, tipos_manutencao(*), veiculos(*)')
+    .in('veiculo_id', veiculoIds)
+    .order('data_realizacao', { ascending: false });
+  const mans = data || [];
+  if (!mans.length) {
+    document.getElementById('hist-content').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔧</div>
+        <div class="empty-title">Nenhuma manutenção registrada</div>
+        <button class="btn-primary" onclick="showPage('registrar')">+ Registrar primeira manutenção</button>
+      </div>`;
+    return;
+  }
+  document.getElementById('hist-content').innerHTML = `
+    <table class="hist-table">
+      <thead><tr><th>Tipo</th><th>Veículo</th><th>Data</th><th>KM</th><th>Oficina</th><th>Valor</th><th>Nota</th></tr></thead>
+      <tbody>${mans.map(m => `
+        <tr>
+          <td><span class="tipo-badge">${m.tipos_manutencao?.icone||'🔧'} ${m.tipos_manutencao?.nome||m.tipo_descricao||'-'}</span></td>
+          <td style="font-size:12px;color:var(--gray-600)">${m.veiculos?.marca||''} ${m.veiculos?.modelo||''}</td>
+          <td>${new Date(m.data_realizacao).toLocaleDateString('pt-BR')}</td>
+          <td>${(m.km_realizacao||0).toLocaleString('pt-BR')} km</td>
+          <td style="font-size:12px">${m.oficina||'-'}</td>
+          <td style="font-weight:600">${m.valor ? 'R$'+Number(m.valor).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '-'}</td>
+          <td>${m.nota_fiscal_url ? `<a class="nota-link" onclick="verNota('${m.nota_fiscal_url}')">📎 Ver</a>` : '-'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+async function verNota(url) {
+  const { data } = await db.storage.from('notas-fiscais').createSignedUrl(url.replace('notas-fiscais/',''), 60);
+  if (data?.signedUrl) window.open(data.signedUrl, '_blank');
+}
+
+// ══════════════════════════════════════
+// ALERTAS
+// ══════════════════════════════════════
+async function carregarAlertas() {
+  if (!veiculos.length) {
+    document.getElementById('alertas-content').innerHTML = '<div class="empty-state"><div class="empty-icon">🔔</div><div class="empty-title">Nenhum veículo cadastrado</div></div>';
+    return;
+  }
+  // Calcular alertas baseado nos veículos
+  const alertas = [];
+  veiculos.forEach(v => {
+    const intervalo = v.intervalo_revisao_km || 10000;
+    const kmAtual = v.km_atual;
+    const ultima = manutencoes.filter(m => m.veiculo_id === v.id).sort((a,b) => b.km_realizacao - a.km_realizacao)[0];
+    const kmBase = ultima ? ultima.km_realizacao : Math.max(0, kmAtual - intervalo);
+    const kmProx = kmBase + intervalo;
+    const kmRestante = kmProx - kmAtual;
+    const mesesRestantes = v.km_mensal > 0 ? Math.round(kmRestante / v.km_mensal) : null;
+
+    alertas.push({ veiculo: v, tipo: 'Revisão', kmProx, kmRestante, mesesRestantes });
+  });
+
+  const urgentes = alertas.filter(a => a.kmRestante <= 0);
+  const proximos = alertas.filter(a => a.kmRestante > 0 && a.kmRestante <= 2000);
+  const normais = alertas.filter(a => a.kmRestante > 2000);
+
+  let html = '';
+  if (urgentes.length) {
+    html += '<div class="section-title" style="color:var(--red)">⚠️ Em atraso</div>';
+    html += urgentes.map(a => alertCard(a, 'urgente')).join('');
+  }
+  if (proximos.length) {
+    html += '<div class="section-title" style="margin-top:20px;color:var(--amber)">⏰ Próximas</div>';
+    html += proximos.map(a => alertCard(a, 'proximo')).join('');
+  }
+  if (normais.length) {
+    html += '<div class="section-title" style="margin-top:20px">✅ Em dia</div>';
+    html += normais.map(a => alertCard(a, '')).join('');
+  }
+  if (!alertas.length) html = '<div class="empty-state"><div class="empty-icon">🎉</div><div class="empty-title">Tudo em dia!</div></div>';
+  document.getElementById('alertas-content').innerHTML = html;
+}
+
+function alertCard(a, cls) {
+  const kmStr = a.kmRestante > 0
+    ? `Faltam ${a.kmRestante.toLocaleString('pt-BR')} km ${a.mesesRestantes ? '(~'+a.mesesRestantes+' meses)' : ''}`
+    : `${Math.abs(a.kmRestante).toLocaleString('pt-BR')} km em atraso!`;
+  return `
+    <div class="alert-card ${cls}">
+      <div class="alert-icon">🔧</div>
+      <div class="alert-info">
+        <div class="alert-tipo">${a.tipo}</div>
+        <div class="alert-veiculo">${a.veiculo.apelido||a.veiculo.modelo} — ${a.veiculo.marca} ${a.veiculo.ano}</div>
+        <div class="alert-prazo ${cls==='urgente'?'red':cls==='proximo'?'amber':''}">${kmStr}</div>
+      </div>
+      <div class="alert-actions">
+        <button class="btn-sm green" onclick="showPage('registrar')">Registrar</button>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════
+// REGISTRAR MANUTENÇÃO
+// ══════════════════════════════════════
+function prepararFormRegistro() {
+  document.getElementById('reg-data').value = new Date().toISOString().split('T')[0];
+  if (veiculoAtivo) document.getElementById('reg-veiculo').value = veiculoAtivo.id;
+}
+
+function dragOver(e) { e.preventDefault(); document.getElementById('upload-area').classList.add('over'); }
+function dropFile(e) {
+  e.preventDefault(); document.getElementById('upload-area').classList.remove('over');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+function fileSelected(input) { if (input.files[0]) processFile(input.files[0]); }
+function processFile(file) {
+  if (file.size > 5 * 1024 * 1024) { toast('Arquivo muito grande (máx. 5MB)', 'error'); return; }
+  uploadFile = file;
+  document.getElementById('upload-nome').textContent = file.name;
+  document.getElementById('upload-preview').style.display = 'flex';
+  document.getElementById('upload-area').style.display = 'none';
+}
+function removerUpload() {
+  uploadFile = null;
+  document.getElementById('upload-preview').style.display = 'none';
+  document.getElementById('upload-area').style.display = 'block';
+  document.getElementById('upload-input').value = '';
+}
+
+async function salvarManutencao() {
+  const veiculoId = document.getElementById('reg-veiculo').value;
+  const tipoId = document.getElementById('reg-tipo').value;
+  const data = document.getElementById('reg-data').value;
+  const km = parseInt(document.getElementById('reg-km').value);
+  if (!veiculoId || !tipoId || !data || !km) { toast('Preencha os campos obrigatórios', 'error'); return; }
+
+  let notaUrl = null;
+  let notaNome = null;
+
+  // Upload nota fiscal
+  if (uploadFile) {
+    const ext = uploadFile.name.split('.').pop();
+    const path = `${currentUser.id}/${Date.now()}.${ext}`;
+    const { data: upData, error: upErr } = await db.storage
+      .from('notas-fiscais').upload(path, uploadFile);
+    if (upErr) { toast('Erro no upload: ' + upErr.message, 'error'); return; }
+    notaUrl = upData.path;
+    notaNome = uploadFile.name;
+  }
+
+  const { error } = await db.from('manutencoes').insert({
+    veiculo_id: veiculoId,
+    tipo_id: parseInt(tipoId),
+    data_realizacao: data,
+    km_realizacao: km,
+    valor: parseFloat(document.getElementById('reg-valor').value) || null,
+    oficina: document.getElementById('reg-oficina').value || null,
+    observacoes: document.getElementById('reg-obs').value || null,
+    nota_fiscal_url: notaUrl,
+    nota_fiscal_nome: notaNome,
+  });
+
+  if (error) { toast('Erro ao salvar: ' + error.message, 'error'); return; }
+
+  // Atualizar KM do veículo
+  await db.from('veiculos').update({ km_atual: km }).eq('id', veiculoId);
+
+  // Verificar trial (1ª manutenção = início do trial)
+  const { data: ass } = await db.from('assinaturas').select('*').eq('usuario_id', currentUser.id).single();
+  if (!ass) {
+    const inicio = new Date();
+    const fim = new Date(inicio); fim.setDate(fim.getDate() + 30);
+    await db.from('assinaturas').insert({
+      usuario_id: currentUser.id, status: 'trial',
+      trial_inicio: inicio.toISOString(), trial_fim: fim.toISOString(),
+    });
+  }
+
+  toast('Manutenção registrada com sucesso! 🔧', 'success');
+  removerUpload();
+  ['reg-km','reg-valor','reg-oficina','reg-obs'].forEach(id => document.getElementById(id).value = '');
+  await carregarVeiculos();
+  await carregarDashboard();
+  showPage('dashboard');
+}
+
+// ══════════════════════════════════════
+// ASSINATURA
+// ══════════════════════════════════════
+async function verificarAssinatura() {
+  const { data: ass } = await db.from('assinaturas').select('*').eq('usuario_id', currentUser.id).maybeSingle();
+  const banner = document.getElementById('trial-banner');
+  if (!ass) {
+    banner.style.display = 'flex';
+    document.getElementById('trial-title').textContent = '🆓 Período gratuito disponível';
+    document.getElementById('trial-sub').textContent = 'Registre sua primeira manutenção para começar os 30 dias grátis';
+    return;
+  }
+  if (ass.status === 'trial' && ass.trial_fim) {
+    const diasRestantes = Math.ceil((new Date(ass.trial_fim) - new Date()) / (1000*60*60*24));
+    if (diasRestantes > 0) {
+      banner.style.display = 'flex';
+      document.getElementById('trial-title').textContent = `⏳ ${diasRestantes} dias de trial restantes`;
+      document.getElementById('trial-sub').textContent = 'Continue registrando suas manutenções gratuitamente';
+    } else {
+      banner.style.display = 'flex';
+      document.getElementById('trial-banner').style.background = 'linear-gradient(135deg,var(--red),#dc2626)';
+      document.getElementById('trial-title').textContent = '⚠️ Trial expirado';
+      document.getElementById('trial-sub').textContent = 'Assine para continuar acessando o histórico';
+    }
+  }
+}
+
+// ══════════════════════════════════════
+// RELATÓRIO PDF
+// ══════════════════════════════════════
+function prepararRelatorio() {
+  const el = document.getElementById('rel-veiculo');
+  el.innerHTML = '<option value="">Selecione</option>' +
+    veiculos.map(v => `<option value="${v.id}">${v.apelido||v.modelo} (${v.marca} ${v.ano})</option>`).join('');
+  if (veiculoAtivo) el.value = veiculoAtivo.id;
+}
+
+async function gerarPDF() {
+  const veiculoId = document.getElementById('rel-veiculo').value;
+  if (!veiculoId) { toast('Selecione um veículo', 'error'); return; }
+  const veiculo = veiculos.find(v => v.id === veiculoId);
+  const { data: mans } = await db.from('manutencoes')
+    .select('*, tipos_manutencao(*)')
+    .eq('veiculo_id', veiculoId)
+    .order('data_realizacao');
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const L = 20; let Y = 20;
+
+  // Header
+  doc.setFillColor(15, 31, 61);
+  doc.rect(0, 0, 210, 35, 'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(22); doc.setFont('helvetica','bold');
+  doc.text('VIVA AUTO', L, 16);
+  doc.setFontSize(11); doc.setFont('helvetica','normal');
+  doc.text('Relatório de Histórico de Manutenção', L, 24);
+  doc.setFontSize(9);
+  doc.text(`Gerado em ${new Date().toLocaleDateString('pt-BR')}`, L, 31);
+  Y = 50;
+
+  // Veículo info
+  doc.setTextColor(15, 31, 61);
+  doc.setFontSize(14); doc.setFont('helvetica','bold');
+  doc.text('Dados do Veículo', L, Y); Y += 8;
+  doc.setFontSize(10); doc.setFont('helvetica','normal'); doc.setTextColor(70,85,105);
+  doc.text(`${veiculo.marca} ${veiculo.modelo} ${veiculo.ano}`, L, Y); Y += 6;
+  if (veiculo.placa) { doc.text(`Placa: ${veiculo.placa}`, L, Y); Y += 6; }
+  if (veiculo.cor) { doc.text(`Cor: ${veiculo.cor}`, L, Y); Y += 6; }
+  doc.text(`KM Atual: ${(veiculo.km_atual||0).toLocaleString('pt-BR')} km`, L, Y); Y += 12;
+
+  // Manutenções
+  doc.setTextColor(15, 31, 61);
+  doc.setFontSize(14); doc.setFont('helvetica','bold');
+  doc.text('Histórico de Manutenções', L, Y); Y += 8;
+
+  const headers = ['Data', 'Tipo', 'KM', 'Oficina', 'Valor'];
+  const cols = [20, 45, 105, 130, 175];
+  doc.setFillColor(241, 245, 249);
+  doc.rect(15, Y-5, 180, 8, 'F');
+  doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(70,85,105);
+  headers.forEach((h,i) => doc.text(h, cols[i], Y)); Y += 8;
+
+  let totalGasto = 0;
+  (mans||[]).forEach((m,idx) => {
+    if (Y > 270) { doc.addPage(); Y = 20; }
+    if (idx%2===0) { doc.setFillColor(248,250,252); doc.rect(15, Y-4, 180, 7, 'F'); }
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(30,41,59);
+    doc.text(new Date(m.data_realizacao).toLocaleDateString('pt-BR'), cols[0], Y);
+    doc.text((m.tipos_manutencao?.nome||m.tipo_descricao||'-').substring(0,25), cols[1], Y);
+    doc.text((m.km_realizacao||0).toLocaleString('pt-BR'), cols[2], Y);
+    doc.text((m.oficina||'-').substring(0,20), cols[3], Y);
+    const val = m.valor ? 'R$'+Number(m.valor).toLocaleString('pt-BR',{minimumFractionDigits:2}) : '-';
+    doc.text(val, cols[4], Y);
+    totalGasto += m.valor || 0;
+    Y += 7;
+  });
+
+  Y += 6;
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(15,31,61);
+  doc.text(`Total investido em manutenção: R$${totalGasto.toLocaleString('pt-BR',{minimumFractionDigits:2})}`, L, Y);
+  doc.text(`Total de registros: ${(mans||[]).length}`, L, Y+7);
+
+  // Footer
+  const pageCount = doc.getNumberOfPages();
+  for (let i=1; i<=pageCount; i++) {
+    doc.setPage(i);
+    doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(148,163,184);
+    doc.text('Documento gerado por Viva Auto — vivaauto.com.br', 105, 290, {align:'center'});
+  }
+
+  doc.save(`historico-manutencao-${veiculo.modelo}-${veiculo.ano}.pdf`);
+  toast('PDF gerado com sucesso! 📄', 'success');
+}
+
+// ══════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════
+function toast(msg, type='') {
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${type==='success'?'✓':type==='error'?'✕':'ℹ'}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(() => t.remove(), 4000);
+}
+</script>
+</body>
+</html>
