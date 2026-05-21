@@ -1,12 +1,18 @@
 {
-  "version": 2,
-  "headers": [
+  "rewrites": [
     {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET, OPTIONS" }
-      ]
+      "source": "/manutencao",
+      "destination": "/manutencao.html"
+    },
+    {
+      "source": "/manutencao/(.*)",
+      "destination": "/manutencao.html"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/fipe",
+      "dest": "/api/fipe.js"
     }
   ]
 }
