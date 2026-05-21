@@ -936,8 +936,21 @@ function alertCard(a, cls) {
 // REGISTRAR MANUTENÇÃO
 // ══════════════════════════════════════
 function prepararFormRegistro() {
+  // Re-popular select de veículos sempre que abrir o form
+  const el = document.getElementById('reg-veiculo');
+  el.innerHTML = '<option value="">Selecione o veículo</option>' +
+    veiculos.map(v => `<option value="${v.id}">${v.apelido || v.modelo} (${v.marca} ${v.ano})</option>`).join('');
+  if (veiculoAtivo) el.value = veiculoAtivo.id;
+
+  // Re-popular select de tipos
+  const elTipo = document.getElementById('reg-tipo');
+  if (elTipo && tiposManutencao.length > 0) {
+    elTipo.innerHTML = '<option value="">Selecione o tipo</option>' +
+      tiposManutencao.map(t => `<option value="${t.id}">${t.icone} ${t.nome}</option>`).join('');
+  }
+
+  // Data de hoje
   document.getElementById('reg-data').value = new Date().toISOString().split('T')[0];
-  if (veiculoAtivo) document.getElementById('reg-veiculo').value = veiculoAtivo.id;
 }
 
 function dragOver(e) { e.preventDefault(); document.getElementById('upload-area').classList.add('over'); }
@@ -966,7 +979,12 @@ async function salvarManutencao() {
   const tipoId = document.getElementById('reg-tipo').value;
   const data = document.getElementById('reg-data').value;
   const km = parseInt(document.getElementById('reg-km').value);
-  if (!veiculoId || !tipoId || !data || !km) { toast('Preencha os campos obrigatórios', 'error'); return; }
+
+  if (!veiculoId) { toast('Selecione o veículo', 'error'); return; }
+  if (!tipoId) { toast('Selecione o tipo de manutenção', 'error'); return; }
+  if (!data) { toast('Informe a data', 'error'); return; }
+  if (!km) { toast('Informe o KM no momento da manutenção', 'error'); return; }
+  if (!currentUser) { toast('Sessão expirada, faça login novamente', 'error'); return; }
 
   let notaUrl = null;
   let notaNome = null;
