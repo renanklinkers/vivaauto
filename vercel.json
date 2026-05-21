@@ -5,14 +5,8 @@
       "destination": "/manutencao.html"
     },
     {
-      "source": "/manutencao/(.*)",
-      "destination": "/manutencao.html"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/fipe",
-      "dest": "/api/fipe.js"
+      "source": "/api/fipe",
+      "destination": "/api/fipe.js"
     }
   ]
 }
