@@ -1,12 +1,7 @@
 {
   "rewrites": [
-    {
-      "source": "/manutencao",
-      "destination": "/manutencao.html"
-    },
-    {
-      "source": "/api/fipe",
-      "destination": "/api/fipe.js"
-    }
+    { "source": "/manutencao", "destination": "/manutencao.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/api/fipe", "destination": "/api/fipe.js" }
   ]
 }
