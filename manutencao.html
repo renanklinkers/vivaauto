@@ -171,12 +171,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--gray
 .modal-close{background:none;border:none;cursor:pointer;font-size:22px;color:var(--gray-400);line-height:1}
 .modal-body{padding:24px 28px 28px}
 
-/* ══ TRIAL BANNER ══ */
-.trial-banner{background:linear-gradient(135deg,var(--amber),#f97316);color:var(--white);border-radius:var(--radius-lg);padding:16px 20px;display:flex;align-items:center;gap:16px;margin-bottom:24px}
-.trial-text{flex:1}
-.trial-title{font-weight:700;font-size:14px;margin-bottom:2px}
-.trial-sub{font-size:12px;opacity:.85}
-.btn-trial{background:var(--white);color:var(--amber);border:none;border-radius:var(--radius);padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+/* ══ TRIAL BANNER: desativado temporariamente ══ */
 
 /* ══ KM PROGRESS ══ */
 .km-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:20px}
@@ -295,15 +290,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--gray
   <!-- MAIN -->
   <main class="main">
 
-    <!-- TRIAL BANNER -->
-    <div class="trial-banner" id="trial-banner" style="display:none">
-      <span style="font-size:24px">⏳</span>
-      <div class="trial-text">
-        <div class="trial-title" id="trial-title">Período gratuito ativo</div>
-        <div class="trial-sub" id="trial-sub">Seu trial começa na primeira manutenção registrada</div>
-      </div>
-      <button class="btn-trial">Assinar R$19,99/mês</button>
-    </div>
+    <!-- TRIAL BANNER: desativado temporariamente -->
 
     <!-- PAGE: DASHBOARD -->
     <div class="page active" id="page-dashboard">
@@ -584,7 +571,7 @@ async function initApp() {
   document.getElementById('app').style.display = 'flex';
 
   // Load data
-  await Promise.all([carregarVeiculos(), carregarTipos(), verificarAssinatura()]);
+  await Promise.all([carregarVeiculos(), carregarTipos()]);
   await carregarDashboard();
 }
 
@@ -1040,27 +1027,7 @@ async function salvarManutencao() {
 // ASSINATURA
 // ══════════════════════════════════════
 async function verificarAssinatura() {
-  const { data: ass } = await db.from('assinaturas').select('*').eq('usuario_id', currentUser.id).maybeSingle();
-  const banner = document.getElementById('trial-banner');
-  if (!ass) {
-    banner.style.display = 'flex';
-    document.getElementById('trial-title').textContent = '🆓 Período gratuito disponível';
-    document.getElementById('trial-sub').textContent = 'Registre sua primeira manutenção para começar os 4 meses grátis';
-    return;
-  }
-  if (ass.status === 'trial' && ass.trial_fim) {
-    const diasRestantes = Math.ceil((new Date(ass.trial_fim) - new Date()) / (1000*60*60*24));
-    if (diasRestantes > 0) {
-      banner.style.display = 'flex';
-      document.getElementById('trial-title').textContent = `⏳ ${diasRestantes} dias de trial restantes`;
-      document.getElementById('trial-sub').textContent = 'Continue registrando suas manutenções gratuitamente';
-    } else {
-      banner.style.display = 'flex';
-      document.getElementById('trial-banner').style.background = 'linear-gradient(135deg,var(--red),#dc2626)';
-      document.getElementById('trial-title').textContent = '⚠️ Trial expirado';
-      document.getElementById('trial-sub').textContent = 'Assine para continuar acessando o histórico';
-    }
-  }
+  // Banner desativado temporariamente — será reativado com a integração de pagamento
 }
 
 // ══════════════════════════════════════
