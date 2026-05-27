@@ -252,7 +252,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--gray
       </div>
       <div class="login-feat">
         <div class="login-feat-icon">🆓</div>
-        <div class="login-feat-title">Grátis por 30 dias</div>
+        <div class="login-feat-title">Grátis por 4 meses</div>
         <div class="login-feat-desc">A partir da primeira manutenção registrada</div>
       </div>
     </div>
@@ -1021,7 +1021,7 @@ async function salvarManutencao() {
   const { data: ass } = await db.from('assinaturas').select('*').eq('usuario_id', currentUser.id).single();
   if (!ass) {
     const inicio = new Date();
-    const fim = new Date(inicio); fim.setDate(fim.getDate() + 30);
+    const fim = new Date(inicio); fim.setDate(fim.getDate() + 120);
     await db.from('assinaturas').insert({
       usuario_id: currentUser.id, status: 'trial',
       trial_inicio: inicio.toISOString(), trial_fim: fim.toISOString(),
@@ -1045,7 +1045,7 @@ async function verificarAssinatura() {
   if (!ass) {
     banner.style.display = 'flex';
     document.getElementById('trial-title').textContent = '🆓 Período gratuito disponível';
-    document.getElementById('trial-sub').textContent = 'Registre sua primeira manutenção para começar os 30 dias grátis';
+    document.getElementById('trial-sub').textContent = 'Registre sua primeira manutenção para começar os 4 meses grátis';
     return;
   }
   if (ass.status === 'trial' && ass.trial_fim) {
