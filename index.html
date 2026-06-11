@@ -1476,7 +1476,10 @@ function renderResults(results, params) {
         <div class="expert-title">Quer uma análise personalizada?</div>
         <div class="expert-sub">Um entusiasta automotivo analisa seu perfil e indica o carro ideal para você.</div>
       </div>
-      <button class="btn-restart" onclick="showPage('wizard')">← Refazer busca</button>
+      <div style="display:flex;gap:10px;flex-shrink:0">
+        <button class="btn-restart" onclick="showPage('wizard')">← Refazer busca</button>
+        <button class="btn-expert" onclick="abrirModal()">💬 Falar com especialista</button>
+      </div>r busca</button>
     </div>`;
 
   // Gravar recomendação no Airtable silenciosamente
