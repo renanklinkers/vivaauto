@@ -613,7 +613,7 @@ function showPage(page) {
 // ══════════════════════════════════════
 async function carregarVeiculos() {
   const { data, error } = await db.from('veiculos')
-    .select('*').eq('ativo', true).order('criado_em');
+    .select('*').eq('usuario_id', currentUser.id).eq('ativo', true).order('criado_em');
   if (error) { console.error(error); return; }
   veiculos = data || [];
   veiculoAtivo = veiculos[0] || null;
@@ -740,8 +740,9 @@ async function carregarDashboard() {
 
   // Buscar manutenções
   const { data: mans } = await db.from('manutencoes')
-    .select('*, tipos_manutencao(*), veiculos(*)')
+    .select('*, tipos_manutencao(*), veiculos!inner(*)')
     .in('veiculo_id', veiculoIds)
+    .eq('veiculos.usuario_id', currentUser.id)
     .order('data_realizacao', { ascending: false });
   manutencoes = mans || [];
 
