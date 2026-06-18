@@ -289,6 +289,81 @@ nav{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 40
   .planos-grid{grid-template-columns:1fr}
 }
 
+/* ══ ONE-PAGE WIZARD ══ */
+.opwiz{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.ow-card{background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(15,31,61,.10);overflow:hidden;border:1px solid #e2e8f0}
+.ow-head{display:flex;align-items:center;gap:10px;padding:16px 24px;border-bottom:1px solid #f1f5f9;background:#f8fafc}
+.ow-num{width:26px;height:26px;border-radius:50%;background:#22c55e;color:#ffffff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Syne',sans-serif}
+.ow-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#0f1f3d}
+.ow-body{padding:22px 24px;display:flex;flex-direction:column;gap:18px}
+.ow-row2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ow-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.ow-field{display:flex;flex-direction:column;gap:8px}
+.ow-label{font-size:12px;font-weight:600;color:#64748b;letter-spacing:.02em;text-transform:uppercase}
+.ow-chips{display:flex;flex-wrap:wrap;gap:7px}
+/* CHIP PADRÃO — cinza, borda fina */
+.ow-chip{
+  display:inline-flex;align-items:center;
+  border:1.5px solid #e2e8f0;
+  background:#ffffff;
+  border-radius:20px;
+  padding:7px 14px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;font-weight:500;
+  color:#475569;
+  cursor:pointer;
+  transition:border-color .15s,background .15s,color .15s;
+  line-height:1;
+  white-space:nowrap;
+  user-select:none;
+}
+.ow-chip:hover{border-color:#0f1f3d;color:#0f1f3d;background:#f8fafc}
+/* CHIP SELECIONADO (single) — verde */
+.ow-chip.sel{background:#22c55e !important;border-color:#22c55e !important;color:#ffffff !important;font-weight:600}
+/* CHIP SELECIONADO (multi) — navy */
+.ow-chip.multi.sel{background:#22c55e !important;border-color:#22c55e !important;color:#ffffff !important;font-weight:600}
+/* INPUT */
+.ow-input{
+  border:1.5px solid #e2e8f0;border-radius:10px;
+  padding:10px 13px;font-size:14px;
+  font-family:'DM Sans',sans-serif;color:#1e293b;
+  background:#ffffff;width:100%;
+  transition:border-color .15s;
+}
+.ow-input:focus{outline:none;border-color:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+/* BOTÃO CTA */
+.btn-cta-wizard{
+  background:#22c55e;color:#ffffff;border:none;
+  border-radius:12px;padding:16px 48px;
+  font-size:16px;font-weight:700;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  width:100%;max-width:400px;
+  transition:background .15s,transform .1s;
+  box-shadow:0 4px 14px rgba(34,197,94,.35);
+}
+.btn-cta-wizard:hover{background:#16a34a;transform:translateY(-1px)}
+.btn-cta-wizard:active{transform:translateY(0)}
+@media(max-width:640px){
+  .ow-row2,.ow-row3{grid-template-columns:1fr}
+  .ow-body{padding:16px}
+  .ow-head{padding:14px 16px}
+}
+
+/* ══ LOCK GATE ══ */
+.card-locked{position:relative;overflow:hidden;border-radius:var(--radius-xl)}
+.card-locked .result-card{filter:blur(6px);pointer-events:none;user-select:none;opacity:.7}
+.lock-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.55);backdrop-filter:blur(1px);border-radius:var(--radius-xl);border:2px solid var(--green);padding:24px;text-align:center;z-index:10}
+.lock-icon{font-size:32px;margin-bottom:10px}
+.lock-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:6px;letter-spacing:-.3px}
+.lock-sub{font-size:13px;color:var(--gray-600);margin-bottom:16px;line-height:1.5}
+.lock-form{display:flex;flex-direction:column;gap:8px;width:100%;max-width:300px}
+.lock-input{border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:10px 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--gray-800);background:var(--white);width:100%;transition:border-color .15s}
+.lock-input:focus{outline:none;border-color:var(--green)}
+.lock-btn{background:var(--green);color:var(--white);border:none;border-radius:var(--radius);padding:11px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;width:100%}
+.lock-btn:hover{background:var(--green-dark)}
+.lock-note{font-size:11px;color:var(--gray-400);margin-top:4px}
+.first-card-badge{background:var(--green);color:var(--white);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;margin-bottom:8px;letter-spacing:.03em}
+
 /* ══ FOOTER ══ */
 footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:grid;grid-template-columns:1fr auto auto;gap:60px;font-size:13px}
 .footer-brand{font-size:15px;font-weight:700;color:white;margin-bottom:6px}
@@ -420,228 +495,202 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="page" id="page-wizard">
   <div class="wizard-wrap">
     <div class="wizard-header">
-      <h2>Recomendador Inteligente</h2>
-      <p>Responda as perguntas e receba recomendações personalizadas.</p>
+      <h2>Encontre seu <span style="color:var(--green)">carro ideal</span></h2>
+      <p style="font-size:14px;color:var(--gray-400);margin-top:4px">Responda abaixo — leva menos de 2 minutos</p>
     </div>
 
-    <!-- Steps bar -->
-    <div class="steps-bar" id="steps-bar">
-      <div class="step-item active" id="step-ind-1"><div class="step-num">1</div><div class="step-lbl">Dados básicos</div></div>
-      <div class="step-item" id="step-ind-2"><div class="step-num">2</div><div class="step-lbl">Uso do veículo</div></div>
-      <div class="step-item" id="step-ind-3"><div class="step-num">3</div><div class="step-lbl">Preferências</div></div>
-      <div class="step-item" id="step-ind-4"><div class="step-num">4</div><div class="step-lbl">Orçamento</div></div>
-    </div>
+    <div class="opwiz">
 
-    <!-- STEP 1: Dados básicos -->
-    <div class="step-card" id="step-1">
-      <div class="step-title">Dados básicos</div>
-      <div class="step-desc">Precisamos de algumas informações para personalizar sua recomendação.</div>
-
-      <div class="field-row">
-        <div class="field"><label class="field-label">Nome *</label><input class="field-input" id="f-nome" placeholder="Seu nome completo"></div>
-        <div class="field"><label class="field-label">E-mail *</label><input class="field-input" id="f-email" type="email" placeholder="seu@email.com"></div>
-      </div>
-      <div class="field-row">
-        <div class="field"><label class="field-label">WhatsApp *</label><input class="field-input" id="f-whats" placeholder="(11) 99999-9999"></div>
-        <div class="field"><label class="field-label">Cidade/Estado *</label><input class="field-input" id="f-cidade" placeholder="Ex: São Paulo/SP"></div>
-      </div>
-      <div class="field">
-        <label class="field-label">Você busca carro zero km ou seminovo? *</label>
-        <div class="options-grid cols3" id="grp-zero">
-          <button class="opt-btn check-style" data-val="zero" onclick="selectOpt(this,'grp-zero')">🆕 Zero km</button>
-          <button class="opt-btn check-style" data-val="seminovo" onclick="selectOpt(this,'grp-zero')">🔄 Seminovo (2022–2024)</button>
-          <button class="opt-btn check-style" data-val="ambos" onclick="selectOpt(this,'grp-zero')">🔍 Tanto faz</button>
+      <!-- SEÇÃO 1 -->
+      <div class="ow-card">
+        <div class="ow-head"><span class="ow-num">1</span><span class="ow-title">Perfil de busca</span></div>
+        <div class="ow-body">
+          <div class="ow-row2">
+            <div class="ow-field">
+              <div class="ow-label">Você busca <span class="req">*</span></div>
+              <div class="ow-chips" id="grp-zero">
+                <button class="ow-chip" data-val="zero" onclick="owSelect(this,'grp-zero')">Zero km</button>
+                <button class="ow-chip" data-val="seminovo" onclick="owSelect(this,'grp-zero')">Seminovo</button>
+                <button class="ow-chip" data-val="ambos" onclick="owSelect(this,'grp-zero')">Tanto faz</button>
+              </div>
+            </div>
+            <div class="ow-field">
+              <div class="ow-label">Perfil de marca <span class="req">*</span></div>
+              <div class="ow-chips" id="grp-premium">
+                <button class="ow-chip" data-val="popular" onclick="owSelect(this,'grp-premium')">Popular</button>
+                <button class="ow-chip" data-val="premium" onclick="owSelect(this,'grp-premium')">Premium</button>
+                <button class="ow-chip" data-val="ambos" onclick="owSelect(this,'grp-premium')">Sem preferência</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="field">
-        <label class="field-label">Perfil de marca desejado? *</label>
-        <div class="options-grid cols3" id="grp-premium">
-          <button class="opt-btn check-style" data-val="popular" onclick="selectOpt(this,'grp-premium')">💰 Popular / custo-benefício</button>
-          <button class="opt-btn check-style" data-val="premium" onclick="selectOpt(this,'grp-premium')">⭐ Premium / luxo</button>
-          <button class="opt-btn check-style" data-val="ambos" onclick="selectOpt(this,'grp-premium')">🔍 Sem preferência</button>
+      <!-- SEÇÃO 2 -->
+      <div class="ow-card">
+        <div class="ow-head"><span class="ow-num">2</span><span class="ow-title">Como você usa o carro</span></div>
+        <div class="ow-body">
+          <div class="ow-row2">
+            <div class="ow-field">
+              <div class="ow-label">Uso principal <span class="req">*</span></div>
+              <div class="ow-chips" id="grp-uso">
+                <button class="ow-chip" data-val="cidade" onclick="owSelect(this,'grp-uso')">Cidade</button>
+                <button class="ow-chip" data-val="estrada" onclick="owSelect(this,'grp-uso')">Estrada</button>
+                <button class="ow-chip" data-val="misto" onclick="owSelect(this,'grp-uso')">Misto</button>
+              </div>
+            </div>
+            <div class="ow-field">
+              <div class="ow-label">Quantas pessoas <span class="req">*</span></div>
+              <div class="ow-chips" id="grp-pessoas">
+                <button class="ow-chip" data-val="1" onclick="owSelect(this,'grp-pessoas')">Só eu</button>
+                <button class="ow-chip" data-val="3" onclick="owSelect(this,'grp-pessoas')">Até 3</button>
+                <button class="ow-chip" data-val="5" onclick="owSelect(this,'grp-pessoas')">Até 5</button>
+                <button class="ow-chip" data-val="6" onclick="owSelect(this,'grp-pessoas')">Mais de 5</button>
+              </div>
+            </div>
+          </div>
+          <div class="ow-row2">
+            <div class="ow-field">
+              <div class="ow-label">Viagens longas (200km+) <span class="req">*</span></div>
+              <div class="ow-chips" id="grp-viagem">
+                <button class="ow-chip" data-val="nunca" onclick="owSelect(this,'grp-viagem')">Raramente</button>
+                <button class="ow-chip" data-val="mes" onclick="owSelect(this,'grp-viagem')">1x por mês</button>
+                <button class="ow-chip" data-val="semana" onclick="owSelect(this,'grp-viagem')">Toda semana</button>
+              </div>
+            </div>
+            <div class="ow-field">
+              <div class="ow-label">Usa para trabalho? <span class="req">*</span></div>
+              <div class="ow-chips" id="grp-trabalho">
+                <button class="ow-chip" data-val="nao" onclick="owSelect(this,'grp-trabalho')">Não</button>
+                <button class="ow-chip" data-val="app" onclick="owSelect(this,'grp-trabalho')">App (Uber/99)</button>
+                <button class="ow-chip" data-val="comercial" onclick="owSelect(this,'grp-trabalho')">Comercial</button>
+              </div>
+            </div>
+          </div>
+          <div class="ow-field" style="max-width:200px">
+            <div class="ow-label">KM por mês (aprox.)</div>
+            <input type="number" id="f-km" class="ow-input" placeholder="Ex: 1500" min="100" max="20000">
+          </div>
         </div>
       </div>
 
-      <div class="step-nav">
-        <button class="btn-back" onclick="showPage('home')">← Voltar</button>
-        <button class="btn-next" onclick="nextStep(1)">Próximo →</button>
-      </div>
-    </div>
-
-    <!-- STEP 2: Uso do veículo -->
-    <div class="step-card" id="step-2" style="display:none">
-      <div class="step-title">Uso do veículo</div>
-      <div class="step-desc">Como você usa — ou pretende usar — o carro no dia a dia?</div>
-
-      <div class="field">
-        <label class="field-label">Quantos km você roda por mês?</label>
-        <input class="field-input" id="f-km" placeholder="Ex: 1500" inputmode="numeric" style="max-width:200px">
-      </div>
-
-      <div class="field">
-        <label class="field-label">Uso principal *</label>
-        <div class="options-grid cols3" id="grp-uso">
-          <button class="opt-btn check-style" data-val="cidade" onclick="selectOpt(this,'grp-uso')"><span class="opt-icon">🏙️</span>Cidade</button>
-          <button class="opt-btn check-style" data-val="estrada" onclick="selectOpt(this,'grp-uso')"><span class="opt-icon">🛣️</span>Estrada</button>
-          <button class="opt-btn check-style" data-val="misto" onclick="selectOpt(this,'grp-uso')"><span class="opt-icon">🔄</span>Misto</button>
+      <!-- SEÇÃO 3 -->
+      <div class="ow-card">
+        <div class="ow-head"><span class="ow-num">3</span><span class="ow-title">Preferências do veículo</span></div>
+        <div class="ow-body">
+          <div class="ow-row2">
+            <div class="ow-field">
+              <div class="ow-label">Tipo de carro</div>
+              <div class="ow-chips" id="grp-tipo">
+                <button class="ow-chip multi" data-val="Hatch" onclick="owMulti(this,'grp-tipo')">Hatch</button>
+                <button class="ow-chip multi" data-val="Sedan" onclick="owMulti(this,'grp-tipo')">Sedã</button>
+                <button class="ow-chip multi" data-val="SUV" onclick="owMulti(this,'grp-tipo')">SUV</button>
+                <button class="ow-chip multi" data-val="Picape" onclick="owMulti(this,'grp-tipo')">Picape</button>
+                <button class="ow-chip multi" data-val="Minivan" onclick="owMulti(this,'grp-tipo')">Minivan</button>
+                <button class="ow-chip multi" data-val="todos" onclick="owMulti(this,'grp-tipo')">Tanto faz</button>
+              </div>
+            </div>
+            <div class="ow-field">
+              <div class="ow-label">Câmbio <span class="req">*</span></div>
+              <div class="ow-chips" id="grp-cambio">
+                <button class="ow-chip" data-val="manual" onclick="owSelect(this,'grp-cambio')">Manual</button>
+                <button class="ow-chip" data-val="automatico" onclick="owSelect(this,'grp-cambio')">Automático</button>
+                <button class="ow-chip" data-val="todos" onclick="owSelect(this,'grp-cambio')">Tanto faz</button>
+              </div>
+            </div>
+          </div>
+          <div class="ow-row2">
+            <div class="ow-field">
+              <div class="ow-label">Elétrico / Híbrido <span class="req">*</span></div>
+              <div class="ow-chips" id="grp-propulsao">
+                <button class="ow-chip" data-val="combustao" onclick="owSelect(this,'grp-propulsao')">Só combustão</button>
+                <button class="ow-chip" data-val="financeiro" onclick="owSelect(this,'grp-propulsao')">Aberto se valer</button>
+                <button class="ow-chip" data-val="sim_elet" onclick="owSelect(this,'grp-propulsao')">Quero elétrico</button>
+              </div>
+            </div>
+            <div class="ow-field">
+              <div class="ow-label">Tração 4x4 / AWD</div>
+              <div class="ow-chips" id="grp-4x4">
+                <button class="ow-chip" data-val="sim" onclick="owSelect(this,'grp-4x4')">Quero 4x4</button>
+                <button class="ow-chip" data-val="nao" onclick="owSelect(this,'grp-4x4')">Não preciso</button>
+                <button class="ow-chip" data-val="indiferente" onclick="owSelect(this,'grp-4x4')">Indiferente</button>
+              </div>
+            </div>
+          </div>
+          <div class="ow-row2">
+            <div class="ow-field">
+              <div class="ow-label">O que mais importa (até 2)</div>
+              <div class="ow-chips" id="grp-carac">
+                <button class="ow-chip multi" data-val="conforto" onclick="owMulti(this,'grp-carac',2)">Conforto</button>
+                <button class="ow-chip multi" data-val="consumo" onclick="owMulti(this,'grp-carac',2)">Consumo</button>
+                <button class="ow-chip multi" data-val="espaco" onclick="owMulti(this,'grp-carac',2)">Espaço</button>
+                <button class="ow-chip multi" data-val="desempenho" onclick="owMulti(this,'grp-carac',2)">Desempenho</button>
+                <button class="ow-chip multi" data-val="tecnologia" onclick="owMulti(this,'grp-carac',2)">Tecnologia</button>
+                <button class="ow-chip multi" data-val="off_road" onclick="owMulti(this,'grp-carac',2)">Off-road</button>
+              </div>
+            </div>
+            <div class="ow-field">
+              <div class="ow-label">Marcas chinesas <span class="req">*</span></div>
+              <div class="ow-chips" id="grp-chinesa">
+                <button class="ow-chip" data-val="sim" onclick="owSelect(this,'grp-chinesa')">Sim, considero</button>
+                <button class="ow-chip" data-val="custo_beneficio" onclick="owSelect(this,'grp-chinesa')">Se valer a pena</button>
+                <button class="ow-chip" data-val="nao" onclick="owSelect(this,'grp-chinesa')">Prefiro evitar</button>
+              </div>
+            </div>
+          </div>
+          <div class="ow-row2">
+            <div class="ow-field">
+              <div class="ow-label">Marca que não considera</div>
+              <input type="text" id="f-marca-nao" class="ow-input" placeholder="Ex: JAC, Chery">
+            </div>
+            <div class="ow-field">
+              <div class="ow-label">Marca preferida</div>
+              <input type="text" id="f-marca-sim" class="ow-input" placeholder="Ex: Toyota, VW">
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="field">
-        <label class="field-label">Quantas pessoas usam o carro? *</label>
-        <div class="options-grid cols2" id="grp-pessoas">
-          <button class="opt-btn check-style" data-val="1" onclick="selectOpt(this,'grp-pessoas')">👤 Geralmente só eu</button>
-          <button class="opt-btn check-style" data-val="3" onclick="selectOpt(this,'grp-pessoas')">👫 Até 3 pessoas</button>
-          <button class="opt-btn check-style" data-val="5" onclick="selectOpt(this,'grp-pessoas')">👨‍👩‍👧 Até 5 pessoas</button>
-          <button class="opt-btn check-style" data-val="6" onclick="selectOpt(this,'grp-pessoas')">👨‍👩‍👧‍👦 Mais de 5 pessoas</button>
+      <!-- SEÇÃO 4 -->
+      <div class="ow-card">
+        <div class="ow-head"><span class="ow-num">4</span><span class="ow-title">Orçamento</span></div>
+        <div class="ow-body">
+          <div class="ow-row3">
+            <div class="ow-field">
+              <div class="ow-label">Valor máximo do carro <span class="req">*</span></div>
+              <input type="text" id="f-orc" class="ow-input orc-mask" placeholder="R$ 0">
+            </div>
+            <div class="ow-field">
+              <div class="ow-label">Entrada (opcional)</div>
+              <input type="text" id="f-entrada" class="ow-input orc-mask" placeholder="R$ 0">
+            </div>
+            <div class="ow-field">
+              <div class="ow-label">Gasto mensal máximo</div>
+              <input type="text" id="f-orc-mensal" class="ow-input orc-mask" placeholder="R$ 0">
+            </div>
+          </div>
+          <div class="ow-field">
+            <div class="ow-label">Forma de pagamento <span class="req">*</span></div>
+            <div class="ow-chips" id="grp-pagamento">
+              <button class="ow-chip" data-val="vista" onclick="owSelect(this,'grp-pagamento')">À vista</button>
+              <button class="ow-chip" data-val="financiamento" onclick="owSelect(this,'grp-pagamento')">Financiamento</button>
+              <button class="ow-chip" data-val="consorcio" onclick="owSelect(this,'grp-pagamento')">Consórcio</button>
+              <button class="ow-chip" data-val="nao_sei" onclick="owSelect(this,'grp-pagamento')">Ainda não sei</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="field">
-        <label class="field-label">Frequência de viagens acima de 200 km *</label>
-        <div class="options-grid cols2" id="grp-viagem">
-          <button class="opt-btn check-style" data-val="nunca" onclick="selectOpt(this,'grp-viagem')">Quase nunca</button>
-          <button class="opt-btn check-style" data-val="ano" onclick="selectOpt(this,'grp-viagem')">Algumas vezes por ano</button>
-          <button class="opt-btn check-style" data-val="mes" onclick="selectOpt(this,'grp-viagem')">Todo mês</button>
-          <button class="opt-btn check-style" data-val="semana" onclick="selectOpt(this,'grp-viagem')">Toda semana</button>
-        </div>
+      <!-- CTA -->
+      <div style="text-align:center;padding:8px 0 40px">
+        <button class="btn-cta-wizard" onclick="verRecomendacao()">Ver minha recomendação →</button>
+        <p style="font-size:12px;color:var(--gray-400);margin-top:10px">100% gratuito · Sem cadastro obrigatório</p>
       </div>
 
-      <div class="field">
-        <label class="field-label">Usa o carro para trabalho? *</label>
-        <div class="options-grid cols3" id="grp-trabalho">
-          <button class="opt-btn check-style" data-val="sim" onclick="selectOpt(this,'grp-trabalho')">Sim</button>
-          <button class="opt-btn check-style" data-val="as_vezes" onclick="selectOpt(this,'grp-trabalho')">Às vezes</button>
-          <button class="opt-btn check-style" data-val="nao" onclick="selectOpt(this,'grp-trabalho')">Não</button>
-        </div>
-      </div>
-
-      <div class="step-nav">
-        <button class="btn-back" onclick="prevStep(2)">← Voltar</button>
-        <button class="btn-next" onclick="nextStep(2)">Próximo →</button>
-      </div>
-    </div>
-
-    <!-- STEP 3: Preferências -->
-    <div class="step-card" id="step-3" style="display:none">
-      <div class="step-title">Preferências</div>
-      <div class="step-desc">Refine a recomendação com suas preferências pessoais.</div>
-
-      <div class="field">
-        <label class="field-label">Tipo de carro preferido <span>(opcional)</span></label>
-        <div class="options-grid cols3" id="grp-tipo">
-          <button class="opt-btn checkbox" data-val="Hatch" onclick="toggleOpt(this,'grp-tipo')">Hatch</button>
-          <button class="opt-btn checkbox" data-val="Sedan" onclick="toggleOpt(this,'grp-tipo')">Sedan</button>
-          <button class="opt-btn checkbox" data-val="SUV" onclick="toggleOpt(this,'grp-tipo')">SUV</button>
-          <button class="opt-btn checkbox" data-val="Picape" onclick="toggleOpt(this,'grp-tipo')">Picape</button>
-          <button class="opt-btn checkbox" data-val="Minivan" onclick="toggleOpt(this,'grp-tipo')">Minivan / 7 lugares</button>
-          <button class="opt-btn checkbox" data-val="qualquer" onclick="toggleOpt(this,'grp-tipo')">Sem preferência</button>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Câmbio *</label>
-        <div class="options-grid cols3" id="grp-cambio">
-          <button class="opt-btn check-style" data-val="Automático" onclick="selectOpt(this,'grp-cambio')">Automático</button>
-          <button class="opt-btn check-style" data-val="Manual" onclick="selectOpt(this,'grp-cambio')">Manual</button>
-          <button class="opt-btn check-style" data-val="todos" onclick="selectOpt(this,'grp-cambio')">Sem preferência</button>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Interesse em elétrico / híbrido *</label>
-        <div class="options-grid" id="grp-propulsao">
-          <button class="opt-btn check-style" data-val="sim_elet" onclick="selectOpt(this,'grp-propulsao')">⚡ Sim, quero elétrico ou híbrido</button>
-          <button class="opt-btn check-style" data-val="financeiro" onclick="selectOpt(this,'grp-propulsao')">💰 Aceito considerar se fizer sentido financeiramente</button>
-          <button class="opt-btn check-style" data-val="combustao" onclick="selectOpt(this,'grp-propulsao')">🔥 Prefiro combustão</button>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Dois fatores mais importantes <span>(escolha até 2)</span></label>
-        <div class="options-grid cols2" id="grp-carac">
-          <button class="opt-btn checkbox" data-val="custo_mensal" onclick="toggleOpt(this,'grp-carac',2)">💰 Menor custo mensal total</button>
-          <button class="opt-btn checkbox" data-val="consumo" onclick="toggleOpt(this,'grp-carac',2)">⛽ Menor consumo</button>
-          <button class="opt-btn checkbox" data-val="conforto" onclick="toggleOpt(this,'grp-carac',2)">🛋️ Conforto e tecnologia</button>
-          <button class="opt-btn checkbox" data-val="desempenho" onclick="toggleOpt(this,'grp-carac',2)">🏎️ Desempenho</button>
-          <button class="opt-btn checkbox" data-val="espaco" onclick="toggleOpt(this,'grp-carac',2)">📦 Espaço interno e porta-malas</button>
-          <button class="opt-btn checkbox" data-val="seguranca" onclick="toggleOpt(this,'grp-carac',2)">🛡️ Segurança</button>
-        </div>
-      </div>
-
-      <div class="field-row">
-        <div class="field">
-          <label class="field-label">Marca que não considera <span>(opcional — separe por vírgula)</span></label>
-          <input class="field-input" id="f-marca-nao" placeholder="Ex: Chery, JAC, BYD">
-        </div>
-        <div class="field">
-          <label class="field-label">Marca preferida <span>(opcional)</span></label>
-          <input class="field-input" id="f-marca-sim" placeholder="Ex: Toyota, VW">
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Considera comprar marca chinesa? *</label>
-        <div class="options-grid cols3" id="grp-chinesa">
-          <button class="opt-btn check-style" data-val="sim" onclick="selectOpt(this,'grp-chinesa')">✅ Sim, considero</button>
-          <button class="opt-btn check-style" data-val="custo_beneficio" onclick="selectOpt(this,'grp-chinesa')">💰 Se tiver bom custo-benefício</button>
-          <button class="opt-btn check-style" data-val="nao" onclick="selectOpt(this,'grp-chinesa')">❌ Prefiro evitar</button>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Precisa de tração 4x4 / AWD? <span>(opcional)</span></label>
-        <div class="options-grid cols3" id="grp-4x4">
-          <button class="opt-btn check-style" data-val="sim" onclick="selectOpt(this,'grp-4x4')">🏔️ Sim, quero 4x4</button>
-          <button class="opt-btn check-style" data-val="nao" onclick="selectOpt(this,'grp-4x4')">🏙️ Não, uso urbano</button>
-          <button class="opt-btn check-style" data-val="indiferente" onclick="selectOpt(this,'grp-4x4')">🔍 Indiferente</button>
-        </div>
-      </div>
-
-      <div class="step-nav">
-        <button class="btn-back" onclick="prevStep(3)">← Voltar</button>
-        <button class="btn-next" onclick="nextStep(3)">Próximo →</button>
-      </div>
-    </div>
-
-    <!-- STEP 4: Orçamento -->
-    <div class="step-card" id="step-4" style="display:none">
-      <div class="step-title">Orçamento</div>
-      <div class="step-desc">Informe seus limites financeiros para filtrar as melhores opções.</div>
-
-      <div class="field-row">
-        <div class="field">
-          <label class="field-label">Valor máximo do carro (R$) *</label>
-          <div class="input-wrap"><span class="input-prefix-label">R$</span><input class="field-input" id="f-orc" placeholder="Ex: 150.000" inputmode="numeric"></div>
-        </div>
-        <div class="field">
-          <label class="field-label">Valor de entrada (R$) <span>(opcional)</span></label>
-          <div class="input-wrap"><span class="input-prefix-label">R$</span><input class="field-input" id="f-entrada" placeholder="Ex: 30.000" inputmode="numeric"></div>
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Gasto mensal máximo desejado (R$) <span>(combustível + manutenção)</span></label>
-        <div class="input-wrap" style="max-width:260px"><span class="input-prefix-label">R$</span><input class="field-input" id="f-orc-mensal" placeholder="Ex: 2.500" inputmode="numeric"></div>
-      </div>
-
-      <div class="field">
-        <label class="field-label">Forma de pagamento *</label>
-        <div class="options-grid cols3" id="grp-pagamento">
-          <button class="opt-btn check-style" data-val="avista" onclick="selectOpt(this,'grp-pagamento')">À vista</button>
-          <button class="opt-btn check-style" data-val="financiamento" onclick="selectOpt(this,'grp-pagamento')">Financiamento</button>
-          <button class="opt-btn check-style" data-val="nao_sei" onclick="selectOpt(this,'grp-pagamento')">Ainda não sei</button>
-        </div>
-      </div>
-
-      <div class="step-nav">
-        <button class="btn-back" onclick="prevStep(4)">← Voltar</button>
-        <button class="btn-next green" onclick="verRecomendacao()">Ver minha recomendação →</button>
-      </div>
     </div>
   </div>
 </div>
+
 
 <!-- ══ RESULTS PAGE ══ -->
 <div class="page" id="page-results">
@@ -1140,9 +1189,6 @@ function goToStep(n) {
 
 function nextStep(from) {
   if (from === 1) {
-    if (!document.getElementById('f-nome').value.trim()) { alert('Por favor, informe seu nome.'); return; }
-    if (!document.getElementById('f-email').value.trim()) { alert('Por favor, informe seu e-mail.'); return; }
-    if (!document.getElementById('f-whats').value.trim()) { alert('Por favor, informe seu WhatsApp.'); return; }
     if (!getSelected('grp-zero')) { alert('Informe se busca carro zero km ou seminovo.'); return; }
     if (!getSelected('grp-premium')) { alert('Informe seu perfil de marca desejado.'); return; }
   }
@@ -1163,6 +1209,16 @@ function nextStep(from) {
 function prevStep(from) { goToStep(from - 1); }
 
 // ══ OPTION BUTTONS ══
+function owSelect(btn, grp) {
+  document.querySelectorAll('#' + grp + ' .ow-chip').forEach(function(b) { b.classList.remove('sel'); });
+  btn.classList.add('sel');
+}
+function owMulti(btn, grp, max) {
+  var sel = document.querySelectorAll('#' + grp + ' .ow-chip.sel');
+  if (!btn.classList.contains('sel') && max && sel.length >= max) return;
+  btn.classList.toggle('sel');
+}
+
 function selectOpt(btn, groupId) {
   document.querySelectorAll('#' + groupId + ' .opt-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
@@ -1179,12 +1235,17 @@ function toggleOpt(btn, groupId, max) {
 }
 
 function getSelected(groupId) {
-  const el = document.querySelector('#' + groupId + ' .opt-btn.selected');
-  return el ? el.dataset.val : null;
+  const el = document.querySelector('#' + groupId + ' .ow-chip.sel') ||
+             document.querySelector('#' + groupId + ' .opt-btn.selected') ||
+             document.querySelector('#' + groupId + ' .opt-btn.sel');
+  return el ? (el.dataset.val || el.dataset.v) : null;
 }
 
 function getMultiSelected(groupId) {
-  return [...document.querySelectorAll('#' + groupId + ' .opt-btn.selected')].map(b => b.dataset.val);
+  const els = document.querySelectorAll(
+    '#' + groupId + ' .ow-chip.sel, #' + groupId + ' .opt-btn.selected'
+  );
+  return [...els].map(b => b.dataset.val || b.dataset.v);
 }
 
 function parseOrcInput(id) {
@@ -1270,8 +1331,24 @@ function calcMensalReal(car, kmMes) {
 
 
 
+// ══ STATE GLOBAL ══
+var lastParams = null;
+var lastResults = [];
+
 function verRecomendacao() {
-  if (!getSelected('grp-pagamento')) { alert('Selecione a forma de pagamento.'); return; }
+  const erros = [];
+  if (!getSelected('grp-zero'))      erros.push('Seção 1: selecione zero km ou seminovo');
+  if (!getSelected('grp-premium'))   erros.push('Seção 1: selecione o perfil de marca');
+  if (!getSelected('grp-uso'))       erros.push('Seção 2: selecione o uso principal');
+  if (!getSelected('grp-pessoas'))   erros.push('Seção 2: selecione quantas pessoas');
+  if (!getSelected('grp-viagem'))    erros.push('Seção 2: selecione frequência de viagens');
+  if (!getSelected('grp-trabalho'))  erros.push('Seção 2: selecione uso para trabalho');
+  if (!getSelected('grp-cambio'))    erros.push('Seção 3: selecione o câmbio');
+  if (!getSelected('grp-propulsao')) erros.push('Seção 3: selecione preferência de motor');
+  if (!getSelected('grp-chinesa'))   erros.push('Seção 3: informe sobre marcas chinesas');
+  if (!getSelected('grp-pagamento')) erros.push('Seção 4: selecione a forma de pagamento');
+  if (!document.getElementById('f-orc')?.value) erros.push('Seção 4: informe o valor máximo do carro');
+  if (erros.length) { alert('Por favor, preencha:\n\n• ' + erros.join('\n• ')); return; }
 
   const orcamento = parseOrcInput('f-orc') || Infinity;
   const orcMensal = parseOrcInput('f-orc-mensal') || null;
@@ -1290,12 +1367,12 @@ function verRecomendacao() {
     propulsaoIntencao: getSelected('grp-propulsao') || 'financeiro',
     carac: getMultiSelected('grp-carac'),
     pagamento: getSelected('grp-pagamento') || 'nao_sei',
-    nome: document.getElementById('f-nome').value,
-    email: document.getElementById('f-email').value,
-    whats: document.getElementById('f-whats').value,
-    cidade: document.getElementById('f-cidade').value,
-    marcaNao: document.getElementById('f-marca-nao').value,
-    marcaSim: document.getElementById('f-marca-sim').value,
+    nome: document.getElementById('f-nome')?.value || '',
+    email: document.getElementById('f-email')?.value || '',
+    whatsapp: document.getElementById('f-whats')?.value || '',
+    cidade: document.getElementById('f-cidade')?.value || '',
+    marcaNao: document.getElementById('f-marca-nao')?.value || '',
+    marcaSim: document.getElementById('f-marca-sim')?.value || '',
     chinesa: getSelected('grp-chinesa') || 'sim',
     zerouUsado: getSelected('grp-zero') || 'ambos',
     tracao4x4: getSelected('grp-4x4') || 'indiferente',
@@ -1472,7 +1549,30 @@ function renderResults(results, params) {
     ? params.orcamento.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0})
     : null;
 
-  const cards = results.map((car, i) => buildCard(car, i, params)).join('');
+  // 1º card completo, demais bloqueados se não tiver dados
+  const temDados = params.nome && params.email;
+  const card1 = buildCard(results[0], 0, params);
+  const cardsExtras = results.slice(1).map((car, i) => buildCard(car, i+1, params)).join('');
+
+  // Quantidade de recomendações extras
+  const qtdExtras = results.length - 1;
+
+  const gateHTML = !temDados && qtdExtras > 0 ? `
+    <div class="card-locked">
+      <div class="result-card">${buildCard(results[1] || results[0], 1, params)}</div>
+      <div class="lock-overlay">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">+ ${qtdExtras} carro${qtdExtras > 1 ? 's' : ''} recomendado${qtdExtras > 1 ? 's' : ''} para você</div>
+        <div class="lock-sub">Informe seu e-mail para desbloquear todas as recomendações gratuitamente</div>
+        <div class="lock-form">
+          <input class="lock-input" id="gate-nome" type="text" placeholder="Seu nome">
+          <input class="lock-input" id="gate-email" type="email" placeholder="Seu e-mail">
+          <input class="lock-input" id="gate-wpp" type="tel" placeholder="WhatsApp (opcional)">
+          <button class="lock-btn" type="button" onclick="desbloquearResultados()">🚗 Ver todas as recomendações</button>
+          <div class="lock-note">100% gratuito · Sem spam</div>
+        </div>
+      </div>
+    </div>` : cardsExtras;
 
   container.innerHTML = `
     <div class="results-top">
@@ -1480,7 +1580,13 @@ function renderResults(results, params) {
       <div class="results-title">${results.length === 1 ? '1 carro recomendado' : `${results.length} carros recomendados para você`}</div>
       <div class="results-sub">Para ${kmLabel} km/mês${orcLabel ? ' · Orçamento até ' + orcLabel : ''} · Custo mensal = combustível + manutenção estimada</div>
     </div>
-    <div class="results-grid">${cards}</div>
+    <div class="results-grid">
+      <div>
+        ${!temDados ? '<div class="first-card-badge">⭐ Sua melhor opção</div>' : ''}
+        ${card1}
+      </div>
+      ${gateHTML}
+    </div>
     <div class="expert-banner">
       <div>
         <div class="expert-title">Quer uma análise personalizada?</div>
@@ -1499,6 +1605,44 @@ function renderResults(results, params) {
   if (results.length > 0) {
     setTimeout(() => atualizarPrecosFIPE(results), 500);
   }
+}
+
+function desbloquearResultados(e) {
+  if (e) e.preventDefault();
+
+  // Coletar valores com fallback robusto
+  const nomeEl  = document.getElementById('gate-nome');
+  const emailEl = document.getElementById('gate-email');
+  const wppEl   = document.getElementById('gate-wpp');
+
+  const nome  = (nomeEl  ? nomeEl.value  : '').trim();
+  const email = (emailEl ? emailEl.value : '').trim();
+  const wpp   = (wppEl   ? wppEl.value   : '').trim();
+
+  if (!nome)  { if (nomeEl)  nomeEl.focus();  return; }
+  if (!email) { if (emailEl) emailEl.focus(); return; }
+
+  // Atualizar params COM os dados do usuário
+  const novosParams = Object.assign({}, lastParams, { nome, email, whatsapp: wpp });
+  lastParams = novosParams;
+
+  // Re-renderizar — agora temDados = true → mostra todos os cards sem gate
+  renderResults(lastResults, novosParams);
+
+  // Scroll para o topo dos resultados
+  var container = document.getElementById('results-container');
+  if (container) container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Gravar e notificar em background
+  gravarRecomendacao(lastResults, novosParams);
+  fetch('https://formspree.io/f/meenlayl', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nome, email, whatsapp: wpp, origem: 'gate_resultados',
+      rec1: lastResults && lastResults[0] ? lastResults[0].marca + ' ' + lastResults[0].modelo : ''
+    })
+  }).catch(function() {});
 }
 
 function gerarJustificativa(car, params, rank) {
