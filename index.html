@@ -1384,7 +1384,10 @@ function verRecomendacao() {
   let filtered = CARROS_RAW.filter(car => {
     const price = car.fipe_price || 100000;
     if (price > params.orcamento) return false;
-    if (params.cambio !== 'todos' && car.transmissao !== params.cambio) return false;
+    // Normalizar câmbio: chip usa 'automatico'/'manual', DB usa 'Automático'/'Manual'
+    const cambioMap = { 'automatico': 'Automático', 'manual': 'Manual', 'todos': 'todos' };
+    const cambioNorm = cambioMap[params.cambio] || params.cambio;
+    if (cambioNorm !== 'todos' && car.transmissao !== cambioNorm) return false;
     if (params.propulsaoIntencao === 'sim_elet' && car.propulsao === 'Combustão') return false;
     if (params.propulsaoIntencao === 'combustao' && car.propulsao !== 'Combustão') return false;
     // Tipo de carroceria — filtro hard quando usuário tem preferência explícita
