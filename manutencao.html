@@ -783,48 +783,90 @@ async function carregarDashboard() {
   }
 }
 
+// ══════════════════════════════════════
+// REGRA: revisão vence por KM OU por tempo (o que ocorrer primeiro)
+// ══════════════════════════════════════
+function calcularRevisao(v, manutencoesVeiculo) {
+  const ultimaRev = (manutencoesVeiculo || [])
+    .filter(m => m.tipos_manutencao?.intervalo_km_padrao)
+    .sort((a, b) => b.km_realizacao - a.km_realizacao)[0];
+
+  const intervaloKm = v.intervalo_revisao_km || 10000;
+  const intervaloMeses = v.intervalo_revisao_meses || 12;
+  const kmAtual = v.km_atual || 0;
+
+  // --- Critério KM ---
+  const kmBase = ultimaRev ? ultimaRev.km_realizacao : Math.max(0, kmAtual - intervaloKm);
+  const kmProx = kmBase + intervaloKm;
+  const kmRestante = kmProx - kmAtual;
+
+  // --- Critério tempo ---
+  // Base de tempo: data da última revisão, ou data de cadastro do veículo se nunca revisado
+  const dataBase = new Date(ultimaRev ? ultimaRev.data_realizacao : (v.criado_em || Date.now()));
+  const dataProx = new Date(dataBase);
+  dataProx.setMonth(dataProx.getMonth() + intervaloMeses);
+  const hoje = new Date();
+  const diasRestantesTempo = Math.ceil((dataProx - hoje) / (1000 * 60 * 60 * 24));
+  const mesesRestantesTempo = Math.round(diasRestantesTempo / 30);
+
+  // --- Critério combinado: o que vencer primeiro ---
+  const diasRestantesKm = v.km_mensal > 0 ? (kmRestante / v.km_mensal) * 30 : Infinity;
+  const venceTempoPrimeiro = diasRestantesTempo <= diasRestantesKm;
+  const diasRestantes = Math.min(diasRestantesTempo, diasRestantesKm);
+
+  // % de progresso considerando os dois critérios (o que estiver mais avançado)
+  const pctKm = intervaloKm > 0 ? (kmAtual - kmBase) / intervaloKm * 100 : 0;
+  const pctTempo = intervaloMeses > 0 ? ((hoje - dataBase) / (dataProx - dataBase)) * 100 : 0;
+  const pct = Math.min(100, Math.max(0, Math.round(Math.max(pctKm, pctTempo))));
+
+  const emAtraso = diasRestantes <= 0;
+
+  return {
+    kmBase, kmProx, kmRestante, intervaloKm,
+    dataBase, dataProx, diasRestantesTempo, mesesRestantesTempo, intervaloMeses,
+    diasRestantes, venceTempoPrimeiro, pct, emAtraso
+  };
+}
+
 function renderProximas() {
   const container = document.getElementById('dash-proximas');
   if (!veiculos.length) return;
 
   const cards = veiculos.map(v => {
-    const ultimaRev = manutencoes
-      .filter(m => m.veiculo_id === v.id && m.tipos_manutencao?.intervalo_km_padrao)
-      .sort((a,b) => b.km_realizacao - a.km_realizacao)[0];
+    const manutencoesVeiculo = manutencoes.filter(m => m.veiculo_id === v.id);
+    const r = calcularRevisao(v, manutencoesVeiculo);
+    const cor = r.pct >= 90 ? 'red' : r.pct >= 70 ? 'amber' : 'green';
 
-    const kmAtual = v.km_atual;
-    const intervalo = v.intervalo_revisao_km || 10000;
-    const kmBase = ultimaRev ? ultimaRev.km_realizacao : Math.max(0, kmAtual - intervalo);
-    const kmProx = kmBase + intervalo;
-    const kmRestante = kmProx - kmAtual;
-    const pct = Math.min(100, Math.round((kmAtual - kmBase) / intervalo * 100));
-    const cor = pct >= 90 ? 'red' : pct >= 70 ? 'amber' : 'green';
+    const restanteStr = r.emAtraso
+      ? 'Revisão em atraso!'
+      : r.venceTempoPrimeiro
+        ? `vence em ~${r.mesesRestantesTempo} ${r.mesesRestantesTempo === 1 ? 'mês' : 'meses'} (prazo)`
+        : `${r.kmRestante.toLocaleString('pt-BR')} km restantes`;
 
     return `
       <div class="km-card" style="margin-bottom:12px">
         <div class="km-header">
           <div>
             <div class="km-tipo">Revisão — ${v.apelido || v.modelo}</div>
-            <div class="km-veiculo">${v.marca} ${v.ano} • ${kmAtual.toLocaleString('pt-BR')} km atual</div>
+            <div class="km-veiculo">${v.marca} ${v.ano} • ${(v.km_atual||0).toLocaleString('pt-BR')} km atual</div>
           </div>
-          <div class="km-pct" style="color:var(--${cor})">${pct}%</div>
+          <div class="km-pct" style="color:var(--${cor})">${r.pct}%</div>
         </div>
-        <div class="progress-bar"><div class="progress-fill ${cor}" style="width:${pct}%"></div></div>
+        <div class="progress-bar"><div class="progress-fill ${cor}" style="width:${r.pct}%"></div></div>
         <div class="km-detail">
-          <span>${kmBase.toLocaleString('pt-BR')} km (última revisão)</span>
-          <span style="color:var(--${cor});font-weight:600">${kmRestante > 0 ? kmRestante.toLocaleString('pt-BR')+' km restantes' : 'Revisão em atraso!'}</span>
-          <span>${kmProx.toLocaleString('pt-BR')} km</span>
+          <span>${r.kmBase.toLocaleString('pt-BR')} km (última revisão)</span>
+          <span style="color:var(--${cor});font-weight:600">${restanteStr}</span>
+          <span>${r.kmProx.toLocaleString('pt-BR')} km</span>
         </div>
       </div>`;
   }).join('');
 
   container.innerHTML = cards || '<div class="empty-state"><div class="empty-sub">Nenhum veículo</div></div>';
 
-  // Update alert stat
+  // Update alert stat — considera KM OU tempo, o que vencer primeiro
   const emAtraso = veiculos.filter(v => {
-    const kmBase = v.km_atual - v.intervalo_revisao_km;
-    const kmProx = kmBase + v.intervalo_revisao_km;
-    return v.km_atual >= kmProx;
+    const r = calcularRevisao(v, manutencoes.filter(m => m.veiculo_id === v.id));
+    return r.emAtraso;
   }).length;
   document.getElementById('stat-alertas').textContent = emAtraso;
   if (emAtraso > 0) {
@@ -886,23 +928,16 @@ async function carregarAlertas() {
     document.getElementById('alertas-content').innerHTML = '<div class="empty-state"><div class="empty-icon">🔔</div><div class="empty-title">Nenhum veículo cadastrado</div></div>';
     return;
   }
-  // Calcular alertas baseado nos veículos
+  // Calcular alertas baseado nos veículos — KM ou tempo (12 meses), o que vencer primeiro
   const alertas = [];
   veiculos.forEach(v => {
-    const intervalo = v.intervalo_revisao_km || 10000;
-    const kmAtual = v.km_atual;
-    const ultima = manutencoes.filter(m => m.veiculo_id === v.id).sort((a,b) => b.km_realizacao - a.km_realizacao)[0];
-    const kmBase = ultima ? ultima.km_realizacao : Math.max(0, kmAtual - intervalo);
-    const kmProx = kmBase + intervalo;
-    const kmRestante = kmProx - kmAtual;
-    const mesesRestantes = v.km_mensal > 0 ? Math.round(kmRestante / v.km_mensal) : null;
-
-    alertas.push({ veiculo: v, tipo: 'Revisão', kmProx, kmRestante, mesesRestantes });
+    const r = calcularRevisao(v, manutencoes.filter(m => m.veiculo_id === v.id));
+    alertas.push({ veiculo: v, tipo: 'Revisão', ...r });
   });
 
-  const urgentes = alertas.filter(a => a.kmRestante <= 0);
-  const proximos = alertas.filter(a => a.kmRestante > 0 && a.kmRestante <= 2000);
-  const normais = alertas.filter(a => a.kmRestante > 2000);
+  const urgentes = alertas.filter(a => a.emAtraso);
+  const proximos = alertas.filter(a => !a.emAtraso && a.diasRestantes <= 60);
+  const normais = alertas.filter(a => !a.emAtraso && a.diasRestantes > 60);
 
   let html = '';
   if (urgentes.length) {
@@ -922,9 +957,16 @@ async function carregarAlertas() {
 }
 
 function alertCard(a, cls) {
-  const kmStr = a.kmRestante > 0
-    ? `Faltam ${a.kmRestante.toLocaleString('pt-BR')} km ${a.mesesRestantes ? '(~'+a.mesesRestantes+' meses)' : ''}`
-    : `${Math.abs(a.kmRestante).toLocaleString('pt-BR')} km em atraso!`;
+  let kmStr;
+  if (a.emAtraso) {
+    kmStr = a.venceTempoPrimeiro
+      ? `Prazo de ${a.intervaloMeses} meses vencido!`
+      : `${Math.abs(a.kmRestante).toLocaleString('pt-BR')} km em atraso!`;
+  } else if (a.venceTempoPrimeiro) {
+    kmStr = `Vence em ~${a.mesesRestantesTempo} ${a.mesesRestantesTempo === 1 ? 'mês' : 'meses'} (prazo de ${a.intervaloMeses} meses) — faltam ${a.kmRestante.toLocaleString('pt-BR')} km`;
+  } else {
+    kmStr = `Faltam ${a.kmRestante.toLocaleString('pt-BR')} km (~${a.mesesRestantesTempo} ${a.mesesRestantesTempo === 1 ? 'mês' : 'meses'})`;
+  }
   return `
     <div class="alert-card ${cls}">
       <div class="alert-icon">🔧</div>
