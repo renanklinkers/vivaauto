@@ -538,9 +538,10 @@ let manutencoes = [];
 // AUTH
 // ══════════════════════════════════════
 async function loginGoogle() {
+  const redirectTo = window.location.origin + '/manutencao.html';
   const { error } = await db.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.href }
+    options: { redirectTo }
   });
   if (error) toast('Erro ao fazer login: ' + error.message, 'error');
 }
