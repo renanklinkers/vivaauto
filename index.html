@@ -47,6 +47,40 @@ nav{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 40
 .nav-link.active{color:var(--navy);font-weight:600}
 .btn-nav{background:var(--green);color:white;border:none;border-radius:var(--radius);padding:9px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;font-family:'Inter',sans-serif}
 .btn-nav:hover{background:var(--green-dark)}
+.btn-nav-manut{background:transparent;color:var(--navy);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .15s;font-family:'Inter',sans-serif}
+.btn-nav-manut:hover{border-color:var(--navy);background:var(--gray-50)}
+
+/* ── SEÇÃO MANUTENÇÃO ── */
+.manut-section{padding:72px 40px;background:var(--gray-50);border-top:1px solid var(--gray-200)}
+.manut-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.manut-content .section-label{margin-bottom:10px}
+.manut-content h2{font-size:clamp(22px,2.8vw,34px);font-weight:800;letter-spacing:-0.8px;color:var(--gray-800);margin-bottom:14px;line-height:1.2}
+.manut-content p{font-size:15px;color:var(--gray-600);line-height:1.7;margin-bottom:24px}
+.manut-features{display:flex;flex-direction:column;gap:14px;margin-bottom:32px}
+.manut-feat{display:flex;align-items:flex-start;gap:12px}
+.manut-feat-icon{width:36px;height:36px;background:var(--green-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px}
+.manut-feat-text strong{display:block;font-size:14px;font-weight:600;color:var(--gray-800);margin-bottom:2px}
+.manut-feat-text span{font-size:13px;color:var(--gray-600);line-height:1.5}
+.btn-manut-cta{background:var(--navy);color:white;border:none;border-radius:var(--radius);padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:all .15s;font-family:'Inter',sans-serif;text-decoration:none}
+.btn-manut-cta:hover{background:var(--navy2);transform:translateY(-1px);box-shadow:0 4px 20px rgba(15,31,61,.3)}
+.manut-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#16a34a;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:6px}
+.manut-mockup{background:white;border-radius:var(--radius-xl);box-shadow:var(--shadow-lg);border:1px solid var(--gray-200);overflow:hidden}
+.manut-mock-header{background:var(--navy);padding:16px 20px;display:flex;align-items:center;gap:8px}
+.manut-mock-logo{font-size:13px;font-weight:700;color:white}
+.manut-mock-dot{width:8px;height:8px;border-radius:50%}
+.manut-mock-body{padding:18px}
+.manut-mock-card{border:1px solid var(--gray-200);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px}
+.manut-mock-icon{font-size:20px;width:36px;height:36px;background:var(--gray-50);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.manut-mock-info strong{display:block;font-size:13px;font-weight:600;color:var(--gray-800)}
+.manut-mock-info span{font-size:11px;color:var(--gray-400)}
+.manut-mock-status{margin-left:auto;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px}
+.status-ok{background:#dcfce7;color:#16a34a}
+.status-warn{background:#fef3c7;color:#d97706}
+@media(max-width:768px){
+  .manut-inner{grid-template-columns:1fr;gap:32px}
+  .manut-section{padding:48px 24px}
+  .manut-mockup{display:none}
+}
 
 /* ── PAGES ── */
 .page{display:none}
@@ -408,8 +442,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="nav-links">
     <span class="nav-link active" id="nav-home" onclick="showPage('home')">Início</span>
     <span class="nav-link" id="nav-wizard" onclick="showPage('wizard')">Recomendador</span>
+    <a class="nav-link" href="manutencao.html">Manutenção</a>
   </div>
-  <button class="btn-nav" onclick="showPage('wizard')">Descobrir meu carro</button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <a href="manutencao.html" class="btn-nav-manut">🔧 Manutenção</a>
+    <button class="btn-nav" onclick="showPage('wizard')">Descobrir meu carro</button>
+  </div>
 </nav>
 
 <!-- ══ HOME PAGE ══ -->
@@ -426,6 +464,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="hero-reason">Comprar um carro no Brasil ainda é uma decisão muito emocional, pouco transparente e quase sempre baseada apenas em preço, aparência ou valor de parcela. O Viva Auto nasceu para mudar essa lógica.</p>
       <div class="hero-ctas">
         <button class="btn-primary" onclick="showPage('wizard')">Descobrir meu carro ideal →</button>
+        <a href="manutencao.html" class="btn-secondary">🔧 Diário de Manutenção</a>
       </div>
       <div class="hero-stats">
         <div><div class="hero-stat-val">6+</div><div class="hero-stat-lbl">Critérios analisados</div></div>
@@ -465,6 +504,82 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 
+  <div class="manut-section">
+    <div class="manut-inner">
+      <div class="manut-content">
+        <div class="manut-badge">🆕 Novo</div>
+        <div class="section-label">Módulo de manutenção</div>
+        <h2>Nunca mais perca uma revisão. Seu carro agradece.</h2>
+        <p>O Diário de Manutenção do Viva Auto centraliza todo o histórico do seu veículo, te avisa quando a próxima revisão chega e gera um certificado completo para valorizar seu carro na hora de vender.</p>
+        <div class="manut-features">
+          <div class="manut-feat">
+            <div class="manut-feat-icon">🔔</div>
+            <div class="manut-feat-text">
+              <strong>Alertas inteligentes</strong>
+              <span>Aviso por KM ou por tempo — o que vencer primeiro. Sem desculpas para esquecer.</span>
+            </div>
+          </div>
+          <div class="manut-feat">
+            <div class="manut-feat-icon">📋</div>
+            <div class="manut-feat-text">
+              <strong>Histórico completo</strong>
+              <span>Registre cada troca de óleo, revisão e reparo com data, KM e valor gasto.</span>
+            </div>
+          </div>
+          <div class="manut-feat">
+            <div class="manut-feat-icon">📄</div>
+            <div class="manut-feat-text">
+              <strong>Certificado de manutenção</strong>
+              <span>Gere um relatório PDF para apresentar ao comprador e negociar com mais segurança.</span>
+            </div>
+          </div>
+        </div>
+        <a href="manutencao.html" class="btn-manut-cta">Acessar Diário de Manutenção →</a>
+      </div>
+      <div class="manut-mockup">
+        <div class="manut-mock-header">
+          <div style="display:flex;gap:5px">
+            <div class="manut-mock-dot" style="background:#ef4444"></div>
+            <div class="manut-mock-dot" style="background:#f59e0b"></div>
+            <div class="manut-mock-dot" style="background:#22c55e"></div>
+          </div>
+          <div class="manut-mock-logo" style="margin-left:10px">Viva Auto — Manutenção</div>
+        </div>
+        <div class="manut-mock-body">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:10px">🔔 Alertas</div>
+          <div class="manut-mock-card">
+            <div class="manut-mock-icon">🔧</div>
+            <div class="manut-mock-info">
+              <strong>Troca de óleo</strong>
+              <span>Toyota Corolla 2022 • 48.000 km</span>
+            </div>
+            <div class="manut-mock-status status-warn">⏰ Próxima</div>
+          </div>
+          <div class="manut-mock-card">
+            <div class="manut-mock-icon">🛞</div>
+            <div class="manut-mock-info">
+              <strong>Revisão geral</strong>
+              <span>Honda HRV 2021 • 62.000 km</span>
+            </div>
+            <div class="manut-mock-status status-ok">✅ Em dia</div>
+          </div>
+          <div class="manut-mock-card" style="border-color:var(--green);background:#f0fdf4">
+            <div class="manut-mock-icon" style="background:var(--green-light)">📄</div>
+            <div class="manut-mock-info">
+              <strong>Certificado gerado</strong>
+              <span>PDF pronto para negociação</span>
+            </div>
+            <div class="manut-mock-status status-ok">↓ Baixar</div>
+          </div>
+          <div style="margin-top:14px;padding:12px;background:var(--navy);border-radius:10px;text-align:center">
+            <div style="font-size:12px;font-weight:700;color:white">Grátis por 1 ano</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">Sem cartão de crédito</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="cta-section">
     <h2>Pronto para encontrar o carro certo?</h2>
     <p>Comece gratuitamente com nossa recomendação automática ou converse com um especialista.</p>
@@ -482,6 +597,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <h4>Navegação</h4>
       <span class="footer-link" onclick="showPage('home')">Início</span>
       <span class="footer-link" onclick="showPage('wizard')">Recomendador</span>
+      <a class="footer-link" href="manutencao.html">Manutenção</a>
     </div>
     <div class="footer-col">
       <h4>Contato</h4>
