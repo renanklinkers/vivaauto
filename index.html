@@ -1643,41 +1643,64 @@ function verRecomendacao() {
   });
   filtered = Object.values(mm);
 
-  // Score + enrich
-  const scored = filtered.map(car => ({
-    ...car,
-    _score: scoreCard(car, params),
-    _tco3: calcTCO(car, params.kmMes, 3),
-    _tco5: calcTCO(car, params.kmMes, 5),
-    _mensal: calcMensalReal(car, params.kmMes),
-  })).sort((a, b) => b._score !== a._score ? b._score - a._score : (b.fipe_price||0) - (a.fipe_price||0));
+  // Score + enrich em chunks para não travar o thread principal
+  const btnVer = document.querySelector('.btn-ver-rec');
+  if (btnVer) { btnVer.disabled = true; btnVer.textContent = 'Calculando…'; }
 
-  // Select 3–5 curated results
-  const pool = scored.slice(0, 80);
-  const final = [];
-  const marcasUsadas = new Set();
+  const CHUNK = 100;
+  let idx = 0;
+  const scored = [];
 
-  if (pool.length) { final.push(pool[0]); marcasUsadas.add(pool[0].marca); }
+  function processChunk(deadline) {
+    while (idx < filtered.length && (deadline.timeRemaining() > 2 || deadline.didTimeout)) {
+      const car = filtered[idx++];
+      scored.push({
+        ...car,
+        _score: scoreCard(car, params),
+        _tco3: calcTCO(car, params.kmMes, 3),
+        _tco5: calcTCO(car, params.kmMes, 5),
+        _mensal: calcMensalReal(car, params.kmMes),
+      });
+    }
 
-  if (params.orcamento < Infinity) {
-    const near = pool.find(c => !final.includes(c) && (c.fipe_price||0) >= params.orcamento * 0.78 && !marcasUsadas.has(c.marca))
-              || pool.find(c => !final.includes(c) && (c.fipe_price||0) >= params.orcamento * 0.78);
-    if (near) { final.push(near); marcasUsadas.add(near.marca); }
+    if (idx < filtered.length) {
+      requestIdleCallback(processChunk, { timeout: 200 });
+      return;
+    }
+
+    // Todos processados — montar resultado final
+    scored.sort((a, b) => b._score !== a._score ? b._score - a._score : (b.fipe_price||0) - (a.fipe_price||0));
+
+    // Select 3–5 curated results
+    const pool = scored.slice(0, 80);
+    const final = [];
+    const marcasUsadas = new Set();
+
+    if (pool.length) { final.push(pool[0]); marcasUsadas.add(pool[0].marca); }
+
+    if (params.orcamento < Infinity) {
+      const near = pool.find(c => !final.includes(c) && (c.fipe_price||0) >= params.orcamento * 0.78 && !marcasUsadas.has(c.marca))
+                || pool.find(c => !final.includes(c) && (c.fipe_price||0) >= params.orcamento * 0.78);
+      if (near) { final.push(near); marcasUsadas.add(near.marca); }
+    }
+
+    for (const car of pool) {
+      if (final.length >= 5) break;
+      if (final.includes(car) || marcasUsadas.has(car.marca)) continue;
+      final.push(car); marcasUsadas.add(car.marca);
+    }
+    for (const car of pool) {
+      if (final.length >= 3) break;
+      if (!final.includes(car)) final.push(car);
+    }
+    final.sort((a, b) => b._score !== a._score ? b._score - a._score : (b.fipe_price||0) - (a.fipe_price||0));
+
+    lastResults = final;
+    renderResults(final, params);
+    if (btnVer) { btnVer.disabled = false; btnVer.textContent = 'Ver minha recomendação →'; }
   }
 
-  for (const car of pool) {
-    if (final.length >= 5) break;
-    if (final.includes(car) || marcasUsadas.has(car.marca)) continue;
-    final.push(car); marcasUsadas.add(car.marca);
-  }
-  for (const car of pool) {
-    if (final.length >= 3) break;
-    if (!final.includes(car)) final.push(car);
-  }
-  final.sort((a, b) => b._score !== a._score ? b._score - a._score : (b.fipe_price||0) - (a.fipe_price||0));
-
-  lastResults = final;
-  renderResults(final, params);
+  requestIdleCallback(processChunk, { timeout: 200 });
   showPage('results');
 }
 
