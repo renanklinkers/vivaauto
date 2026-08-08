@@ -1440,67 +1440,6 @@ function parseOrcInput(id) {
 // ══ MAIN RECOMMENDATION ══
 
 // ══════════════════════════════════════
-// TCO CONSTANTS
-// ══════════════════════════════════════
-
-
-function calcTCO(car, kmMes, anos) {
-  const price = getPrice(car);
-  const kmTotal = kmMes * 12 * anos;
-  let combustivel = 0;
-  const prop = car.propulsao;
-  if (prop === 'Elétrico') {
-    const kwh_km = car.consumo_cidade_elet ? (1 / car.consumo_cidade_elet) : 0.18;
-    combustivel = kmTotal * kwh_km * KWH;
-  } else if (prop === 'Plug-In' || prop === 'Híbrido') {
-    const c = car.consumo_medio || 12;
-    combustivel = (kmTotal / c) * GASOLINA * 0.55;
-  } else {
-    const c = car.consumo_medio || 12;
-    if (car.combustivel === 'F') {
-      const cGas = (kmTotal / c) * GASOLINA;
-      const cEt = car.consumo_cidade_etanol ? (kmTotal / (car.consumo_cidade_etanol * 0.7 + (car.consumo_estrada_etanol||car.consumo_cidade_etanol) * 0.3)) * ETANOL : cGas * 0.85;
-      combustivel = Math.min(cGas, cEt);
-    } else {
-      combustivel = (kmTotal / c) * GASOLINA;
-    }
-  }
-  const propKey = prop || 'Combustão';
-  const manutMensal = (MANUT[propKey] || MANUT['Combustão'])[car.categoria] || 420;
-  const manut = manutMensal * 12 * anos;
-  const deprRate = DEPR[car.categoria] || 0.13;
-  const depr = price * (1 - Math.pow(1 - deprRate, anos));
-  const total = Math.round(combustivel + manut + depr);
-  const mensal = Math.round(total / (anos * 12));
-  return { total, combustivel: Math.round(combustivel), manut: Math.round(manut), depr: Math.round(depr), mensal };
-}
-
-function calcMensalReal(car, kmMes) {
-  // Custo mensal: combustível + manutenção mensal (sem depreciação — isso é custo de manutenção real)
-  const prop = car.propulsao;
-  let combustivel = 0;
-  if (prop === 'Elétrico') {
-    const kwh_km = car.consumo_cidade_elet ? (1 / car.consumo_cidade_elet) : 0.18;
-    combustivel = kmMes * kwh_km * KWH;
-  } else if (prop === 'Plug-In' || prop === 'Híbrido') {
-    const c = car.consumo_medio || 12;
-    combustivel = (kmMes / c) * GASOLINA * 0.55;
-  } else {
-    const c = car.consumo_medio || 12;
-    if (car.combustivel === 'F') {
-      const cGas = (kmMes / c) * GASOLINA;
-      const cEt = car.consumo_cidade_etanol ? (kmMes / (car.consumo_cidade_etanol * 0.7)) * ETANOL : cGas * 0.85;
-      combustivel = Math.min(cGas, cEt);
-    } else {
-      combustivel = (kmMes / c) * GASOLINA;
-    }
-  }
-  const propKey = prop || 'Combustão';
-  const manut = (MANUT[propKey] || MANUT['Combustão'])[car.categoria] || 420;
-  return Math.round(combustivel + manut);
-}
-
-
 // ══════════════════════════════════════
 // MATRIZ DINÂMICA DE PESOS POR PERFIL
 // ══════════════════════════════════════
@@ -1647,12 +1586,14 @@ function verRecomendacao() {
   const btnVer = document.querySelector('.btn-ver-rec');
   if (btnVer) { btnVer.disabled = true; btnVer.textContent = 'Calculando…'; }
 
-  const CHUNK = 100;
+  const CHUNK = 60; // carros por fatia — pequeno o suficiente para não travar
   let idx = 0;
   const scored = [];
 
   function processChunk(deadline) {
-    while (idx < filtered.length && (deadline.timeRemaining() > 2 || deadline.didTimeout)) {
+    // Processar no máximo CHUNK itens por callback — independente do tempo
+    let processed = 0;
+    while (idx < filtered.length && processed < CHUNK) {
       const car = filtered[idx++];
       scored.push({
         ...car,
@@ -1661,10 +1602,12 @@ function verRecomendacao() {
         _tco5: calcTCO(car, params.kmMes, 5),
         _mensal: calcMensalReal(car, params.kmMes),
       });
+      processed++;
     }
 
     if (idx < filtered.length) {
-      requestIdleCallback(processChunk, { timeout: 200 });
+      // Ainda tem carros — agendar próxima fatia
+      requestIdleCallback(processChunk, { timeout: 1000 });
       return;
     }
 
@@ -1700,31 +1643,11 @@ function verRecomendacao() {
     if (btnVer) { btnVer.disabled = false; btnVer.textContent = 'Ver minha recomendação →'; }
   }
 
-  requestIdleCallback(processChunk, { timeout: 200 });
+  requestIdleCallback(processChunk, { timeout: 1000 });
   showPage('results');
 }
 
-function calcMensalReal(car, kmMes) {
-  const prop = car.propulsao;
-  const c = car.consumo_medio || 12;
-  let comb = 0;
-  if (prop === 'Elétrico') {
-    const kwh_km = car.consumo_cidade_elet ? (1 / car.consumo_cidade_elet) : 0.18;
-    comb = kmMes * kwh_km * KWH;
-  } else if (prop === 'Plug-In' || prop === 'Híbrido') {
-    comb = (kmMes / c) * GASOLINA * 0.55;
-  } else {
-    if (car.combustivel === 'F') {
-      const cg = (kmMes / c) * GASOLINA;
-      const et = car.consumo_cidade_etanol;
-      const ce = et ? (kmMes / (et * 0.7)) * ETANOL : cg * 0.85;
-      comb = Math.min(cg, ce);
-    } else { comb = (kmMes / c) * GASOLINA; }
-  }
-  const pk = (MANUT[prop] ? prop : 'Combustão');
-  const manut = (MANUT[pk] || MANUT['Combustão'])[car.categoria] || 420;
-  return Math.round(comb + manut);
-}
+// calcMensalReal definida acima (versão única com lógica completa)
 
 // ══ RENDER RESULTS ══
 const PERFIL_LABELS = {
@@ -2454,7 +2377,7 @@ function renderChips() {
 }
 
 // ── TCO calc ──
-function calcTCO(c) {
+function calcTCOComp(c) {
   const preco = c.fipe_price || 100000;
   // Combustível
   const consumo = c.consumo_medio || 12;
@@ -2517,7 +2440,7 @@ function renderComparativo() {
   document.getElementById('comp-charts').classList.add('visible');
 
   const radarData = normRadar(cars);
-  const tcos = cars.map(calcTCO);
+  const tcos = cars.map(calcTCOComp);
 
   // Destruir charts anteriores
   [chartRadar, chartTcoTotal, chartTcoBreakdown].forEach(ch => { if (ch) ch.destroy(); });
