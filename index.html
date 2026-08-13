@@ -1506,7 +1506,7 @@ function verRecomendacao() {
     if (params.propulsaoIntencao === 'sim_elet' && car.propulsao === 'Combustão') return false;
     if (params.propulsaoIntencao === 'combustao' && car.propulsao !== 'Combustão') return false;
     // Tipo de carroceria — filtro hard quando usuário tem preferência explícita
-    if (params.tipo && params.tipo.length > 0 && !params.tipo.includes('qualquer')) {
+    if (params.tipo && params.tipo.length > 0 && !params.tipo.includes('qualquer') && !params.tipo.includes('todos')) {
       const carroceria = car.carroceria || 'SUV';
       // Exceção: se usuário pede SUV mas precisa de 7 lugares,
       // incluir Minivan pois são os únicos veículos acessíveis com 7 lugares
@@ -1586,14 +1586,14 @@ function verRecomendacao() {
   const btnVer = document.querySelector('.btn-ver-rec');
   if (btnVer) { btnVer.disabled = true; btnVer.textContent = 'Calculando…'; }
 
-  const CHUNK = 60; // carros por fatia — pequeno o suficiente para não travar
+  const CHUNK = 60;
   let idx = 0;
   const scored = [];
 
-  function processChunk(deadline) {
-    // Processar no máximo CHUNK itens por callback — independente do tempo
-    let processed = 0;
-    while (idx < filtered.length && processed < CHUNK) {
+  function processChunk() {
+    // Processar exatamente CHUNK itens por vez e devolver o controle ao browser
+    const end = Math.min(idx + CHUNK, filtered.length);
+    while (idx < end) {
       const car = filtered[idx++];
       scored.push({
         ...car,
@@ -1602,12 +1602,11 @@ function verRecomendacao() {
         _tco5: calcTCO(car, params.kmMes, 5),
         _mensal: calcMensalReal(car, params.kmMes),
       });
-      processed++;
     }
 
     if (idx < filtered.length) {
-      // Ainda tem carros — agendar próxima fatia
-      requestIdleCallback(processChunk, { timeout: 1000 });
+      // Ainda tem carros — cede o thread e volta na próxima macrotask
+      setTimeout(processChunk, 0);
       return;
     }
 
@@ -1643,7 +1642,7 @@ function verRecomendacao() {
     if (btnVer) { btnVer.disabled = false; btnVer.textContent = 'Ver minha recomendação →'; }
   }
 
-  requestIdleCallback(processChunk, { timeout: 1000 });
+  setTimeout(processChunk, 0);
   showPage('results');
 }
 
