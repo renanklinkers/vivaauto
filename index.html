@@ -47,7 +47,21 @@ nav{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 40
 .nav-link.active{color:var(--navy);font-weight:600}
 .btn-nav{background:var(--green);color:white;border:none;border-radius:var(--radius);padding:9px 18px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;font-family:'Inter',sans-serif}
 .btn-nav:hover{background:var(--green-dark)}
-.btn-nav-manut{background:transparent;color:var(--navy);border:1.5px solid var(--gray-200);border-radius:var(--radius);padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .15s;font-family:'Inter',sans-serif}
+.hero-split{display:grid;grid-template-columns:1fr 1px 1fr;min-height:100vh;padding-top:64px}
+.hero-half{display:flex;flex-direction:column;justify-content:center;padding:72px 56px}
+.hero-half-left{background:var(--navy)}
+.hero-half-right{background:#07111f}
+.hero-divider{background:rgba(255,255,255,.08);width:1px}
+.hero-badge-green{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.3);color:#22c55e}
+.hero-h2-carga{font-size:clamp(22px,2.8vw,36px);font-weight:800;color:var(--white);letter-spacing:-.8px;line-height:1.15;margin-bottom:16px}
+.em-green{font-style:normal;color:var(--green)}
+.btn-carga{background:var(--green);color:var(--navy);padding:14px 24px;border-radius:var(--radius);font-size:15px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s;font-family:'Inter',sans-serif}
+.btn-carga:hover{background:var(--green-dark);transform:translateY(-1px);box-shadow:0 4px 20px rgba(34,197,94,.3)}
+@media(max-width:900px){
+  .hero-split{grid-template-columns:1fr;grid-template-rows:auto 1px auto;padding-top:64px}
+  .hero-divider{width:100%;height:1px}
+  .hero-half{padding:48px 28px}
+};border-radius:var(--radius);padding:8px 16px;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .15s;font-family:'Inter',sans-serif}
 .btn-nav-manut:hover{border-color:var(--navy);background:var(--gray-50)}
 
 /* ── SEÇÃO MANUTENÇÃO ── */
@@ -489,6 +503,23 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
+<!-- BARRA DE ANÚNCIO VIVAAUTO CARGA -->
+<div id="announcement-bar" style="background:linear-gradient(90deg,#0d2240,#0a3320,#0d2240);background-size:200%;animation:shimmer 4s ease infinite;padding:10px 24px;text-align:center;position:relative;z-index:200;border-bottom:1px solid rgba(34,197,94,.2)">
+  <a href="vivaauto-carga.html" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;flex-wrap:wrap;justify-content:center">
+    <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);border-radius:20px;padding:3px 10px">
+      <span style="width:6px;height:6px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse-bar 1.5s infinite"></span>
+      <span style="font-size:11px;font-weight:700;color:#22c55e;letter-spacing:.08em;text-transform:uppercase">Novo</span>
+    </span>
+    <span style="font-size:14px;font-weight:600;color:#fff">Apresentando o <strong style="color:#22c55e">VivaAuto Carga</strong> — eletropostos para o seu negócio sem nenhum investimento</span>
+    <span style="font-size:13px;font-weight:700;color:#22c55e;display:inline-flex;align-items:center;gap:4px">Saiba mais →</span>
+  </a>
+  <button onclick="document.getElementById('announcement-bar').style.display='none'" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.4);font-size:20px;cursor:pointer;line-height:1;padding:4px">×</button>
+</div>
+<style>
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes pulse-bar{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.75)}}
+</style>
+
 <!-- NAV -->
 <nav>
   <a class="nav-logo" onclick="showPage('home')">
@@ -502,6 +533,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <span class="nav-link" id="nav-wizard" onclick="showPage('wizard')">Recomendador</span>
     <span class="nav-link" id="nav-comp" onclick="showPage('comp')">Comparativo</span>
     <a class="nav-link" href="manutencao.html">Manutenção</a>
+    <a class="nav-link" href="vivaauto-carga.html" style="color:var(--green);font-weight:600">⚡ Carga</a>
   </div>
   <div style="display:flex;gap:8px;align-items:center">
     <a href="manutencao.html" class="btn-nav-manut">🔧 Manutenção</a>
@@ -513,24 +545,47 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="page active" id="page-home">
 
   <div class="hero">
-    <div class="hero-inner">
-      <div class="hero-badge">
-        <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-        Recomendação inteligente de carros
+    <div class="hero-split">
+
+      <!-- LADO ESQUERDO: RECOMENDADOR -->
+      <div class="hero-half hero-half-left">
+        <div class="hero-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+          Recomendação inteligente
+        </div>
+        <h1>Escolha seu próximo carro com <em>inteligência</em>,<br>não por impulso.</h1>
+        <p class="hero-sub">Recomendações baseadas em custo total, uso real e critérios técnicos — 2.000+ modelos na base, resultado em menos de 5 minutos.</p>
+        <div class="hero-ctas">
+          <button class="btn-primary" onclick="showPage('wizard')">Descobrir meu carro ideal →</button>
+        </div>
+        <div class="hero-stats">
+          <div><div class="hero-stat-val">6+</div><div class="hero-stat-lbl">Critérios analisados</div></div>
+          <div><div class="hero-stat-val">100%</div><div class="hero-stat-lbl">Gratuito</div></div>
+          <div><div class="hero-stat-val">2.000+</div><div class="hero-stat-lbl">Modelos na base</div></div>
+        </div>
       </div>
-      <h1>Escolha seu próximo carro com <em>inteligência</em>,<br>não por impulso.</h1>
-      <p class="hero-sub">Recomendações baseadas em custo total, uso real e critérios técnicos para ajudar você a encontrar o carro certo para a sua vida.</p>
-      <p class="hero-reason">Comprar um carro no Brasil ainda é uma decisão muito emocional, pouco transparente e quase sempre baseada apenas em preço, aparência ou valor de parcela. O Viva Auto nasceu para mudar essa lógica.</p>
-      <div class="hero-ctas">
-        <button class="btn-primary" onclick="showPage('wizard')">Descobrir meu carro ideal →</button>
-        <a href="manutencao.html" class="btn-secondary">🔧 Diário de Manutenção</a>
+
+      <!-- DIVISOR -->
+      <div class="hero-divider"></div>
+
+      <!-- LADO DIREITO: VIVAAUTO CARGA -->
+      <div class="hero-half hero-half-right">
+        <div class="hero-badge hero-badge-green">
+          <span style="width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse-dot 1.5s infinite"></span>
+          Novo — VivaAuto Carga
+        </div>
+        <h2 class="hero-h2-carga">Instale eletropostos no seu negócio.<br><em class="em-green">Sem custo. Sem risco.</em></h2>
+        <p class="hero-sub">Padarias, academias, galerias, clínicas — instalamos carregadores EV sem nenhum investimento do seu lado e você participa da receita gerada.</p>
+        <div class="hero-ctas">
+          <a href="vivaauto-carga.html" class="btn-carga">⚡ Quero um eletroposto →</a>
+        </div>
+        <div class="hero-stats">
+          <div><div class="hero-stat-val">R$ 0</div><div class="hero-stat-lbl">Custo para o parceiro</div></div>
+          <div><div class="hero-stat-val">40+</div><div class="hero-stat-lbl">Min de permanência</div></div>
+          <div><div class="hero-stat-val">100%</div><div class="hero-stat-lbl">Gerenciado por nós</div></div>
+        </div>
       </div>
-      <div class="hero-stats">
-        <div><div class="hero-stat-val">6+</div><div class="hero-stat-lbl">Critérios analisados</div></div>
-        <div><div class="hero-stat-val">100%</div><div class="hero-stat-lbl">Gratuito</div></div>
-        <div><div class="hero-stat-val">&lt; 5 min</div><div class="hero-stat-lbl">Para o resultado</div></div>
-        <div><div class="hero-stat-val">2.000+</div><div class="hero-stat-lbl">Modelos na base</div></div>
-      </div>
+
     </div>
   </div>
 
@@ -639,8 +694,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </div>
 
-  <div class="cta-section">
-    <h2>Pronto para encontrar o carro certo?</h2>
+  <!-- BANNER VIVAAUTO CARGA -->
+  <div style="background:linear-gradient(135deg,#07111f 0%,#0d2240 100%);padding:64px 40px">
+    <div style="max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:5px 14px;margin-bottom:16px">
+          <span style="font-size:12px;font-weight:700;color:#22c55e;letter-spacing:.08em;text-transform:uppercase">⚡ Novo — VivaAuto Carga</span>
+        </div>
+        <h2 style="font-size:clamp(22px,3vw,34px);font-weight:800;color:#fff;letter-spacing:-.6px;margin-bottom:12px;line-height:1.2">Instale eletropostos no seu negócio.<br>Sem custo. Sem complicação.</h2>
+        <p style="font-size:15px;color:rgba(255,255,255,.6);line-height:1.65;max-width:480px">Padarias, academias, clínicas, galerias, clubes — instalamos carregadores EV sem investimento do seu lado e você participa da receita gerada.</p>
+      </div>
+      <div style="flex-shrink:0">
+        <a href="vivaauto-carga.html" style="display:inline-flex;align-items:center;gap:10px;background:#22c55e;color:#07111f;padding:16px 28px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;white-space:nowrap;transition:all .15s" onmouseover="this.style.background='#1ea84f';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#22c55e';this.style.transform='none'">Saiba mais →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">    <h2>Pronto para encontrar o carro certo?</h2>
     <p>Comece gratuitamente com nossa recomendação automática ou converse com um especialista.</p>
     <div class="cta-btns">
       <button class="btn-primary" onclick="showPage('wizard')">Descobrir meu carro ideal →</button>
@@ -657,6 +727,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="footer-link" onclick="showPage('home')">Início</span>
       <span class="footer-link" onclick="showPage('wizard')">Recomendador</span>
       <a class="footer-link" href="manutencao.html">Manutenção</a>
+      <a class="footer-link" href="vivaauto-carga.html">⚡ VivaAuto Carga</a>
     </div>
     <div class="footer-col">
       <h4>Contato</h4>

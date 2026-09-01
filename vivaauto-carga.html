@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VivaAuto Carga — Eletropostos para o seu negócio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0d1f38;
+  --navy-deep:#07111f;
+  --navy-mid:#162a45;
+  --green:#22c55e;
+  --green-dim:#16a34a;
+  --green-glow:rgba(34,197,94,.18);
+  --electric:#38bdf8;
+  --electric-dim:#0ea5e9;
+  --electric-glow:rgba(56,189,248,.15);
+  --white:#ffffff;
+  --off-white:#f0f6ff;
+  --gray-100:#e2eaf4;
+  --gray-400:#7a96b5;
+  --gray-600:#4a6484;
+  --r-sm:10px;
+  --r-md:16px;
+  --r-lg:24px;
+  --shadow:0 4px 24px rgba(0,0,0,.18);
+  --shadow-lg:0 12px 48px rgba(0,0,0,.28);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--navy);-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;transition:background .3s,box-shadow .3s}
+nav.scrolled{background:rgba(7,17,31,.96);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(255,255,255,.06)}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-logo-icon{width:32px;height:32px;background:var(--green);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-logo-text{font-size:15px;font-weight:700;color:var(--white);letter-spacing:-.3px}
+.nav-logo-text span{color:var(--green)}
+.nav-links{display:flex;gap:28px}
+.nav-link{color:rgba(255,255,255,.7);font-size:14px;font-weight:500;text-decoration:none;transition:color .15s}
+.nav-link:hover{color:var(--white)}
+@media(max-width:768px){.nav-links{display:none}}
+
+/* ── HERO ── */
+.hero{min-height:100vh;background:var(--navy-deep);display:flex;align-items:center;position:relative;overflow:hidden;padding:100px 40px 80px}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 65% 50%,rgba(56,189,248,.07) 0%,transparent 70%)}
+.hero-grid{max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 420px;gap:72px;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:5px 14px;margin-bottom:24px}
+.hero-eyebrow-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero-eyebrow span{font-size:12px;font-weight:600;color:var(--green);letter-spacing:.08em;text-transform:uppercase}
+.hero-h1{font-size:clamp(34px,4.5vw,58px);font-weight:900;line-height:1.08;letter-spacing:-1.5px;color:var(--white);margin-bottom:20px}
+.hero-h1 em{font-style:normal;color:var(--green)}
+.hero-sub{font-size:17px;color:rgba(255,255,255,.62);line-height:1.65;margin-bottom:36px;max-width:480px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.btn-primary{background:var(--green);color:var(--navy-deep);padding:15px 28px;border-radius:var(--r-sm);font-size:15px;font-weight:700;cursor:pointer;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s;font-family:'Inter',sans-serif}
+.btn-primary:hover{background:#1ea84f;transform:translateY(-1px);box-shadow:0 6px 24px rgba(34,197,94,.35)}
+.btn-outline{border:1.5px solid rgba(56,189,248,.4);color:var(--electric);background:transparent;padding:14px 28px;border-radius:var(--r-sm);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s;font-family:'Inter',sans-serif}
+.btn-outline:hover{border-color:var(--electric);background:var(--electric-glow)}
+.hero-stats{display:flex;gap:28px;margin-top:44px;padding-top:32px;border-top:1px solid rgba(255,255,255,.08)}
+.hero-stat-val{font-size:26px;font-weight:800;color:var(--white);letter-spacing:-0.5px}
+.hero-stat-label{font-size:12px;color:var(--gray-400);margin-top:2px}
+
+/* Charging widget */
+.charge-widget{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:var(--r-lg);padding:28px;backdrop-filter:blur(8px)}
+.cw-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.cw-car{font-size:12px;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase}
+.cw-status{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--green);font-weight:600}
+.cw-status-dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse-dot 1.5s infinite}
+.cw-pct{font-size:64px;font-weight:900;color:var(--white);letter-spacing:-3px;line-height:1;margin-bottom:4px}
+.cw-pct span{font-size:28px;font-weight:600;color:var(--gray-400)}
+.cw-sub{font-size:13px;color:var(--gray-400);margin-bottom:20px}
+.cw-bar-wrap{height:10px;background:rgba(255,255,255,.08);border-radius:5px;overflow:hidden;margin-bottom:20px}
+.cw-bar-fill{height:100%;width:0%;border-radius:5px;background:linear-gradient(90deg,var(--green),var(--electric));transition:width 2.5s cubic-bezier(.22,1,.36,1)}
+.cw-metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.cw-metric{background:rgba(255,255,255,.04);border-radius:10px;padding:12px}
+.cw-metric-val{font-size:16px;font-weight:700;color:var(--white);letter-spacing:-.3px}
+.cw-metric-label{font-size:11px;color:var(--gray-400);margin-top:2px}
+.cw-footer{margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center}
+.cw-footer-loc{font-size:12px;color:var(--gray-400)}
+.cw-footer-rev{font-size:13px;font-weight:700;color:var(--green)}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.charge-widget{display:none}}
+
+/* ── SEÇÕES COMUNS ── */
+section{padding:88px 40px}
+.section-inner{max-width:1100px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+.eyebrow-green{color:var(--green)}
+.eyebrow-electric{color:var(--electric)}
+.section-h2{font-size:clamp(26px,3.5vw,42px);font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:16px}
+.section-sub{font-size:16px;color:var(--gray-600);line-height:1.65;max-width:560px}
+
+/* ── COMO FUNCIONA ── */
+.como{background:var(--off-white)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:52px;position:relative}
+.steps::before{content:'';position:absolute;top:36px;left:calc(16.66% + 16px);right:calc(16.66% + 16px);height:1px;background:linear-gradient(90deg,var(--green),var(--electric));z-index:0}
+.step{position:relative;z-index:1}
+.step-num{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;margin-bottom:20px;border:2px solid}
+.step-num-g{background:var(--green-glow);border-color:var(--green);color:var(--green)}
+.step-num-e{background:var(--electric-glow);border-color:var(--electric);color:var(--electric)}
+.step h3{font-size:17px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.step p{font-size:14px;color:var(--gray-600);line-height:1.6}
+@media(max-width:768px){.steps{grid-template-columns:1fr;gap:24px}.steps::before{display:none}}
+
+/* ── PARA LOCAIS ── */
+.locais-section{background:var(--white)}
+.locais-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:52px}
+.benefit-list{display:flex;flex-direction:column;gap:20px}
+.benefit{display:flex;gap:16px;align-items:flex-start}
+.benefit-icon{width:44px;height:44px;background:var(--green-glow);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.benefit h4{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.benefit p{font-size:13px;color:var(--gray-600);line-height:1.55}
+.locais-card{background:var(--navy);border-radius:var(--r-lg);padding:32px;color:var(--white)}
+.locais-card h3{font-size:20px;font-weight:800;margin-bottom:6px}
+.locais-card .sub{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:24px}
+.revenue-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.revenue-row:last-child{border-bottom:none}
+.rr-label{font-size:13px;color:rgba(255,255,255,.6)}
+.rr-val{font-size:16px;font-weight:700;color:var(--green)}
+.locais-cta{margin-top:28px}
+@media(max-width:768px){.locais-grid{grid-template-columns:1fr}}
+
+/* ── PARA INVESTIDORES ── */
+.invest-section{background:var(--navy-deep);padding:88px 40px}
+.invest-inner{max-width:1100px;margin:0 auto}
+.invest-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;margin-top:52px}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.kpi{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-md);padding:20px}
+.kpi-val{font-size:30px;font-weight:800;color:var(--electric);letter-spacing:-1px;margin-bottom:4px}
+.kpi-label{font-size:13px;color:rgba(255,255,255,.5)}
+.kpi-note{font-size:11px;color:var(--gray-400);margin-top:6px}
+.invest-text h3{font-size:22px;font-weight:800;color:var(--white);margin-bottom:16px;line-height:1.3}
+.invest-text p{font-size:15px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:20px}
+.invest-bullets{list-style:none;display:flex;flex-direction:column;gap:12px}
+.invest-bullets li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:rgba(255,255,255,.7);line-height:1.5}
+.invest-bullets li::before{content:'↗';color:var(--electric);font-weight:700;flex-shrink:0;margin-top:1px}
+@media(max-width:768px){.invest-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}}
+
+
+/* ── FAQ ── */
+.faq-section{background:var(--white)}
+.faq-list{max-width:720px;margin:48px auto 0;display:flex;flex-direction:column;gap:0}
+.faq-item{border-bottom:1px solid var(--gray-100)}
+.faq-q{width:100%;background:none;border:none;text-align:left;padding:20px 0;display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:600;color:var(--navy);cursor:pointer;font-family:'Inter',sans-serif;gap:16px}
+.faq-q:hover{color:var(--green)}
+.faq-icon{font-size:18px;color:var(--gray-400);flex-shrink:0;transition:transform .2s}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--green)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.faq-item.open .faq-a{max-height:200px}
+.faq-a p{font-size:14px;color:var(--gray-600);line-height:1.7;padding-bottom:20px}
+
+/* ── CTA FINAL ── */
+.cta-final{background:linear-gradient(135deg,var(--navy-deep) 0%,var(--navy-mid) 100%);padding:96px 40px;text-align:center;position:relative;overflow:hidden}
+.cta-final::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%)}
+.cta-final-inner{position:relative;max-width:640px;margin:0 auto}
+.cta-final h2{font-size:clamp(28px,4vw,46px);font-weight:900;color:var(--white);letter-spacing:-1px;line-height:1.1;margin-bottom:16px}
+.cta-final p{font-size:16px;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:40px}
+.cta-dual{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-cta-green{background:var(--green);color:var(--navy-deep);padding:16px 32px;border-radius:var(--r-sm);font-size:15px;font-weight:700;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;transition:all .15s}
+.btn-cta-green:hover{background:#1ea84f;transform:translateY(-2px)}
+.btn-cta-ghost{border:1.5px solid rgba(56,189,248,.4);color:var(--electric);background:transparent;padding:15px 32px;border-radius:var(--r-sm);font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;transition:all .15s}
+.btn-cta-ghost:hover{border-color:var(--electric);background:var(--electric-glow)}
+
+/* ── FOOTER ── */
+footer{background:var(--navy-deep);padding:40px;border-top:1px solid rgba(255,255,255,.06)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-brand{font-size:14px;font-weight:700;color:var(--white)}
+.footer-brand span{color:var(--green)}
+.footer-copy{font-size:13px;color:var(--gray-400)}
+.footer-link{font-size:13px;color:var(--gray-400);text-decoration:none;transition:color .15s}
+.footer-link:hover{color:var(--white)}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">⚡</div>
+    <div class="nav-logo-text">VivaAuto <span>Carga</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="#como-funciona" class="nav-link">Como funciona</a>
+    <a href="#para-locais" class="nav-link">Para locais</a>
+  </div>
+
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-dot"></div>
+        <span>Infraestrutura de recarga EV</span>
+      </div>
+      <h1 class="hero-h1">Seu espaço já<br>tem clientes.<br><em>Nós trazemos<br>a receita.</em></h1>
+      <p class="hero-sub">Instalamos eletropostos sem nenhum custo para o seu negócio. Você oferece um serviço premium aos seus clientes e recebe parte da receita gerada — todo mês.</p>
+      <div class="hero-ctas">
+        <a href="#para-locais" class="btn-primary">Instalar no meu negócio →</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val">100%</div>
+          <div class="hero-stat-label">Sem custo para o parceiro</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">R$ 0</div>
+          <div class="hero-stat-label">Custo para o local</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">40+</div>
+          <div class="hero-stat-label">Minutos de permanência por sessão</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charging Widget -->
+    <div class="charge-widget" id="chargeWidget">
+      <div class="cw-header">
+        <div class="cw-car">Toyota RAV4 PHEV</div>
+        <div class="cw-status"><div class="cw-status-dot"></div>Carregando</div>
+      </div>
+      <div class="cw-pct" id="cwPct">0<span>%</span></div>
+      <div class="cw-sub">Tempo restante: <strong>47 min</strong></div>
+      <div class="cw-bar-wrap"><div class="cw-bar-fill" id="cwBar"></div></div>
+      <div class="cw-metrics">
+        <div class="cw-metric">
+          <div class="cw-metric-val">22 kWh</div>
+          <div class="cw-metric-label">Adicionados</div>
+        </div>
+        <div class="cw-metric">
+          <div class="cw-metric-val" id="cwVal">R$ 0</div>
+          <div class="cw-metric-label">Sessão atual</div>
+        </div>
+        <div class="cw-metric">
+          <div class="cw-metric-val">7,4 kW</div>
+          <div class="cw-metric-label">Potência</div>
+        </div>
+      </div>
+      <div class="cw-footer">
+        <div class="cw-footer-loc">📍 YCSA — Vaga 03</div>
+        <div class="cw-footer-rev" id="cwRev">Receita parceiro: R$ 0</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="como" id="como-funciona">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow eyebrow-green">⚡ Processo simples</div>
+      <h2 class="section-h2">Três passos. Sem complicação.</h2>
+      <p class="section-sub">Cuidamos de tudo — da instalação à cobrança. Você só colhe os frutos.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num step-num-g">1</div>
+        <h3>Instalamos no seu local</h3>
+        <p>Avaliamos a infraestrutura elétrica e instalamos os eletropostos sem custo para você. CAPEX 100% nosso, risco 100% nosso.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num step-num-g">2</div>
+        <h3>Cobramos por sessão</h3>
+        <p>Os usuários carregam via aplicativo ou cartão. A gestão, suporte e manutenção dos equipamentos é totalmente nossa.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num step-num-e">3</div>
+        <h3>Seu negócio cresce junto</h3>
+        <p>O eletroposto atrai um novo perfil de cliente, garante pelo menos 40 minutos de permanência por sessão e posiciona seu espaço como referência em mobilidade sustentável.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA LOCAIS -->
+<section class="locais-section" id="para-locais">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="eyebrow eyebrow-green">🏢 Para qualquer negócio com movimento</div>
+      <h2 class="section-h2">Um serviço premium<br>que se paga sozinho.</h2>
+      <p class="section-sub">Mais de 1,2 milhão de EVs e híbridos circulam no Brasil. Padarias, academias, galerias, clínicas, clubes — onde há permanência, há demanda de recarga.</p>
+    </div>
+    <div class="locais-grid">
+      <div class="benefit-list reveal">
+        <div class="benefit">
+          <div class="benefit-icon">🔌</div>
+          <div>
+            <h4>Zero investimento, zero risco</h4>
+            <p>Equipamento, instalação, manutenção e software — tudo por nossa conta. Você não desembolsa nenhum centavo.</p>
+          </div>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-icon">🏆</div>
+          <div>
+            <h4>Diferencial competitivo real</h4>
+            <p>Negócio com eletroposto atrai um perfil de cliente de maior poder aquisitivo, aumenta o tempo de permanência e gera recomendação orgânica.</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">📱</div>
+          <div>
+            <h4>Gestão transparente</h4>
+            <p>Dashboard em tempo real com sessões realizadas e utilização dos equipamentos. Você acompanha tudo sem precisar gerenciar nada.</p>
+          </div>
+        </div>
+      </div>
+      <div class="locais-card reveal">
+        <h3>O que você ganha</h3>
+        <div class="sub">Sem investimento. Sem operação. Só vantagens.</div>
+        <div class="revenue-row">
+          <span class="rr-label">Instalação e equipamentos</span>
+          <span class="rr-val">Por nossa conta</span>
+        </div>
+        <div class="revenue-row">
+          <span class="rr-label">Manutenção e suporte</span>
+          <span class="rr-val">Por nossa conta</span>
+        </div>
+        <div class="revenue-row">
+          <span class="rr-label">Permanência mínima por sessão</span>
+          <span class="rr-val">40+ minutos</span>
+        </div>
+        <div class="revenue-row">
+          <span class="rr-label">Perfil de cliente atraído</span>
+          <span class="rr-val">Alta renda, tech-savvy</span>
+        </div>
+        <div class="revenue-row">
+          <span class="rr-label" style="color:var(--green)">Participação na receita</span>
+          <span class="rr-val" style="font-size:16px;color:var(--green)">Negociado caso a caso</span>
+        </div>
+        <a href="https://wa.me/5511962884031?text=Olá! Tenho interesse em um eletroposto no meu negócio." class="btn-primary locais-cta" style="width:100%;justify-content:center;margin-top:20px">Falar com um especialista →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center">
+      <div class="eyebrow eyebrow-green" style="justify-content:center">Dúvidas frequentes</div>
+      <h2 class="section-h2" style="text-align:center">Perguntas frequentes</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">O local precisa investir algum valor? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Não. O investimento em equipamentos, instalação elétrica, software e manutenção é 100% da VivaAuto Carga. O parceiro entra com o espaço — e fica com a valorização do local, o aumento de permanência e a participação na receita das sessões, negociada individualmente.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Quem gerencia o carregador no dia a dia? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Nós. O local não precisa fazer nada operacional — suporte ao usuário, manutenção dos equipamentos e monitoramento remoto são inteiramente da nossa responsabilidade.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Como funciona a participação na receita? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>A participação na receita das sessões é definida individualmente em negociação com cada parceiro, levando em conta o perfil do local, o fluxo esperado e o modelo de operação. Entre em contato para conversarmos.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">A infraestrutura elétrica do local precisa ser adaptada? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Fazemos uma avaliação técnica gratuita antes de qualquer compromisso. Pequenas adequações são por nossa conta. Se o local precisar de obra civil significativa, discutimos caso a caso.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Qual é o prazo mínimo de contrato? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>O contrato padrão é de 36 meses, com cláusula de renovação automática. Em caso de rescisão antecipada pelo local, há uma cláusula de reembolso proporcional do CAPEX investido.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final" id="contato">
+  <div class="cta-final-inner">
+    <div class="reveal">
+      <h2>Pronto para instalar<br>o próximo eletroposto?</h2>
+      <p>Seja um restaurante, padaria, galeria, academia ou clube — o próximo passo é uma conversa rápida de 20 minutos.</p>
+      <div class="cta-dual">
+        <a href="https://wa.me/5511962884031?text=Olá! Tenho interesse em um eletroposto no meu negócio." class="btn-cta-green">💬 Falar pelo WhatsApp</a>
+        <a href="mailto:carga@vivaauto.com.br" class="btn-cta-ghost">📧 Receber material completo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">VivaAuto <span>Carga</span></div>
+    <div class="footer-copy">© 2026 VivaAuto. Todos os direitos reservados.</div>
+    <a href="https://www.vivaauto.com.br" class="footer-link">← Viva Auto Recomendador</a>
+  </div>
+</footer>
+
+<script>
+// Nav scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Charging widget animation
+setTimeout(() => {
+  let pct = 0;
+  const target = 78;
+  const bar = document.getElementById('cwBar');
+  const pctEl = document.getElementById('cwPct');
+  const valEl = document.getElementById('cwVal');
+  const revEl = document.getElementById('cwRev');
+
+  bar.style.width = target + '%';
+
+  const anim = setInterval(() => {
+    pct = Math.min(pct + 1, target);
+    pctEl.innerHTML = pct + '<span>%</span>';
+    const sessVal = Math.round(pct * 22 / target * 2.40);
+    valEl.textContent = 'R$ ' + sessVal.toLocaleString('pt-BR');
+    revEl.textContent = 'Receita parceiro: R$ ' + Math.round(sessVal * 0.20).toLocaleString('pt-BR');
+    if (pct >= target) clearInterval(anim);
+  }, 35);
+}, 600);
+
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+revealEls.forEach(el => obs.observe(el));
+
+// FAQ toggle
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>
