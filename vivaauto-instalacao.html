@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instalação de Carregadores — VivaAuto Carga</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0d1f38;
+  --deep:#070f1c;
+  --mid:#162a45;
+  --green:#22c55e;
+  --green-dim:#16a34a;
+  --amber:#f59e0b;
+  --electric:#38bdf8;
+  --white:#ffffff;
+  --off:#f0f6ff;
+  --gray:#8599b0;
+  --gray-light:#e2eaf4;
+  --r:12px;
+  --r-lg:20px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--white);color:var(--navy);-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(7,15,28,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-icon{width:30px;height:30px;background:var(--green);border-radius:8px;display:grid;place-items:center;font-size:15px}
+.nav-name{font-size:14px;font-weight:700;color:var(--white)}
+.nav-name span{color:var(--green)}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;transition:color .15s}
+.nav-link:hover,.nav-link.hl{color:var(--white)}
+.nav-link.hl{color:var(--green);font-weight:600}
+.nav-cta{background:var(--green);color:var(--deep);padding:8px 18px;border-radius:var(--r);font-size:13px;font-weight:700;text-decoration:none;transition:background .15s}
+.nav-cta:hover{background:var(--green-dim)}
+@media(max-width:768px){.nav-links{display:none}}
+
+/* HERO */
+.hero{min-height:100vh;background:var(--deep);padding-top:60px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:rgba(255,255,255,.07);pointer-events:none}
+.hero-inner{max-width:1200px;margin:0 auto;padding:64px 40px 80px;width:100%}
+.hero-label{font-size:12px;font-weight:600;color:var(--green);letter-spacing:.12em;margin-bottom:32px;display:flex;align-items:center;gap:10px}
+.hero-label::before{content:'';width:24px;height:1px;background:var(--green)}
+.hero-split-type{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:48px}
+.hero-type-block{padding:32px 0}
+.hero-type-block:first-child{border-right:1px solid rgba(255,255,255,.1);padding-right:48px}
+.hero-type-block:last-child{padding-left:48px}
+.hero-type-word{font-size:clamp(42px,6vw,80px);font-weight:900;letter-spacing:-3px;line-height:.95;display:block;margin-bottom:12px}
+.hero-type-word.res{color:var(--green)}
+.hero-type-word.com{color:var(--electric)}
+.hero-type-desc{font-size:15px;color:rgba(255,255,255,.55);line-height:1.6;max-width:340px}
+.hero-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:40px;border-top:1px solid rgba(255,255,255,.08);flex-wrap:wrap;gap:20px}
+.hero-tagline{font-size:clamp(16px,2vw,20px);font-weight:600;color:rgba(255,255,255,.85);max-width:480px;line-height:1.5}
+.hero-tagline strong{color:var(--white)}
+.hero-btn{background:var(--green);color:var(--deep);padding:14px 28px;border-radius:var(--r);font-size:15px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s;white-space:nowrap}
+.hero-btn:hover{background:var(--green-dim);transform:translateY(-1px)}
+@media(max-width:700px){
+  .hero-split-type{grid-template-columns:1fr}
+  .hero-type-block:first-child{border-right:none;border-bottom:1px solid rgba(255,255,255,.1);padding-right:0;padding-bottom:32px}
+  .hero-type-block:last-child{padding-left:0;padding-top:32px}
+}
+
+/* COMO FUNCIONA */
+.processo{background:var(--off);padding:80px 40px}
+.proc-inner{max-width:960px;margin:0 auto}
+.sec-tag{font-size:12px;font-weight:600;color:var(--green);letter-spacing:.1em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec-tag::before{content:'';width:20px;height:2px;background:var(--green)}
+.sec-h2{font-size:clamp(24px,3.5vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:48px;color:var(--navy);line-height:1.1}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;position:relative}
+.steps::before{content:'';position:absolute;top:20px;left:calc(16.6% + 20px);right:calc(16.6% + 20px);height:1px;background:var(--gray-light)}
+.step{position:relative}
+.step-n{width:40px;height:40px;border-radius:50%;background:var(--navy);color:var(--white);font-size:14px;font-weight:800;display:grid;place-items:center;margin-bottom:20px;position:relative;z-index:1}
+.step h3{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.step p{font-size:13px;color:#5a7090;line-height:1.65}
+@media(max-width:700px){.steps{grid-template-columns:1fr;gap:32px}.steps::before{display:none}}
+
+/* SERVIÇOS */
+.servicos{padding:80px 40px;background:var(--white)}
+.serv-inner{max-width:1100px;margin:0 auto}
+.serv-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:48px}
+.serv-card{border-radius:var(--r-lg);overflow:hidden;border:1px solid var(--gray-light)}
+.serv-card-header{padding:36px 36px 28px;position:relative}
+.serv-card-header::after{content:'';position:absolute;bottom:0;left:36px;right:36px;height:1px;background:var(--gray-light)}
+.sc-res .serv-card-header{background:linear-gradient(135deg,#0a2218,#0d1f38)}
+.sc-com .serv-card-header{background:linear-gradient(135deg,#061828,#0d1f38)}
+.sc-label{font-size:11px;font-weight:700;letter-spacing:.09em;padding:4px 12px;border-radius:20px;display:inline-block;margin-bottom:16px}
+.sc-res .sc-label{background:rgba(34,197,94,.15);color:var(--green)}
+.sc-com .sc-label{background:rgba(56,189,248,.12);color:var(--electric)}
+.sc-title{font-size:clamp(22px,2.5vw,30px);font-weight:800;color:var(--white);letter-spacing:-.5px;margin-bottom:12px;line-height:1.1}
+.sc-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.6}
+.serv-card-body{padding:32px 36px;background:var(--white)}
+.feat-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.feat-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:#3a5070;line-height:1.5}
+.feat-icon{flex-shrink:0;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;margin-top:1px}
+.sc-res .feat-icon{background:rgba(34,197,94,.12);color:var(--green)}
+.sc-com .feat-icon{background:rgba(56,189,248,.1);color:var(--electric)}
+.sc-cta{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;margin-top:24px;padding:12px 20px;border-radius:var(--r);text-decoration:none;transition:all .15s}
+.sc-res .sc-cta{background:rgba(34,197,94,.1);color:var(--green)}
+.sc-res .sc-cta:hover{background:var(--green);color:var(--deep)}
+.sc-com .sc-cta{background:rgba(56,189,248,.08);color:var(--electric)}
+.sc-com .sc-cta:hover{background:var(--electric);color:var(--deep)}
+@media(max-width:768px){.serv-grid{grid-template-columns:1fr}}
+
+/* DIFERENCIAIS */
+.diferenciais{background:var(--navy);padding:80px 40px}
+.dif-inner{max-width:1100px;margin:0 auto}
+.dif-h2{font-size:clamp(24px,3vw,38px);font-weight:800;color:var(--white);letter-spacing:-1px;margin-bottom:48px;line-height:1.1;max-width:500px}
+.dif-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,.06);border-radius:var(--r-lg);overflow:hidden}
+.dif-item{background:var(--navy);padding:32px;transition:background .2s}
+.dif-item:hover{background:var(--mid)}
+.dif-num{font-size:11px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.06em;margin-bottom:16px}
+.dif-item h3{font-size:16px;font-weight:700;color:var(--white);margin-bottom:8px;line-height:1.3}
+.dif-item p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6}
+@media(max-width:700px){.dif-grid{grid-template-columns:1fr}}
+
+/* FAQ */
+.faq{background:var(--white);padding:80px 40px}
+.faq-inner{max-width:720px;margin:0 auto}
+.faq-h2{font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-1px;margin-bottom:40px;color:var(--navy)}
+.faq-item{border-bottom:1px solid var(--gray-light)}
+.faq-q{width:100%;background:none;border:none;text-align:left;padding:20px 0;font-size:15px;font-weight:600;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:'Inter',sans-serif;transition:color .15s}
+.faq-q:hover{color:var(--green)}
+.faq-icon{font-size:20px;color:var(--gray);flex-shrink:0;transition:transform .2s;line-height:1}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--green)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.faq-item.open .faq-a{max-height:200px}
+.faq-a p{font-size:14px;color:#5a7090;line-height:1.7;padding-bottom:20px}
+
+/* CTA FINAL */
+.cta-final{background:var(--deep);padding:96px 40px;text-align:center}
+.cta-inner{max-width:560px;margin:0 auto}
+.cta-h2{font-size:clamp(26px,4vw,44px);font-weight:900;color:var(--white);letter-spacing:-1.5px;line-height:1.1;margin-bottom:14px}
+.cta-sub{font-size:16px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:36px}
+.cta-btn{background:var(--green);color:var(--deep);padding:16px 32px;border-radius:var(--r);font-size:16px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:10px;transition:all .15s}
+.cta-btn:hover{background:var(--green-dim);transform:translateY(-2px);box-shadow:0 8px 28px rgba(34,197,94,.3)}
+.cta-note{font-size:12px;color:rgba(255,255,255,.3);margin-top:16px}
+
+/* FOOTER */
+footer{background:var(--deep);border-top:1px solid rgba(255,255,255,.06);padding:28px 40px}
+.ft-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.ft-brand{font-size:13px;font-weight:700;color:var(--white)}
+.ft-brand span{color:var(--green)}
+.ft-links{display:flex;gap:20px}
+.ft-link{font-size:12px;color:rgba(255,255,255,.4);text-decoration:none}
+.ft-link:hover{color:var(--white)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="vivaauto-carga.html" class="nav-brand">
+    <div class="nav-icon">⚡</div>
+    <div class="nav-name">VivaAuto <span>Carga</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="vivaauto-carga.html" class="nav-link">Eletropostos</a>
+    <a href="#residencial" class="nav-link">Residencial</a>
+    <a href="#comercial" class="nav-link">Comercial</a>
+    <a href="#como-funciona" class="nav-link">Como funciona</a>
+    <a href="https://wa.me/5511962884031?text=Quero instalar um carregador EV." class="nav-cta">Pedir orçamento</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Instalação de carregadores EV</div>
+    <div class="hero-split-type">
+      <div class="hero-type-block">
+        <span class="hero-type-word res">Residencial.</span>
+        <p class="hero-type-desc">Carregue seu carro na garagem de casa — com segurança, rapidez e instalação profissional certificada.</p>
+      </div>
+      <div class="hero-type-block">
+        <span class="hero-type-word com">Comercial.</span>
+        <p class="hero-type-desc">Múltiplos pontos de recarga para empresas, condomínios, estacionamentos e galerias — com projeto elétrico incluso.</p>
+      </div>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-tagline"><strong>Da visita técnica à ativação:</strong> nós cuidamos de tudo para o seu carregador funcionar no primeiro dia.</p>
+      <a href="https://wa.me/5511962884031?text=Olá! Quero instalar um carregador EV. Pode me ajudar?" class="hero-btn">💬 Pedir orçamento gratuito</a>
+    </div>
+  </div>
+</div>
+
+<!-- COMO FUNCIONA -->
+<section class="processo" id="como-funciona">
+  <div class="proc-inner">
+    <div class="sec-tag">Processo</div>
+    <h2 class="sec-h2">Três etapas. Do zero ao carregador funcionando.</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">1</div>
+        <h3>Visita técnica gratuita</h3>
+        <p>Um eletricista certificado avalia sua infraestrutura elétrica, identifica o melhor ponto de instalação e apresenta o projeto sem custo e sem compromisso.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <h3>Orçamento e aprovação</h3>
+        <p>Você recebe um orçamento detalhado com equipamento, mão de obra e prazo. Apenas após sua aprovação damos início à instalação.</p>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <h3>Instalação e ativação</h3>
+        <p>Equipe certificada realiza a instalação com materiais de qualidade, laudo técnico incluso e garantia do serviço. Tudo testado antes de ir embora.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section class="servicos" id="residencial">
+  <div class="serv-inner">
+    <div class="sec-tag">Serviços</div>
+    <h2 class="sec-h2">Para cada perfil, a solução certa.</h2>
+    <div class="serv-grid">
+
+      <div class="serv-card sc-res" id="residencial">
+        <div class="serv-card-header">
+          <div class="sc-label">Residencial</div>
+          <h2 class="sc-title">Carregue em casa, como você merece.</h2>
+          <p class="sc-desc">Pare de depender de eletropostos públicos. Com um carregador em casa, você acorda todo dia com o carro cheio.</p>
+        </div>
+        <div class="serv-card-body">
+          <ul class="feat-list">
+            <li><div class="feat-icon">✓</div>Wallbox 7,4 kW ou 11 kW — carregamento completo em 4 a 6 horas</li>
+            <li><div class="feat-icon">✓</div>Compatível com todos os veículos elétricos e plug-in híbridos do mercado</li>
+            <li><div class="feat-icon">✓</div>Instalação em casas, apartamentos com vaga privativa ou garagem</li>
+            <li><div class="feat-icon">✓</div>Laudo técnico e ART incluso — tudo dentro da norma ABNT NBR 5410</li>
+            <li><div class="feat-icon">✓</div>Prazo médio de instalação: 1 dia útil</li>
+          </ul>
+          <a href="https://wa.me/5511962884031?text=Quero instalar um carregador residencial." class="sc-cta">Orçamento residencial →</a>
+        </div>
+      </div>
+
+      <div class="serv-card sc-com" id="comercial">
+        <div class="serv-card-header">
+          <div class="sc-label">Comercial</div>
+          <h2 class="sc-title">Recarga EV como diferencial do seu negócio.</h2>
+          <p class="sc-desc">Ofereça recarga para seus clientes, colaboradores ou moradores — com projeto elétrico profissional e suporte contínuo.</p>
+        </div>
+        <div class="serv-card-body">
+          <ul class="feat-list">
+            <li><div class="feat-icon">✓</div>Projetos de 1 a dezenas de pontos — estacionamentos, condomínios, escritórios</li>
+            <li><div class="feat-icon">✓</div>Carregadores AC (7,4 kW / 22 kW) com gestão por aplicativo</li>
+            <li><div class="feat-icon">✓</div>Projeto elétrico completo com dimensionamento de carga</li>
+            <li><div class="feat-icon">✓</div>Possibilidade de monetização — cobrar por sessão dos seus clientes</li>
+            <li><div class="feat-icon">✓</div>Manutenção preventiva e suporte técnico pós-instalação</li>
+          </ul>
+          <a href="https://wa.me/5511962884031?text=Quero instalar carregadores comerciais." class="sc-cta">Orçamento comercial →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section class="diferenciais">
+  <div class="dif-inner">
+    <h2 class="dif-h2">Por que instalar com a VivaAuto Carga?</h2>
+    <div class="dif-grid">
+      <div class="dif-item">
+        <div class="dif-num">01</div>
+        <h3>Eletricistas certificados</h3>
+        <p>Toda instalação é realizada por profissionais habilitados, com emissão de ART e laudo técnico incluso no serviço.</p>
+      </div>
+      <div class="dif-item">
+        <div class="dif-num">02</div>
+        <h3>Equipamentos homologados</h3>
+        <p>Trabalhamos apenas com carregadores com certificação INMETRO, IP65 e compatibilidade OCPP — para durar e funcionar direito.</p>
+      </div>
+      <div class="dif-item">
+        <div class="dif-num">03</div>
+        <h3>Visita técnica gratuita</h3>
+        <p>Avaliamos sua infraestrutura elétrica sem custo, sem compromisso, e entregamos orçamento detalhado em até 24h.</p>
+      </div>
+      <div class="dif-item">
+        <div class="dif-num">04</div>
+        <h3>Projeto elétrico incluso</h3>
+        <p>No residencial, assessoramos. No comercial, entregamos projeto elétrico completo com memorial descritivo e dimensionamento.</p>
+      </div>
+      <div class="dif-item">
+        <div class="dif-num">05</div>
+        <h3>Garantia do serviço</h3>
+        <p>Garantia de 12 meses na instalação e suporte técnico para qualquer dúvida após a ativação do equipamento.</p>
+      </div>
+      <div class="dif-item">
+        <div class="dif-num">06</div>
+        <h3>Ecossistema VivaAuto</h3>
+        <p>Clientes comerciais podem integrar os carregadores à plataforma VivaAuto Carga e cobrar por sessão dos seus usuários.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="faq-inner">
+    <h2 class="faq-h2">Dúvidas frequentes</h2>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Meu apartamento pode ter um carregador? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Sim, desde que a vaga seja privativa. Avaliamos a viabilidade elétrica do seu condomínio e orientamos sobre a aprovação em assembleia quando necessário. Em muitos casos a instalação é simples e não impacta as áreas comuns.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Qual a diferença entre 7,4 kW e 22 kW? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>7,4 kW (monofásico) recarrega um EV médio em 6–8h — ideal para carga noturna residencial. 22 kW (trifásico) reduz esse tempo para 2–3h, mais indicado para condomínios ou empresas com alta rotatividade de veículos. Indicamos o melhor para o seu caso na visita técnica.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Precisa mexer no padrão de energia da minha casa? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Na maioria dos casos, não. Avaliamos a carga instalada atual e dimensionamos o circuito dedicado para o carregador sem necessidade de upgrade do padrão. Quando necessário, informamos previamente e auxiliamos no processo com a concessionária.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Quanto tempo leva a instalação? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Instalações residenciais simples são concluídas em 1 dia útil. Projetos comerciais com múltiplos pontos têm prazo definido no orçamento, geralmente de 3 a 10 dias úteis dependendo do escopo.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">O serviço funciona para qualquer marca de carro elétrico? <span class="faq-icon">+</span></button>
+      <div class="faq-a"><p>Sim. Os carregadores que instalamos são compatíveis com todos os veículos elétricos e plug-in híbridos vendidos no Brasil, incluindo BYD, Volvo, Toyota, Jeep, Kia, Hyundai, BMW e outros, via conector Tipo 2 (padrão nacional).</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-final">
+  <div class="cta-inner">
+    <h2 class="cta-h2">Pronto para instalar?</h2>
+    <p class="cta-sub">Visita técnica gratuita, orçamento em 24h. Sem compromisso para conversar.</p>
+    <a href="https://wa.me/5511962884031?text=Olá! Quero instalar um carregador EV. Pode me ajudar?" class="cta-btn">💬 Falar pelo WhatsApp</a>
+    <p class="cta-note">Atendemos São Paulo e Grande SP</p>
+  </div>
+</div>
+
+<footer>
+  <div class="ft-inner">
+    <div class="ft-brand">VivaAuto <span>Carga</span> — Instalação EV</div>
+    <div class="ft-links">
+      <a href="vivaauto-carga.html" class="ft-link">Eletropostos</a>
+      <a href="https://www.vivaauto.com.br" class="ft-link">Viva Auto</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(btn){
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!isOpen) item.classList.add('open');
+}
+
+// Nav scroll
+window.addEventListener('scroll',()=>{
+  document.querySelector('nav').style.borderBottomColor =
+    window.scrollY > 40 ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.06)';
+});
+</script>
+</body>
+</html>

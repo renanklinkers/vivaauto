@@ -97,7 +97,7 @@ section{padding:88px 40px}
 /* ── COMO FUNCIONA ── */
 .como{background:var(--off-white)}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:52px;position:relative}
-.steps::before{content:'';position:absolute;top:36px;left:calc(16.66% + 16px);right:calc(16.66% + 16px);height:1px;background:linear-gradient(90deg,var(--green),var(--electric));z-index:0}
+.steps::before{content:'';position:absolute;top:36px;left:calc(16.66% + 16px);right:calc(16.66% + 16px);height:1px;background:linear-gradient(90deg,var(--green),var(--electric));z-index:0;pointer-events:none}
 .step{position:relative;z-index:1}
 .step-num{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;margin-bottom:20px;border:2px solid}
 .step-num-g{background:var(--green-glow);border-color:var(--green);color:var(--green)}
@@ -155,7 +155,7 @@ section{padding:88px 40px}
 
 /* ── CTA FINAL ── */
 .cta-final{background:linear-gradient(135deg,var(--navy-deep) 0%,var(--navy-mid) 100%);padding:96px 40px;text-align:center;position:relative;overflow:hidden}
-.cta-final::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%)}
+.cta-final::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
 .cta-final-inner{position:relative;max-width:640px;margin:0 auto}
 .cta-final h2{font-size:clamp(28px,4vw,46px);font-weight:900;color:var(--white);letter-spacing:-1px;line-height:1.1;margin-bottom:16px}
 .cta-final p{font-size:16px;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:40px}
@@ -190,6 +190,7 @@ footer{background:var(--navy-deep);padding:40px;border-top:1px solid rgba(255,25
   <div class="nav-links">
     <a href="#como-funciona" class="nav-link">Como funciona</a>
     <a href="#para-locais" class="nav-link">Para locais</a>
+    <a href="vivaauto-instalacao.html" class="nav-link" style="color:var(--green);font-weight:600">🔌 Instalar carregador</a>
   </div>
 
 </nav>
@@ -376,6 +377,18 @@ footer{background:var(--navy-deep);padding:40px;border-top:1px solid rgba(255,25
   </div>
 </section>
 
+<!-- BANNER INSTALAÇÃO -->
+<div style="background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);padding:40px">
+  <div style="max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap">
+    <div>
+      <div style="font-size:11px;font-weight:700;color:var(--green);letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:8px"><span style="width:16px;height:1px;background:var(--green);display:inline-block"></span>TAMBÉM FAZEMOS</div>
+      <h3 style="font-size:clamp(18px,2.5vw,26px);font-weight:800;color:var(--white);letter-spacing:-.5px;margin-bottom:8px;line-height:1.2">Instalação de carregadores<br>residencial e comercial</h3>
+      <p style="font-size:14px;color:rgba(255,255,255,.55);line-height:1.6;max-width:420px">Quer instalar um carregador na sua casa, no seu condomínio ou na sua empresa? Visita técnica gratuita e orçamento em 24h.</p>
+    </div>
+    <a href="vivaauto-instalacao.html" style="flex-shrink:0;background:transparent;border:1.5px solid rgba(34,197,94,.4);color:var(--green);padding:14px 24px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all .15s;white-space:nowrap" onmouseover="this.style.background='rgba(34,197,94,.1)';this.style.borderColor='var(--green)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(34,197,94,.4)'">🔌 Ver instalação →</a>
+  </div>
+</div>
+
 <!-- CTA FINAL -->
 <section class="cta-final" id="contato">
   <div class="cta-final-inner">
@@ -396,6 +409,7 @@ footer{background:var(--navy-deep);padding:40px;border-top:1px solid rgba(255,25
     <div class="footer-brand">VivaAuto <span>Carga</span></div>
     <div class="footer-copy">© 2026 VivaAuto. Todos os direitos reservados.</div>
     <a href="https://www.vivaauto.com.br" class="footer-link">← Viva Auto Recomendador</a>
+    <a href="vivaauto-instalacao.html" class="footer-link">🔌 Instalação EV</a>
   </div>
 </footer>
 
