@@ -495,7 +495,106 @@ footer{background:var(--navy);color:rgba(255,255,255,.6);padding:40px;display:gr
 @media(max-width:768px){
   .comp-charts-grid{grid-template-columns:1fr}
   .comp-chart-canvas{height:240px}
-}</style>
+}
+
+/* ══════════════════════════════════════
+   HOME REDESIGN — CLEAN & FRIENDLY
+══════════════════════════════════════ */
+
+/* Nav modo claro */
+nav.nav-light{background:rgba(255,255,255,.97);border-bottom:1px solid #e2e8f0;box-shadow:0 1px 12px rgba(0,0,0,.06)}
+nav.nav-light .nav-logo-text{color:var(--navy)}
+nav.nav-light .nav-link{color:#4a6484}
+nav.nav-light .nav-link:hover,nav.nav-light .nav-link.active{color:var(--navy)}
+nav.nav-light .btn-nav-manut{color:var(--navy);border-color:#cbd5e1}
+nav.nav-light .btn-nav-manut:hover{border-color:var(--navy);background:#f8fafc}
+nav.nav-light a[href="vivaauto-carga.html"].nav-link{color:var(--green)}
+
+/* HOME HERO */
+.h-hero{background:#fff;padding:80px 40px 72px;position:relative;overflow:hidden}
+.h-hero::before{content:'';position:absolute;top:-120px;right:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(34,197,94,.07) 0%,transparent 70%);pointer-events:none}
+.h-hero::after{content:'';position:absolute;bottom:-80px;left:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(56,189,248,.05) 0%,transparent 70%);pointer-events:none}
+.h-hero-inner{max-width:860px;margin:0 auto;text-align:center;position:relative}
+.h-eyebrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.h-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600}
+.h-pill-green{background:rgba(34,197,94,.1);color:#16a34a;border:1px solid rgba(34,197,94,.25)}
+.h-pill-blue{background:rgba(56,189,248,.1);color:#0284c7;border:1px solid rgba(56,189,248,.2)}
+.h-pill-dot{width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse-dot 1.5s infinite}
+.h-h1{font-size:clamp(32px,5vw,60px);font-weight:900;line-height:1.08;letter-spacing:-2px;color:var(--navy);margin-bottom:20px}
+.h-h1 em{font-style:normal;color:var(--green)}
+.h-sub{font-size:clamp(15px,1.8vw,18px);color:#64748b;line-height:1.65;margin-bottom:36px;max-width:580px;margin-left:auto;margin-right:auto}
+.h-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+.h-btn-primary{background:var(--green);color:white;border:none;padding:15px 28px;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;display:inline-flex;align-items:center;gap:8px}
+.h-btn-primary:hover{background:var(--green-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(34,197,94,.3)}
+.h-btn-ghost{background:#f1f5f9;color:var(--navy);border:none;padding:15px 28px;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.h-btn-ghost:hover{background:#e2e8f0}
+.h-stats{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;padding-top:32px;border-top:1px solid #f1f5f9}
+.h-stat{padding:0 28px;text-align:center}
+.h-stat-n{display:block;font-size:22px;font-weight:800;color:var(--navy);letter-spacing:-.5px}
+.h-stat-l{display:block;font-size:12px;color:#94a3b8;margin-top:2px}
+.h-stat-div{width:1px;height:36px;background:#e2e8f0}
+@media(max-width:640px){.h-stat-div{display:none}.h-stat{padding:12px 16px}}
+
+/* SERVIÇOS */
+.h-services{background:#f8fafc;padding:72px 40px}
+.h-services-inner{max-width:1100px;margin:0 auto}
+.h-sec-label{font-size:11px;font-weight:700;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.h-sec-h2{font-size:clamp(22px,3vw,36px);font-weight:800;color:var(--navy);letter-spacing:-.8px;margin-bottom:40px;line-height:1.15}
+.h-serv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.h-serv-card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:28px 24px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:12px}
+.h-serv-card:hover{border-color:var(--green);box-shadow:0 8px 32px rgba(0,0,0,.08);transform:translateY(-2px)}
+.h-serv-icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:22px;margin-bottom:4px}
+.h-serv-icon-green{background:rgba(34,197,94,.1)}
+.h-serv-icon-amber{background:rgba(245,158,11,.1)}
+.h-serv-icon-teal{background:rgba(20,184,166,.1)}
+.h-serv-icon-blue{background:rgba(56,189,248,.1)}
+.h-serv-card h3{font-size:16px;font-weight:700;color:var(--navy);line-height:1.2}
+.h-serv-card p{font-size:13px;color:#64748b;line-height:1.6;flex:1}
+.h-serv-link{font-size:13px;font-weight:700;color:var(--green);margin-top:4px}
+.h-serv-link-blue{color:#0284c7}
+.h-serv-link-teal{color:#0d9488}
+@media(max-width:900px){.h-serv-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.h-serv-grid{grid-template-columns:1fr}}
+
+/* BLOG */
+.h-blog{background:#fff;padding:72px 40px}
+.h-blog-inner{max-width:1100px;margin:0 auto}
+.h-blog-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px;gap:24px;flex-wrap:wrap}
+.h-blog-sub{font-size:15px;color:#64748b;line-height:1.6;margin-top:8px;max-width:480px}
+.h-blog-all{font-size:14px;font-weight:700;color:var(--green);text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;flex-shrink:0;align-self:flex-start;margin-top:8px}
+.h-blog-all:hover{text-decoration:underline}
+.h-blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.h-art-card{border:1px solid #e2e8f0;border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:14px;transition:all .2s;text-decoration:none;color:inherit}
+.h-art-card:hover{border-color:var(--green);box-shadow:0 8px 32px rgba(0,0,0,.07);transform:translateY(-2px)}
+.h-art-cat{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.05em}
+.h-art-title{font-size:17px;font-weight:700;color:var(--navy);line-height:1.35}
+.h-art-excerpt{font-size:13px;color:#64748b;line-height:1.65;flex:1}
+.h-art-footer{display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid #f1f5f9;font-size:12px;color:#94a3b8}
+.h-art-footer strong{font-size:13px;font-weight:600;color:var(--green)}
+.h-blog-empty{grid-column:1/-1;text-align:center;padding:48px;color:#94a3b8;font-size:15px}
+.h-blog-loading{color:#94a3b8;font-size:14px;padding:24px 0}
+@media(max-width:900px){.h-blog-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.h-blog-grid{grid-template-columns:1fr}}
+
+/* CTA HOME */
+.h-cta{background:var(--navy);padding:80px 40px;text-align:center}
+.h-cta-inner{max-width:560px;margin:0 auto}
+.h-cta h2{font-size:clamp(24px,3.5vw,40px);font-weight:800;color:#fff;letter-spacing:-1px;margin-bottom:12px;line-height:1.15}
+.h-cta p{font-size:15px;color:rgba(255,255,255,.6);margin-bottom:32px;line-height:1.6}
+
+/* FOOTER novo */
+.h-footer{background:#0d1f38;padding:48px 40px 28px;color:rgba(255,255,255,.5)}
+.h-footer-inner{max-width:1100px;margin:0 auto}
+.h-footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.h-footer-brand{font-size:18px;font-weight:800;color:#fff;margin-bottom:8px}
+.h-footer-brand span{color:var(--green)}
+.h-footer-tagline{font-size:13px;line-height:1.6;max-width:240px}
+.h-footer-col h4{font-size:12px;font-weight:700;color:#fff;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.h-footer-link{display:block;font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;margin-bottom:10px;transition:color .15s}
+.h-footer-link:hover{color:#fff}
+.h-footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:20px;font-size:12px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media(max-width:768px){.h-footer-top{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.h-footer-top{grid-template-columns:1fr}}</style>
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -521,7 +620,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </style>
 
 <!-- NAV -->
-<nav>
+<nav id="main-nav" class="nav-light">
   <a class="nav-logo" onclick="showPage('home')">
     <div class="nav-logo-icon">
       <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13 8 13.67 8 14.5 7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
@@ -536,7 +635,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a class="nav-link" href="vivaauto-carga.html" style="color:var(--green);font-weight:600">⚡ Carga</a>
   </div>
   <div style="display:flex;gap:8px;align-items:center">
-    <a href="manutencao.html" class="btn-nav-manut">🔧 Manutenção</a>
     <button class="btn-nav" onclick="showPage('wizard')">Descobrir meu carro</button>
   </div>
 </nav>
@@ -544,197 +642,123 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- ══ HOME PAGE ══ -->
 <div class="page active" id="page-home">
 
-  <div class="hero">
-    <div class="hero-split">
-
-      <!-- LADO ESQUERDO: RECOMENDADOR -->
-      <div class="hero-half hero-half-left">
-        <div class="hero-badge">
-          <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-          Recomendação inteligente
-        </div>
-        <h1>Escolha seu próximo carro com <em>inteligência</em>,<br>não por impulso.</h1>
-        <p class="hero-sub">Recomendações baseadas em custo total, uso real e critérios técnicos — 2.000+ modelos na base, resultado em menos de 5 minutos.</p>
-        <div class="hero-ctas">
-          <button class="btn-primary" onclick="showPage('wizard')">Descobrir meu carro ideal →</button>
-        </div>
-        <div class="hero-stats">
-          <div><div class="hero-stat-val">6+</div><div class="hero-stat-lbl">Critérios analisados</div></div>
-          <div><div class="hero-stat-val">100%</div><div class="hero-stat-lbl">Gratuito</div></div>
-          <div><div class="hero-stat-val">2.000+</div><div class="hero-stat-lbl">Modelos na base</div></div>
-        </div>
+  <!-- HERO -->
+  <section class="h-hero">
+    <div class="h-hero-inner">
+      <div class="h-eyebrow">
+        <span class="h-pill h-pill-green"><span class="h-pill-dot"></span> Recomendação inteligente</span>
+        <span class="h-pill h-pill-blue"><span class="h-pill-dot"></span> Novo: VivaAuto Carga</span>
       </div>
-
-      <!-- DIVISOR -->
-      <div class="hero-divider"></div>
-
-      <!-- LADO DIREITO: VIVAAUTO CARGA -->
-      <div class="hero-half hero-half-right">
-        <div class="hero-badge hero-badge-green">
-          <span style="width:7px;height:7px;background:#22c55e;border-radius:50%;display:inline-block;animation:pulse-dot 1.5s infinite"></span>
-          Novo — VivaAuto Carga
-        </div>
-        <h2 class="hero-h2-carga">Instale eletropostos no seu negócio.<br><em class="em-green">Sem custo. Sem risco.</em></h2>
-        <p class="hero-sub">Padarias, academias, galerias, clínicas — instalamos carregadores EV sem nenhum investimento do seu lado e você participa da receita gerada.</p>
-        <div class="hero-ctas">
-          <a href="vivaauto-carga.html" class="btn-carga">⚡ Quero um eletroposto →</a>
-        </div>
-        <div class="hero-stats">
-          <div><div class="hero-stat-val">R$ 0</div><div class="hero-stat-lbl">Custo para o parceiro</div></div>
-          <div><div class="hero-stat-val">40+</div><div class="hero-stat-lbl">Min de permanência</div></div>
-          <div><div class="hero-stat-val">100%</div><div class="hero-stat-lbl">Gerenciado por nós</div></div>
-        </div>
+      <h1 class="h-h1">Escolha seu próximo carro com <em>inteligência</em>, não por impulso.</h1>
+      <p class="h-sub">Análise baseada em custo total, uso real e 2.000+ modelos. Resultado personalizado em menos de 5 minutos — 100% gratuito.</p>
+      <div class="h-ctas">
+        <button class="h-btn-primary" onclick="showPage('wizard')">🚗 Descobrir meu carro ideal</button>
+        <button class="h-btn-ghost" onclick="showPage('comp')">Comparar modelos</button>
       </div>
-
-    </div>
-  </div>
-
-  <div class="section" style="background:white">
-    <div class="section-label">Por que o Viva Auto existe</div>
-    <h2>Por que o Viva Auto existe</h2>
-    <p class="section-sub">Comprar um carro no Brasil ainda é uma decisão muito emocional, pouco transparente e quase sempre baseada apenas em preço, aparência ou valor de parcela.</p>
-    <p class="section-sub2">O Viva Auto nasceu para mudar essa lógica. Nossa proposta é ajudar motoristas a escolherem o carro mais adequado ao seu uso real, considerando custo total, perfil de vida, espaço, consumo, manutenção e racional técnico.</p>
-    <div class="why-grid">
-      <div class="why-card">
-        <div class="why-icon">📊</div>
-        <div class="why-title">Custo total transparente</div>
-        <div class="why-desc">Depreciação, combustível e manutenção considerados — não só o preço de etiqueta.</div>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">👁️</div>
-        <div class="why-title">Decisão racional</div>
-        <div class="why-desc">Dados técnicos reais, não marketing. Baseado na base PBEV/INMETRO e preços FIPE.</div>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">❤️</div>
-        <div class="why-title">Perfil real de uso</div>
-        <div class="why-desc">Seu dia a dia define a recomendação. Cidade, estrada, família, trabalho — cada perfil tem pesos diferentes.</div>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">🏎️</div>
-        <div class="why-title">Feito por entusiasta</div>
-        <div class="why-desc">Criado por um profissional com carreira construída no mercado automotivo brasileiro.</div>
+      <div class="h-stats">
+        <div class="h-stat"><span class="h-stat-n">2.000+</span><span class="h-stat-l">Modelos na base</span></div>
+        <div class="h-stat-div"></div>
+        <div class="h-stat"><span class="h-stat-n">6+</span><span class="h-stat-l">Critérios analisados</span></div>
+        <div class="h-stat-div"></div>
+        <div class="h-stat"><span class="h-stat-n">100%</span><span class="h-stat-l">Gratuito</span></div>
+        <div class="h-stat-div"></div>
+        <div class="h-stat"><span class="h-stat-n">&lt; 5 min</span><span class="h-stat-l">Para o resultado</span></div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="manut-section">
-    <div class="manut-inner">
-      <div class="manut-content">
-        <div class="manut-badge">🆕 Novo</div>
-        <div class="section-label">Módulo de manutenção</div>
-        <h2>Nunca mais perca uma revisão. Seu carro agradece.</h2>
-        <p>O Diário de Manutenção do Viva Auto centraliza todo o histórico do seu veículo, te avisa quando a próxima revisão chega e gera um certificado completo para valorizar seu carro na hora de vender.</p>
-        <div class="manut-features">
-          <div class="manut-feat">
-            <div class="manut-feat-icon">🔔</div>
-            <div class="manut-feat-text">
-              <strong>Alertas inteligentes</strong>
-              <span>Aviso por KM ou por tempo — o que vencer primeiro. Sem desculpas para esquecer.</span>
-            </div>
-          </div>
-          <div class="manut-feat">
-            <div class="manut-feat-icon">📋</div>
-            <div class="manut-feat-text">
-              <strong>Histórico completo</strong>
-              <span>Registre cada troca de óleo, revisão e reparo com data, KM e valor gasto.</span>
-            </div>
-          </div>
-          <div class="manut-feat">
-            <div class="manut-feat-icon">📄</div>
-            <div class="manut-feat-text">
-              <strong>Certificado de manutenção</strong>
-              <span>Gere um relatório PDF para apresentar ao comprador e negociar com mais segurança.</span>
-            </div>
-          </div>
+  <!-- SERVIÇOS -->
+  <section class="h-services">
+    <div class="h-services-inner">
+      <div class="h-sec-label">Nosso ecossistema</div>
+      <h2 class="h-sec-h2">Tudo que você precisa em um lugar</h2>
+      <div class="h-serv-grid">
+        <div class="h-serv-card" onclick="showPage('wizard')">
+          <div class="h-serv-icon h-serv-icon-green">🚗</div>
+          <h3>Recomendador</h3>
+          <p>Encontre o carro ideal para o seu perfil de uso e orçamento em menos de 5 minutos.</p>
+          <span class="h-serv-link">Começar →</span>
         </div>
-        <a href="manutencao.html" class="btn-manut-cta">Acessar Diário de Manutenção →</a>
-      </div>
-      <div class="manut-mockup">
-        <div class="manut-mock-header">
-          <div style="display:flex;gap:5px">
-            <div class="manut-mock-dot" style="background:#ef4444"></div>
-            <div class="manut-mock-dot" style="background:#f59e0b"></div>
-            <div class="manut-mock-dot" style="background:#22c55e"></div>
-          </div>
-          <div class="manut-mock-logo" style="margin-left:10px">Viva Auto — Manutenção</div>
+        <div class="h-serv-card" onclick="location.href='manutencao.html'">
+          <div class="h-serv-icon h-serv-icon-amber">🔧</div>
+          <h3>Diário de Manutenção</h3>
+          <p>Histórico completo, alertas de revisão e certificado PDF. Grátis por 1 ano.</p>
+          <span class="h-serv-link" style="color:#d97706">Acessar →</span>
         </div>
-        <div class="manut-mock-body">
-          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:10px">🔔 Alertas</div>
-          <div class="manut-mock-card">
-            <div class="manut-mock-icon">🔧</div>
-            <div class="manut-mock-info">
-              <strong>Troca de óleo</strong>
-              <span>Toyota Corolla 2022 • 48.000 km</span>
-            </div>
-            <div class="manut-mock-status status-warn">⏰ Próxima</div>
-          </div>
-          <div class="manut-mock-card">
-            <div class="manut-mock-icon">🛞</div>
-            <div class="manut-mock-info">
-              <strong>Revisão geral</strong>
-              <span>Honda HRV 2021 • 62.000 km</span>
-            </div>
-            <div class="manut-mock-status status-ok">✅ Em dia</div>
-          </div>
-          <div class="manut-mock-card" style="border-color:var(--green);background:#f0fdf4">
-            <div class="manut-mock-icon" style="background:var(--green-light)">📄</div>
-            <div class="manut-mock-info">
-              <strong>Certificado gerado</strong>
-              <span>PDF pronto para negociação</span>
-            </div>
-            <div class="manut-mock-status status-ok">↓ Baixar</div>
-          </div>
-          <div style="margin-top:14px;padding:12px;background:var(--navy);border-radius:10px;text-align:center">
-            <div style="font-size:12px;font-weight:700;color:white">Grátis por 1 ano</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">Sem cartão de crédito</div>
-          </div>
+        <div class="h-serv-card" onclick="location.href='vivaauto-carga.html'">
+          <div class="h-serv-icon h-serv-icon-teal">⚡</div>
+          <h3>Eletropostos</h3>
+          <p>Instale carregadores EV no seu negócio sem investimento e participe da receita.</p>
+          <span class="h-serv-link h-serv-link-teal">Saiba mais →</span>
+        </div>
+        <div class="h-serv-card" onclick="location.href='vivaauto-instalacao.html'">
+          <div class="h-serv-icon h-serv-icon-blue">🔌</div>
+          <h3>Instalação EV</h3>
+          <p>Carregadores residenciais e comerciais. Visita técnica gratuita, orçamento em 24h.</p>
+          <span class="h-serv-link h-serv-link-blue">Ver serviço →</span>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- BANNER VIVAAUTO CARGA -->
-  <div style="background:linear-gradient(135deg,#07111f 0%,#0d2240 100%);padding:64px 40px">
-    <div style="max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center">
-      <div>
-        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:5px 14px;margin-bottom:16px">
-          <span style="font-size:12px;font-weight:700;color:#22c55e;letter-spacing:.08em;text-transform:uppercase">⚡ Novo — VivaAuto Carga</span>
+  <!-- ARTIGOS -->
+  <section class="h-blog">
+    <div class="h-blog-inner">
+      <div class="h-blog-header">
+        <div>
+          <div class="h-sec-label">Publicado toda semana</div>
+          <h2 class="h-sec-h2">Artigos sobre o mundo automotivo</h2>
+          <p class="h-blog-sub">Reviews, manutenção, mercado e mobilidade elétrica — todo conteúdo em português, sem jargão, sem enrolação.</p>
         </div>
-        <h2 style="font-size:clamp(22px,3vw,34px);font-weight:800;color:#fff;letter-spacing:-.6px;margin-bottom:12px;line-height:1.2">Instale eletropostos no seu negócio.<br>Sem custo. Sem complicação.</h2>
-        <p style="font-size:15px;color:rgba(255,255,255,.6);line-height:1.65;max-width:480px">Padarias, academias, clínicas, galerias, clubes — instalamos carregadores EV sem investimento do seu lado e você participa da receita gerada.</p>
+        <a href="artigos.html" class="h-blog-all">Ver todos os artigos →</a>
       </div>
-      <div style="flex-shrink:0">
-        <a href="vivaauto-carga.html" style="display:inline-flex;align-items:center;gap:10px;background:#22c55e;color:#07111f;padding:16px 28px;border-radius:10px;font-size:15px;font-weight:700;text-decoration:none;white-space:nowrap;transition:all .15s" onmouseover="this.style.background='#1ea84f';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#22c55e';this.style.transform='none'">Saiba mais →</a>
+      <div class="h-blog-grid" id="h-blog-grid">
+        <div class="h-blog-loading">Carregando artigos...</div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="cta-section">    <h2>Pronto para encontrar o carro certo?</h2>
-    <p>Comece gratuitamente com nossa recomendação automática ou converse com um especialista.</p>
-    <div class="cta-btns">
-      <button class="btn-primary" onclick="showPage('wizard')">Descobrir meu carro ideal →</button>
+  <!-- CTA -->
+  <section class="h-cta">
+    <div class="h-cta-inner">
+      <h2>Pronto para escolher com mais inteligência?</h2>
+      <p>2.000+ modelos analisados. Resultado personalizado em menos de 5 minutos.</p>
+      <button class="h-btn-primary" onclick="showPage('wizard')">Descobrir meu carro ideal →</button>
     </div>
-  </div>
+  </section>
 
-  <footer>
-    <div>
-      <div class="footer-brand">Viva Auto</div>
-      <div class="footer-tagline">Escolha seu próximo carro com inteligência, não por impulso.</div>
-    </div>
-    <div class="footer-col">
-      <h4>Navegação</h4>
-      <span class="footer-link" onclick="showPage('home')">Início</span>
-      <span class="footer-link" onclick="showPage('wizard')">Recomendador</span>
-      <a class="footer-link" href="manutencao.html">Manutenção</a>
-      <a class="footer-link" href="vivaauto-carga.html">⚡ VivaAuto Carga</a>
-    </div>
-    <div class="footer-col">
-      <h4>Contato</h4>
-      <span class="footer-link">✉️ contato@vivaauto.com.br</span>
+  <!-- FOOTER -->
+  <footer class="h-footer">
+    <div class="h-footer-inner">
+      <div class="h-footer-top">
+        <div>
+          <div class="h-footer-brand">Viva <span>Auto</span></div>
+          <p class="h-footer-tagline">Escolha seu próximo carro com inteligência, não por impulso.</p>
+        </div>
+        <div>
+          <h4>Ferramentas</h4>
+          <span class="h-footer-link" onclick="showPage('wizard')" style="cursor:pointer">Recomendador</span>
+          <span class="h-footer-link" onclick="showPage('comp')" style="cursor:pointer">Comparativo</span>
+          <a class="h-footer-link" href="manutencao.html">Manutenção</a>
+        </div>
+        <div>
+          <h4>VivaAuto Carga</h4>
+          <a class="h-footer-link" href="vivaauto-carga.html">⚡ Eletropostos</a>
+          <a class="h-footer-link" href="vivaauto-instalacao.html">🔌 Instalação EV</a>
+        </div>
+        <div>
+          <h4>Conteúdo</h4>
+          <a class="h-footer-link" href="artigos.html">Artigos</a>
+          <span class="h-footer-link">✉️ contato@vivaauto.com.br</span>
+        </div>
+      </div>
+      <div class="h-footer-bottom">
+        <span>© 2026 Viva Auto. Todos os direitos reservados.</span>
+        <span>Feito com ❤️ por entusiastas do mercado automotivo</span>
+      </div>
     </div>
   </footer>
-  <div class="footer-bottom">© 2026 Viva Auto. Todos os direitos reservados.</div>
+
 </div>
 
 <!-- ══ WIZARD PAGE ══ -->
@@ -1413,6 +1437,8 @@ function showPage(name) {
     const el = document.getElementById('nav-' + n);
     if (el) el.classList.toggle('active', n === name);
   });
+  const nav = document.getElementById('main-nav');
+  if (nav) nav.classList.toggle('nav-light', name === 'home');
   if (name === 'comp') initComparativo();
   window.scrollTo(0, 0);
   if (name === 'wizard') goToStep(1);
@@ -2317,9 +2343,33 @@ async function marcarEspecialista() {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
-// ══════════════════════════════════════════════
-// COMPARATIVO
-// ══════════════════════════════════════════════
+// ══ BLOG: CARREGAR ARTIGOS DO JSON ══
+async function carregarArtigos() {
+  const grid = document.getElementById('h-blog-grid');
+  if (!grid) return;
+  try {
+    const res = await fetch('/artigos.json');
+    if (!res.ok) throw new Error('not found');
+    const artigos = await res.json();
+    const recentes = artigos.slice(0, 3);
+    if (!recentes.length) { grid.innerHTML = '<div class="h-blog-empty">Artigos em breve!</div>'; return; }
+    grid.innerHTML = recentes.map(a => {
+      const data = new Date(a.data).toLocaleDateString('pt-BR', {day:'numeric',month:'short',year:'numeric'});
+      return `<a href="artigos/${a.slug}.html" class="h-art-card">
+        <span class="h-art-cat" style="background:${a.cor}20;color:${a.cor}">${a.categoria}</span>
+        <div class="h-art-title">${a.titulo}</div>
+        <div class="h-art-excerpt">${a.resumo}</div>
+        <div class="h-art-footer">
+          <span>${data} · ${a.leitura}</span>
+          <strong>Ler artigo →</strong>
+        </div>
+      </a>`;
+    }).join('');
+  } catch {
+    grid.innerHTML = '<div class="h-blog-empty">✍️ Primeiros artigos chegando em breve!</div>';
+  }
+}
+document.addEventListener('DOMContentLoaded', carregarArtigos);
 let compSelecionados = [];
 let chartRadar = null, chartTcoTotal = null, chartTcoBreakdown = null;
 const COMP_CORES = ['#3b82f6','#ec4899','#f59e0b'];
