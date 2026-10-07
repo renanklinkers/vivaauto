@@ -1,0 +1,794 @@
+<title>VivaAuto CRM</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+/* ── tokens ── */
+:root {
+  --navy:   #0f1f3d;
+  --navy2:  #1b2f55;
+  --amber:  #f0b429;
+  --amber2: #fbbf24;
+  --bg:     #f4f6fb;
+  --surface:#ffffff;
+  --border: #dde3ec;
+  --muted:  #5b6678;
+  --ink:    #1c2433;
+  --soft:   #eef2f7;
+ 
+  --s-novo:       #3b82f6;
+  --s-contato:    #8b5cf6;
+  --s-proposta:   #f59e0b;
+  --s-negociacao: #f97316;
+  --s-fechado:    #10b981;
+  --s-perdido:    #ef4444;
+ 
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:     #0d1829;
+    --surface:#111e35;
+    --border: #1e3050;
+    --muted:  #7a8fa8;
+    --ink:    #e8edf5;
+    --soft:   #182640;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:     #0d1829;
+  --surface:#111e35;
+  --border: #1e3050;
+  --muted:  #7a8fa8;
+  --ink:    #e8edf5;
+  --soft:   #182640;
+  color-scheme: dark;
+}
+ 
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+a{color:inherit;text-decoration:none}
+ 
+/* ── login screen ── */
+#login-screen{position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;padding:24px}
+.login-box{background:#1b2f55;border-radius:20px;padding:40px 36px;width:100%;max-width:380px;text-align:center}
+.login-logo{font-size:28px;font-weight:800;color:#fff;letter-spacing:-.03em;margin-bottom:4px}
+.login-logo span{color:var(--amber)}
+.login-sub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:32px}
+.login-label{display:block;font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;text-align:left;margin-bottom:6px}
+.login-input{width:100%;padding:13px 16px;border-radius:10px;border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:#fff;font-family:inherit;font-size:15px;outline:none;letter-spacing:.1em;transition:border .15s;text-align:center}
+.login-input:focus{border-color:var(--amber)}
+.login-btn{margin-top:16px;width:100%;padding:14px;background:var(--amber);color:var(--navy);border:none;border-radius:10px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;transition:background .15s}
+.login-btn:hover{background:var(--amber2)}
+.login-err{margin-top:12px;font-size:13px;color:#f87171;min-height:18px}
+#login-screen[hidden]{display:none!important}
+ 
+/* ── top bar ── */
+.topbar{background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:56px;position:sticky;top:env(safe-area-inset-top,0px);z-index:100}
+.topbar-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;letter-spacing:-.02em}
+.topbar-brand span{color:var(--amber)}
+.topbar-actions{display:flex;gap:8px}
+ 
+/* ── main layout ── */
+.main{padding:24px;max-width:1400px;margin:0 auto}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.page-title{font-size:22px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.page-sub{font-size:13px;color:var(--muted);margin-top:2px}
+ 
+/* ── stats row ── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:24px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.stat-val{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;color:var(--ink)}
+.stat-lbl{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+.stat-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+ 
+/* ── toolbar ── */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.search-wrap input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-size:13px;font-family:inherit;outline:none}
+.search-wrap input:focus{border-color:var(--amber)}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+select.filter{padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:13px;outline:none;cursor:pointer}
+select.filter:focus{border-color:var(--amber)}
+ 
+/* ── buttons ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--amber);color:var(--navy)}
+.btn-primary:hover{background:var(--amber2)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--soft);color:var(--ink)}
+.btn-danger{background:#fee2e2;color:#b91c1c;border:none}
+.btn-danger:hover{background:#fecaca}
+.btn-sm{padding:5px 10px;font-size:12px}
+ 
+/* ── table ── */
+.table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;background:var(--surface)}
+thead{background:var(--soft)}
+th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;border-bottom:1px solid var(--border)}
+td{padding:13px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr.lead-row:hover td{background:var(--soft);cursor:pointer}
+.name-cell{font-weight:600;color:var(--ink)}
+.sub-cell{font-size:12px;color:var(--muted);margin-top:2px}
+.actions-cell{display:flex;gap:6px;justify-content:flex-end}
+ 
+/* ── status badge ── */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+.badge-novo      {background:#eff6ff;color:var(--s-novo)}
+.badge-contato   {background:#f5f3ff;color:var(--s-contato)}
+.badge-proposta  {background:#fffbeb;color:#92400e}
+.badge-negociacao{background:#fff7ed;color:#9a3412}
+.badge-fechado   {background:#ecfdf5;color:#065f46}
+.badge-perdido   {background:#fef2f2;color:#991b1b}
+ 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .badge-novo      {background:#1e3a5f;color:#93c5fd}
+  :root:not([data-theme="light"]) .badge-contato   {background:#2e1d5e;color:#c4b5fd}
+  :root:not([data-theme="light"]) .badge-proposta  {background:#3d2e00;color:#fcd34d}
+  :root:not([data-theme="light"]) .badge-negociacao{background:#3d1f00;color:#fdba74}
+  :root:not([data-theme="light"]) .badge-fechado   {background:#022c22;color:#6ee7b7}
+  :root:not([data-theme="light"]) .badge-perdido   {background:#3d0000;color:#fca5a5}
+}
+:root[data-theme="dark"] .badge-novo      {background:#1e3a5f;color:#93c5fd}
+:root[data-theme="dark"] .badge-contato   {background:#2e1d5e;color:#c4b5fd}
+:root[data-theme="dark"] .badge-proposta  {background:#3d2e00;color:#fcd34d}
+:root[data-theme="dark"] .badge-negociacao{background:#3d1f00;color:#fdba74}
+:root[data-theme="dark"] .badge-fechado   {background:#022c22;color:#6ee7b7}
+:root[data-theme="dark"] .badge-perdido   {background:#3d0000;color:#fca5a5}
+ 
+/* ── modal ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:16px}
+.overlay[hidden]{display:none!important}
+.modal{background:var(--surface);border-radius:16px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;padding:28px}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.modal-title{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.close-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:22px;line-height:1;padding:0;display:flex}
+ 
+/* ── form ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+input,select,textarea{padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:13px;outline:none;transition:border .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--amber)}
+textarea{resize:vertical;min-height:72px;line-height:1.5}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+ 
+/* ── orçamentos ── */
+.orc-list{display:flex;flex-direction:column;gap:8px}
+.orc-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--soft);border-radius:8px;border:1px solid var(--border)}
+.orc-item-info{flex:1;min-width:0}
+.orc-item-name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.orc-item-date{font-size:11px;color:var(--muted)}
+.add-orc-row{display:flex;gap:8px;margin-top:8px}
+.add-orc-row input{flex:1}
+ 
+/* ── detail panel ── */
+.detail-section{margin-bottom:20px}
+.detail-section-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.detail-item{}
+.detail-label{font-size:11px;color:var(--muted);margin-bottom:2px}
+.detail-value{font-size:13px;font-weight:500}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:12px;padding-bottom:14px;position:relative}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:7px;top:18px;bottom:0;width:1px;background:var(--border)}
+.tl-dot{width:15px;height:15px;border-radius:50%;background:var(--amber);border:2px solid var(--surface);flex-shrink:0;margin-top:2px}
+.tl-text{font-size:13px;line-height:1.45}
+.tl-date{font-size:11px;color:var(--muted);margin-top:2px}
+ 
+/* ── empty state ── */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-icon{font-size:40px;margin-bottom:12px}
+.empty-title{font-weight:700;font-size:16px;color:var(--ink);margin-bottom:6px}
+ 
+/* ── csv btn ── */
+.export-note{font-size:12px;color:var(--muted);margin-top:12px;text-align:right}
+ 
+@media(max-width:600px){
+  .main{padding:16px}
+  .form-grid{grid-template-columns:1fr}
+  .form-group.full{grid-column:1}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  th:nth-child(n+4),td:nth-child(n+4){display:none}
+}
+</style>
+ 
+<!-- ── Login screen ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Viva<span>Auto</span></div>
+    <div class="login-sub">Área restrita · CRM de Leads</div>
+    <label class="login-label" for="pwd-input">Senha de acesso</label>
+    <input id="pwd-input" class="login-input" type="password" placeholder="••••••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+ 
+<!-- ── Top bar ── -->
+<div class="topbar">
+  <div class="topbar-brand">Viva<span>Auto</span> &nbsp;·&nbsp; <span style="font-weight:500;opacity:.7;font-size:13px">CRM Leads</span></div>
+  <div class="topbar-actions">
+    <button class="btn btn-ghost" onclick="exportCSV()" style="color:#fff;border-color:rgba(255,255,255,.2)">⬇ Exportar CSV</button>
+    <button class="btn btn-primary" onclick="openModal()">+ Novo Lead</button>
+  </div>
+</div>
+ 
+<!-- ── Main ── -->
+<div class="main">
+ 
+  <!-- stats -->
+  <div class="stats" id="stats"></div>
+ 
+  <!-- toolbar -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="search" type="text" placeholder="Buscar por nome, telefone, cidade…" oninput="renderTable()">
+    </div>
+    <select class="filter" id="filter-status" onchange="renderTable()">
+      <option value="">Todos os status</option>
+      <option value="Novo">Novo</option>
+      <option value="Em contato">Em contato</option>
+      <option value="Proposta enviada">Proposta enviada</option>
+      <option value="Negociação">Negociação</option>
+      <option value="Fechado">Fechado</option>
+      <option value="Perdido">Perdido</option>
+    </select>
+    <select class="filter" id="filter-tipo" onchange="renderTable()">
+      <option value="">Todos os serviços</option>
+      <option value="Instalação EV">Instalação EV</option>
+      <option value="Carga Comercial">Carga Comercial</option>
+      <option value="Consultoria">Consultoria</option>
+      <option value="Venda">Venda</option>
+    </select>
+  </div>
+ 
+  <!-- table -->
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Lead</th>
+          <th>Contato</th>
+          <th>Endereço</th>
+          <th>Serviço</th>
+          <th>Status</th>
+          <th>Últ. interação</th>
+          <th>Orçamentos</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <p class="export-note" id="count-note"></p>
+</div>
+ 
+<!-- ── Modal add/edit ── -->
+<div class="overlay" id="modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">Novo Lead</span>
+      <button class="close-btn" onclick="closeModal()" aria-label="Fechar">×</button>
+    </div>
+    <form id="lead-form" onsubmit="saveLead(event)">
+      <div class="form-grid">
+        <!-- contato -->
+        <div class="form-group full" style="border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:4px">
+          <label style="font-size:13px;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:700;margin-bottom:0">Dados de contato</label>
+        </div>
+        <div class="form-group">
+          <label>Nome *</label>
+          <input id="f-nome" required placeholder="Nome completo">
+        </div>
+        <div class="form-group">
+          <label>Telefone / WhatsApp *</label>
+          <input id="f-tel" required placeholder="(11) 9xxxx-xxxx">
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input id="f-email" type="email" placeholder="email@exemplo.com">
+        </div>
+        <div class="form-group">
+          <label>Empresa</label>
+          <input id="f-empresa" placeholder="Nome da empresa">
+        </div>
+ 
+        <!-- endereço -->
+        <div class="form-group full" style="border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:4px;margin-top:8px">
+          <label style="font-size:13px;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:700;margin-bottom:0">Endereço</label>
+        </div>
+        <div class="form-group full">
+          <label>Logradouro</label>
+          <input id="f-rua" placeholder="Rua, número, complemento">
+        </div>
+        <div class="form-group">
+          <label>Cidade</label>
+          <input id="f-cidade" placeholder="São Paulo">
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <input id="f-estado" placeholder="SP" maxlength="2" style="text-transform:uppercase">
+        </div>
+ 
+        <!-- negociação -->
+        <div class="form-group full" style="border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:4px;margin-top:8px">
+          <label style="font-size:13px;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:700;margin-bottom:0">Negociação</label>
+        </div>
+        <div class="form-group">
+          <label>Serviço</label>
+          <select id="f-tipo">
+            <option value="">— selecionar —</option>
+            <option>Instalação EV</option>
+            <option>Carga Comercial</option>
+            <option>Consultoria</option>
+            <option>Venda</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="f-status">
+            <option>Novo</option>
+            <option>Em contato</option>
+            <option>Proposta enviada</option>
+            <option>Negociação</option>
+            <option>Fechado</option>
+            <option>Perdido</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Valor estimado (R$)</label>
+          <input id="f-valor" type="number" min="0" step="0.01" placeholder="0,00">
+        </div>
+        <div class="form-group">
+          <label>Origem do lead</label>
+          <select id="f-origem">
+            <option value="">— selecionar —</option>
+            <option>WhatsApp</option>
+            <option>Instagram</option>
+            <option>Site</option>
+            <option>Indicação</option>
+            <option>Google</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Observações / próximos passos</label>
+          <textarea id="f-obs" placeholder="Detalhes do atendimento, próximas ações…"></textarea>
+        </div>
+ 
+        <!-- orçamentos -->
+        <div class="form-group full" style="border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:4px;margin-top:8px">
+          <label style="font-size:13px;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:700;margin-bottom:0">Orçamentos enviados</label>
+        </div>
+        <div class="form-group full">
+          <div class="orc-list" id="orc-list"></div>
+          <div class="add-orc-row">
+            <input id="orc-desc" placeholder="Descrição do orçamento">
+            <input id="orc-valor" type="number" min="0" step="0.01" placeholder="Valor R$" style="max-width:130px">
+            <input id="orc-data" type="date" style="max-width:150px">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="addOrc()">+ Add</button>
+          </div>
+        </div>
+      </div>
+ 
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar Lead</button>
+      </div>
+    </form>
+  </div>
+</div>
+ 
+<!-- ── Modal detalhe ── -->
+<div class="overlay" id="detail-modal" hidden>
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header">
+      <span class="modal-title" id="dm-name"></span>
+      <button class="close-btn" onclick="closeDetail()">×</button>
+    </div>
+    <div id="dm-body"></div>
+    <div style="display:flex;gap:8px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+      <button class="btn btn-ghost" onclick="editFromDetail()">✏️ Editar</button>
+      <button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="deleteFromDetail()">Excluir</button>
+    </div>
+  </div>
+</div>
+ 
+<script>
+/* ── data layer ── */
+const KEY = 'vivaauto_leads_v3';
+let leads = [], editId = null, detailId = null;
+let pendingOrcs = [];
+ 
+function load() {
+  try { leads = JSON.parse(localStorage.getItem(KEY)) || []; } catch(e) { leads = []; }
+  if (!leads.length) leads = sampleData();
+  save();
+}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(leads)); } catch(e) {}
+}
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+ 
+/* ── dados reais ── */
+function sampleData() {
+  return [
+    {
+      id: uid(),
+      nome: 'Fernando Garcia',
+      tel: '(11) 97250-9384',
+      email: 'fernandogarcia.mack@gmail.com',
+      empresa: '',
+      rua: 'Rua Paulo Sérgio de Macedo, 71',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      bairro: 'Jd. Lar São Paulo',
+      tipo: 'Instalação EV',
+      status: 'Em contato',
+      valor: 6000,
+      origem: 'WhatsApp',
+      obs: 'Aguardando envio do orçamento para estudo de carga.',
+      orcs: [],
+      criado: '2026-10-06',
+      atualizado: '2026-10-06'
+    },
+    {
+      id: uid(),
+      nome: 'William Yuzo',
+      tel: '(11) 93363-8505',
+      email: '',
+      empresa: '',
+      rua: 'Rua Humaitá, 107 — CEP 01321-010',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      tipo: 'Instalação EV',
+      status: 'Em contato',
+      valor: 11500,
+      origem: 'WhatsApp',
+      obs: 'Visita técnica realizada em 02/10/2026. Aguardando envio de dois orçamentos: estudo de carga (R$6.000) e instalação (R$5.500).',
+      orcs: [],
+      criado: '2026-10-02',
+      atualizado: '2026-10-06'
+    },
+    {
+      id: uid(),
+      nome: 'Pedro Miguel Mauad',
+      tel: '(11) 98377-3013',
+      email: '',
+      empresa: '',
+      rua: 'R. Dr. Ernesto Vergara, 333 — Edif. Bruno IV',
+      cidade: 'Praia Grande',
+      estado: 'SP',
+      bairro: 'Tupi',
+      tipo: 'Instalação EV',
+      status: 'Em contato',
+      valor: 6000,
+      origem: 'WhatsApp',
+      obs: 'Aguardando envio do orçamento para estudo de carga.',
+      orcs: [],
+      criado: '2026-10-06',
+      atualizado: '2026-10-06'
+    },
+    {
+      id: uid(),
+      nome: 'Bruno',
+      tel: '(11) 98120-8234',
+      email: '',
+      empresa: '',
+      rua: '',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      tipo: 'Instalação EV',
+      status: 'Negociação',
+      valor: 0,
+      origem: 'WhatsApp',
+      obs: 'Visita técnica realizada em 29/09/2026. Cotação de instalação já enviada. Cliente sinalizou que irá seguir com a instalação. Próximo passo: reunião com a síndica para alinhar detalhes. Pendente: envio da cotação dos carregadores importados da China.',
+      orcs: [
+        { id: uid(), desc: 'Cotação instalação', valor: 0, data: '2026-09-29' }
+      ],
+      criado: '2026-09-29',
+      atualizado: '2026-10-06'
+    },
+    {
+      id: uid(),
+      nome: 'Ricardo Junqueira',
+      tel: '(11) 97624-6352',
+      email: '',
+      empresa: '',
+      rua: 'Av. Dr. Martin Luther King, 2547 — Alta Villa, Apto 152',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      tipo: 'Instalação EV',
+      status: 'Em contato',
+      valor: 0,
+      origem: 'WhatsApp',
+      obs: 'Visita técnica realizada em 06/10/2026. Condomínio quer instalar infraestrutura completa (eletrocalhas para todas as vagas) para que cada morador possa instalar seu próprio carregador. Próximo passo: montar orçamento para montagem e passagem das eletrocalhas.',
+      orcs: [],
+      criado: '2026-10-06',
+      atualizado: '2026-10-06'
+    },
+  ];
+}
+ 
+/* ── status helpers ── */
+const statusKey = s => ({
+  'Novo':'novo','Em contato':'contato','Proposta enviada':'proposta',
+  'Negociação':'negociacao','Fechado':'fechado','Perdido':'perdido'
+}[s]||'novo');
+ 
+function badge(s) {
+  return `<span class="badge badge-${statusKey(s)}">${s}</span>`;
+}
+ 
+/* ── render table ── */
+function renderTable() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const fs = document.getElementById('filter-status').value;
+  const ft = document.getElementById('filter-tipo').value;
+ 
+  let filtered = leads.filter(l => {
+    const hay = [l.nome,l.tel,l.email,l.empresa,l.cidade,l.estado].join(' ').toLowerCase();
+    return (!q || hay.includes(q)) && (!fs || l.status===fs) && (!ft || l.tipo===ft);
+  });
+ 
+  // sort: newest updated first
+  filtered.sort((a,b) => (b.atualizado||'').localeCompare(a.atualizado||''));
+ 
+  const tbody = document.getElementById('tbody');
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">Nenhum lead encontrado</div><p>Tente outro filtro ou adicione um novo lead.</p></div></td></tr>`;
+    document.getElementById('count-note').textContent='';
+    return;
+  }
+ 
+  tbody.innerHTML = filtered.map(l => {
+    const orcCount = (l.orcs||[]).length;
+    const lastOrc = orcCount ? l.orcs[orcCount-1] : null;
+    const valorFmt = l.valor ? 'R$'+Number(l.valor).toLocaleString('pt-BR') : '—';
+    const tel = l.tel ? `<a href="tel:${l.tel.replace(/\D/g,'')}">${l.tel}</a>` : '—';
+    return `<tr class="lead-row" onclick="openDetail('${l.id}')">
+      <td><div class="name-cell">${esc(l.nome)}</div>${l.empresa?`<div class="sub-cell">${esc(l.empresa)}</div>`:''}</td>
+      <td><div>${tel}</div>${l.email?`<div class="sub-cell">${esc(l.email)}</div>`:''}</td>
+      <td><div>${l.cidade||'—'}${l.estado?' · '+l.estado:''}</div>${l.rua?`<div class="sub-cell" style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(l.rua)}</div>`:''}</td>
+      <td>${l.tipo||'—'}</td>
+      <td>${badge(l.status)}</td>
+      <td style="white-space:nowrap">${fmtDate(l.atualizado)}</td>
+      <td>${orcCount ? `<span style="font-weight:600">${orcCount}</span><span style="color:var(--muted);font-size:11px"> enviado${orcCount>1?'s':''}</span>${lastOrc?`<div class="sub-cell">${fmtDate(lastOrc.data)}</div>`:''}` : `<span style="color:var(--muted)">—</span>`}</td>
+      <td><div class="actions-cell" onclick="event.stopPropagation()">
+        <button class="btn btn-ghost btn-sm" onclick="openModal('${l.id}')">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteLead('${l.id}')">✕</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+ 
+  const total = leads.length, totalValor = leads.reduce((s,l)=>s+(+l.valor||0),0);
+  document.getElementById('count-note').textContent = `${filtered.length} de ${total} leads · Valor total pipeline: R$ ${totalValor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+ 
+  renderStats();
+}
+ 
+function renderStats() {
+  const counts = {};
+  leads.forEach(l => { counts[l.status] = (counts[l.status]||0)+1; });
+  const pipe = leads.filter(l=>!['Fechado','Perdido'].includes(l.status)).reduce((s,l)=>s+(+l.valor||0),0);
+  const fechados = leads.filter(l=>l.status==='Fechado').reduce((s,l)=>s+(+l.valor||0),0);
+ 
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-val">${leads.length}</div><div class="stat-lbl">Total leads</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--s-novo)">${counts['Novo']||0}</div><div class="stat-lbl"><span class="stat-dot" style="background:var(--s-novo)"></span>Novos</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--s-proposta)">${(counts['Proposta enviada']||0)+(counts['Negociação']||0)}</div><div class="stat-lbl"><span class="stat-dot" style="background:var(--s-proposta)"></span>Em proposta</div></div>
+    <div class="stat"><div class="stat-val" style="color:var(--s-fechado)">${counts['Fechado']||0}</div><div class="stat-lbl"><span class="stat-dot" style="background:var(--s-fechado)"></span>Fechados</div></div>
+    <div class="stat"><div class="stat-val" style="font-size:16px">R$${(pipe/1000).toFixed(0)}k</div><div class="stat-lbl">Pipeline aberto</div></div>
+    <div class="stat"><div class="stat-val" style="font-size:16px;color:var(--s-fechado)">R$${(fechados/1000).toFixed(0)}k</div><div class="stat-lbl">Receita fechada</div></div>
+  `;
+}
+ 
+/* ── modal add/edit ── */
+function openModal(id=null) {
+  editId = id;
+  pendingOrcs = [];
+  const l = id ? leads.find(x=>x.id===id) : null;
+  document.getElementById('modal-title').textContent = id ? 'Editar Lead' : 'Novo Lead';
+ 
+  const fields = ['nome','tel','email','empresa','rua','cidade','estado','tipo','status','valor','origem','obs'];
+  fields.forEach(f => {
+    const el = document.getElementById('f-'+f);
+    if(el) el.value = l ? (l[f]||'') : (f==='status'?'Novo':'');
+  });
+ 
+  pendingOrcs = l ? [...(l.orcs||[])] : [];
+  document.getElementById('orc-desc').value='';
+  document.getElementById('orc-valor').value='';
+  document.getElementById('orc-data').value='';
+  renderOrcList();
+  document.getElementById('modal').hidden = false;
+}
+ 
+function closeModal() { document.getElementById('modal').hidden = true; editId=null; }
+ 
+function addOrc() {
+  const desc = document.getElementById('orc-desc').value.trim();
+  const val  = document.getElementById('orc-valor').value;
+  const data = document.getElementById('orc-data').value;
+  if(!desc) { document.getElementById('orc-desc').focus(); return; }
+  pendingOrcs.push({ id:uid(), desc, valor:val?+val:0, data:data||new Date().toISOString().slice(0,10) });
+  document.getElementById('orc-desc').value='';
+  document.getElementById('orc-valor').value='';
+  document.getElementById('orc-data').value='';
+  renderOrcList();
+}
+ 
+function removeOrc(id) { pendingOrcs = pendingOrcs.filter(o=>o.id!==id); renderOrcList(); }
+ 
+function renderOrcList() {
+  document.getElementById('orc-list').innerHTML = pendingOrcs.map(o=>`
+    <div class="orc-item">
+      <div class="orc-item-info">
+        <div class="orc-item-name">${esc(o.desc)}</div>
+        <div class="orc-item-date">${o.valor?'R$'+Number(o.valor).toLocaleString('pt-BR')+' · ':''}${fmtDate(o.data)}</div>
+      </div>
+      <button type="button" class="btn btn-danger btn-sm" onclick="removeOrc('${o.id}')">✕</button>
+    </div>`).join('');
+}
+ 
+function saveLead(e) {
+  e.preventDefault();
+  const today = new Date().toISOString().slice(0,10);
+  const data = {
+    id: editId||uid(),
+    nome:    document.getElementById('f-nome').value.trim(),
+    tel:     document.getElementById('f-tel').value.trim(),
+    email:   document.getElementById('f-email').value.trim(),
+    empresa: document.getElementById('f-empresa').value.trim(),
+    rua:     document.getElementById('f-rua').value.trim(),
+    cidade:  document.getElementById('f-cidade').value.trim(),
+    estado:  document.getElementById('f-estado').value.trim().toUpperCase(),
+    tipo:    document.getElementById('f-tipo').value,
+    status:  document.getElementById('f-status').value,
+    valor:   +document.getElementById('f-valor').value||0,
+    origem:  document.getElementById('f-origem').value,
+    obs:     document.getElementById('f-obs').value.trim(),
+    orcs:    pendingOrcs,
+    atualizado: today,
+  };
+  if (editId) {
+    const idx = leads.findIndex(l=>l.id===editId);
+    data.criado = leads[idx].criado || today;
+    leads[idx] = data;
+  } else {
+    data.criado = today;
+    leads.unshift(data);
+  }
+  save();
+  closeModal();
+  renderTable();
+}
+ 
+/* ── detail ── */
+function openDetail(id) {
+  detailId = id;
+  const l = leads.find(x=>x.id===id);
+  if(!l) return;
+  document.getElementById('dm-name').innerHTML = `${esc(l.nome)} ${badge(l.status)}`;
+  document.getElementById('dm-body').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title">Contato</div>
+      <div class="detail-grid">
+        <div class="detail-item"><div class="detail-label">Telefone</div><div class="detail-value">${l.tel||'—'}</div></div>
+        <div class="detail-item"><div class="detail-label">E-mail</div><div class="detail-value">${l.email||'—'}</div></div>
+        <div class="detail-item"><div class="detail-label">Empresa</div><div class="detail-value">${l.empresa||'—'}</div></div>
+        <div class="detail-item"><div class="detail-label">Origem</div><div class="detail-value">${l.origem||'—'}</div></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Endereço</div>
+      <div class="detail-grid">
+        <div class="detail-item" style="grid-column:1/-1"><div class="detail-label">Logradouro</div><div class="detail-value">${l.rua||'—'}</div></div>
+        <div class="detail-item"><div class="detail-label">Cidade</div><div class="detail-value">${l.cidade||'—'}</div></div>
+        <div class="detail-item"><div class="detail-label">Estado</div><div class="detail-value">${l.estado||'—'}</div></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Negociação</div>
+      <div class="detail-grid">
+        <div class="detail-item"><div class="detail-label">Serviço</div><div class="detail-value">${l.tipo||'—'}</div></div>
+        <div class="detail-item"><div class="detail-label">Valor estimado</div><div class="detail-value">${l.valor?'R$ '+Number(l.valor).toLocaleString('pt-BR'):'—'}</div></div>
+        <div class="detail-item" style="grid-column:1/-1"><div class="detail-label">Observações</div><div class="detail-value" style="line-height:1.5;white-space:pre-wrap">${l.obs||'—'}</div></div>
+      </div>
+    </div>
+    ${l.orcs&&l.orcs.length?`
+    <div class="detail-section">
+      <div class="detail-section-title">Orçamentos enviados</div>
+      <div class="timeline">
+        ${l.orcs.map(o=>`<div class="tl-item"><div class="tl-dot"></div><div><div class="tl-text">${esc(o.desc)}${o.valor?' — <strong>R$ '+Number(o.valor).toLocaleString('pt-BR')+'</strong>':''}</div><div class="tl-date">${fmtDate(o.data)}</div></div></div>`).join('')}
+      </div>
+    </div>`:''}
+    <div class="detail-section" style="border:none;margin-bottom:0">
+      <div class="detail-section-title">Datas</div>
+      <div class="detail-grid">
+        <div class="detail-item"><div class="detail-label">Criado em</div><div class="detail-value">${fmtDate(l.criado)}</div></div>
+        <div class="detail-item"><div class="detail-label">Últ. atualização</div><div class="detail-value">${fmtDate(l.atualizado)}</div></div>
+      </div>
+    </div>
+  `;
+  document.getElementById('detail-modal').hidden = false;
+}
+function closeDetail() { document.getElementById('detail-modal').hidden=true; detailId=null; }
+function editFromDetail() { closeDetail(); openModal(detailId); }
+function deleteFromDetail() { deleteLead(detailId); closeDetail(); }
+ 
+/* ── delete ── */
+function deleteLead(id) {
+  leads = leads.filter(l=>l.id!==id);
+  save(); renderTable();
+}
+ 
+/* ── export CSV ── */
+function exportCSV() {
+  const cols = ['Nome','Telefone','Email','Empresa','Rua','Cidade','Estado','Serviço','Status','Valor','Origem','Observações','Orçamentos','Criado','Atualizado'];
+  const rows = leads.map(l => [
+    l.nome, l.tel, l.email, l.empresa, l.rua, l.cidade, l.estado,
+    l.tipo, l.status, l.valor||0, l.origem, l.obs,
+    (l.orcs||[]).map(o=>`${o.desc} R$${o.valor} (${o.data})`).join(' | '),
+    l.criado, l.atualizado
+  ].map(v=>'"'+(String(v||'').replace(/"/g,'""'))+'"').join(','));
+  const csv = [cols.join(','), ...rows].join('\n');
+  const blob = new Blob(['﻿'+csv], {type:'text/csv;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href=url; a.download='vivaauto-leads-'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+ 
+/* ── utils ── */
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtDate(d) {
+  if(!d) return '—';
+  const [y,m,day] = d.split('-');
+  return `${day}/${m}/${y}`;
+}
+ 
+/* ── keyboard ── */
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') { closeModal(); closeDetail(); }
+});
+ 
+/* ── login ── */
+const PASS_HASH = '5a4d6f7c3e1b2a9f8d0c5e4b3a2f1d0e9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4'; // placeholder, replaced at runtime
+const CORRECT  = 'Vivaauto#CRM';
+const AUTH_KEY = 'vivaauto_crm_auth';
+ 
+function doLogin() {
+  const v = document.getElementById('pwd-input').value;
+  if (v === CORRECT) {
+    try { localStorage.setItem(AUTH_KEY, '1'); } catch(e){}
+    document.getElementById('login-screen').hidden = true;
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('login-err').textContent = '';
+    load(); renderTable();
+  } else {
+    document.getElementById('login-err').textContent = 'Senha incorreta. Tente novamente.';
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-input').focus();
+  }
+}
+ 
+function checkAuth() {
+  try {
+    if (localStorage.getItem(AUTH_KEY) === '1') {
+      document.getElementById('login-screen').hidden = true;
+      return true;
+    }
+  } catch(e){}
+  document.getElementById('pwd-input').focus();
+  return false;
+}
+ 
+/* ── init ── */
+if (checkAuth()) { load(); renderTable(); }
+</script>
