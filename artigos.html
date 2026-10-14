@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WJF3TCTT');</script>
+<!-- End Google Tag Manager -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artigos sobre carros | VivaAuto</title>
+<meta name="description" content="Reviews, manutenção, mercado e mobilidade elétrica. Conteúdo em português, sem jargão, para você tomar decisões melhores na hora de comprar ou manter seu carro.">
+<link rel="canonical" href="https://www.vivaauto.com.br/artigos.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Artigos sobre carros | VivaAuto">
+<meta property="og:description" content="Reviews, manutenção, mercado e mobilidade elétrica. Conteúdo em português, sem jargão.">
+<meta property="og:url" content="https://www.vivaauto.com.br/artigos.html">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="VivaAuto">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,400..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1f3d;
+    --navy-2: #1b2f55;
+    --green: #22c55e;
+    --amber: #f0b429;
+    --ink: #1c2433;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --soft: #f8fafc;
+    --paper: #ffffff;
+    --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --radius: 16px;
+    --shadow: 0 4px 24px rgba(15,31,61,.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-family: var(--sans); background: var(--soft); color: var(--ink); font-size: 15px; line-height: 1.6; }
+  a { color: inherit; text-decoration: none; }
+
+  /* NAV */
+  nav {
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-brand {
+    font-weight: 900;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    color: #fff;
+  }
+  .nav-brand span { color: var(--green); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a { font-size: 13px; font-weight: 600; color: #a0b0cc; transition: color .15s; }
+  .nav-links a:hover, .nav-links a.active { color: #fff; }
+  .nav-cta {
+    background: var(--green);
+    color: var(--navy) !important;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-weight: 700 !important;
+    color: #fff !important;
+  }
+  .nav-cta:hover { background: #16a34a !important; }
+  @media (max-width: 640px) {
+    nav { padding: 0 20px; }
+    .nav-links { gap: 16px; }
+    .nav-links a:not(.nav-cta):not(:last-child) { display: none; }
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--navy);
+    padding: clamp(3rem, 8vw, 5rem) 40px clamp(2.5rem, 6vw, 4rem);
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .hero p { font-size: clamp(1rem, 2vw, 1.15rem); color: #a0b0cc; max-width: 520px; line-height: 1.6; }
+
+  /* FILTERS */
+  .filters {
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    padding: 0 40px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter-btn {
+    flex-shrink: 0;
+    padding: 14px 18px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+  }
+  .filter-btn:hover { color: var(--navy); }
+  .filter-btn.active { color: var(--navy); border-bottom-color: var(--green); }
+  @media (max-width: 640px) { .filters { padding: 0 20px; } }
+
+  /* GRID */
+  .content { max-width: 1100px; margin: 0 auto; padding: clamp(2rem, 5vw, 3.5rem) 40px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 580px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .content { padding: 1.5rem 20px; } }
+
+  /* CARD */
+  .art-card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: all .2s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .art-card:hover {
+    border-color: var(--green);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+  .art-cat {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    align-self: flex-start;
+  }
+  .art-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.35;
+  }
+  .art-excerpt {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    flex: 1;
+  }
+  .art-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    font-size: 12px;
+    color: #94a3b8;
+  }
+  .art-footer strong { font-size: 13px; font-weight: 600; color: var(--green); }
+
+  /* STATES */
+  .loading { grid-column: 1/-1; padding: 48px; text-align: center; color: var(--muted); font-size: 14px; }
+  .empty { grid-column: 1/-1; padding: 48px; text-align: center; color: #94a3b8; font-size: 15px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: #a0b0cc;
+    padding: 40px;
+    text-align: center;
+    font-size: 13px;
+    margin-top: 48px;
+  }
+  footer a { color: var(--green); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WJF3TCTT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<nav>
+  <a class="nav-brand" href="/">VIVA<span>AUTO</span></a>
+  <div class="nav-links">
+    <a href="/">Recomendador</a>
+    <a href="/manutencao.html">Manutenção</a>
+    <a href="/artigos.html" class="active">Artigos</a>
+    <a href="/" class="nav-cta">Encontrar meu carro</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Artigos</h1>
+    <p>Reviews, manutenção, mercado e mobilidade elétrica — sem jargão, para você tomar decisões melhores.</p>
+  </div>
+</section>
+
+<div class="filters">
+  <button class="filter-btn active" data-cat="todos">Todos</button>
+  <button class="filter-btn" data-cat="Mercado">Mercado</button>
+  <button class="filter-btn" data-cat="Elétricos">Elétricos</button>
+  <button class="filter-btn" data-cat="Manutenção">Manutenção</button>
+</div>
+
+<div class="content">
+  <div class="grid" id="grid">
+    <div class="loading">Carregando artigos…</div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 VivaAuto · <a href="/">Recomendador</a> · <a href="/manutencao.html">Manutenção</a> · <a href="/artigos.html">Artigos</a></p>
+</footer>
+
+<script>
+let todosArtigos = [];
+let catAtiva = 'todos';
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  const lista = catAtiva === 'todos'
+    ? todosArtigos
+    : todosArtigos.filter(a => a.categoria === catAtiva);
+
+  if (!lista.length) {
+    grid.innerHTML = '<div class="empty">Nenhum artigo encontrado.</div>';
+    return;
+  }
+
+  grid.innerHTML = lista.map(a => {
+    const data = new Date(a.data + 'T12:00:00').toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' });
+    return `<a href="/artigos/${a.slug}.html" class="art-card">
+      <span class="art-cat" style="background:${a.cor}20;color:${a.cor}">${a.categoria}</span>
+      <div class="art-title">${a.titulo}</div>
+      <div class="art-excerpt">${a.resumo}</div>
+      <div class="art-footer">
+        <span>${data} · ${a.leitura}</span>
+        <strong>Ler artigo →</strong>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+async function init() {
+  const grid = document.getElementById('grid');
+  try {
+    const res = await fetch('/artigos.json');
+    if (!res.ok) throw new Error();
+    todosArtigos = await res.json();
+    // mostrar mais recentes primeiro
+    todosArtigos.sort((a, b) => b.data.localeCompare(a.data));
+    renderGrid();
+  } catch {
+    grid.innerHTML = '<div class="empty">✍️ Artigos chegando em breve!</div>';
+  }
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    catAtiva = btn.dataset.cat;
+    renderGrid();
+  });
+});
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
