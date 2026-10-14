@@ -2351,7 +2351,7 @@ async function carregarArtigos() {
     const res = await fetch('/artigos.json');
     if (!res.ok) throw new Error('not found');
     const artigos = await res.json();
-    const recentes = artigos.slice(0, 3);
+    const recentes = artigos.sort((a,b) => b.data.localeCompare(a.data)).slice(0, 3);
     if (!recentes.length) { grid.innerHTML = '<div class="h-blog-empty">Artigos em breve!</div>'; return; }
     grid.innerHTML = recentes.map(a => {
       const data = new Date(a.data).toLocaleDateString('pt-BR', {day:'numeric',month:'short',year:'numeric'});
