@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quero Comprar — VivaAuto</title>
+<meta name="description" content="Publique seu interesse de compra e deixe os lojistas virem até você. Grátis.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700;900&display=swap">
+<style>
+:root{
+  --navy:#0B1F3A;--n2:#132D4A;--n3:#1A3A5C;
+  --green:#00C27C;--blue:#5BB8F5;
+  --bg:#f5f7fa;--card:#fff;--border:#dde5f0;
+  --text:#0B1F3A;--muted:#6b7fa3;--light:#e8eef8;
+  color-scheme:light;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --bg:#080f1c;--card:#0d1a2e;--border:#1e3550;
+  --text:#D0E0ED;--muted:#8BA7C0;--light:#132D4A;
+  color-scheme:dark;
+}}
+:root[data-theme=dark]{
+  --bg:#080f1c;--card:#0d1a2e;--border:#1e3550;
+  --text:#D0E0ED;--muted:#8BA7C0;--light:#132D4A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+/* NAV */
+nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{color:#fff;font-weight:900;font-size:20px;text-decoration:none}
+.logo span{color:var(--green)}
+nav a.back{color:var(--green);font-size:13px;font-weight:600;text-decoration:none;opacity:.85}
+nav a.back:hover{opacity:1}
+
+/* HERO */
+.hero{background:var(--navy);padding:48px 24px 56px;text-align:center}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(0,194,124,.12);border:1px solid rgba(0,194,124,.25);
+  border-radius:99px;padding:5px 14px;margin-bottom:18px;
+  font-size:12px;font-weight:700;color:var(--green);letter-spacing:.5px;text-transform:uppercase;
+}
+.hero h1{color:#fff;font-size:clamp(26px,5vw,40px);font-weight:900;line-height:1.2;max-width:640px;margin:0 auto 14px;text-wrap:balance}
+.hero h1 span{color:var(--green)}
+.hero p{color:#8BA7C0;font-size:16px;max-width:520px;margin:0 auto;line-height:1.6}
+.steps{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px}
+.step{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;
+  padding:12px 18px;display:flex;align-items:center;gap:10px;min-width:160px;}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--navy);
+  font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step p{font-size:13px;color:#D0E0ED;line-height:1.35}
+
+/* FORM */
+main{max-width:680px;margin:0 auto;padding:36px 24px 80px}
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:20px}
+.section-title{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.field label .req{color:var(--green)}
+.field input,.field select,.field textarea{
+  width:100%;padding:11px 14px;border-radius:9px;
+  border:1.5px solid var(--border);background:var(--bg);
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;
+  transition:.15s;outline:none;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green)}
+.field textarea{resize:vertical;min-height:90px}
+.field .hint{font-size:11px;color:var(--muted);margin-top:5px}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:480px){.row2{grid-template-columns:1fr}}
+
+.radio-group{display:flex;flex-wrap:wrap;gap:8px}
+.radio-group label{
+  display:flex;align-items:center;gap:7px;cursor:pointer;
+  padding:8px 14px;border-radius:8px;border:1.5px solid var(--border);
+  font-size:13px;font-weight:500;transition:.15s;
+}
+.radio-group input[type=radio]{display:none}
+.radio-group input[type=radio]:checked + span{color:var(--green)}
+.radio-group label:has(input:checked){border-color:var(--green);background:rgba(0,194,124,.07)}
+
+/* SUBMIT */
+.submit-area{text-align:center;margin-top:28px}
+.btn-submit{
+  background:var(--green);color:var(--navy);
+  border:none;border-radius:12px;padding:15px 48px;
+  font-family:'DM Sans',sans-serif;font-size:16px;font-weight:900;
+  cursor:pointer;transition:.15s;width:100%;max-width:360px;
+}
+.btn-submit:hover{filter:brightness(1.08)}
+.btn-submit:disabled{opacity:.5;cursor:not-allowed}
+.privacy{font-size:11px;color:var(--muted);margin-top:10px;text-align:center}
+
+/* SUCCESS */
+#success{display:none;text-align:center;padding:40px 24px}
+.success-icon{font-size:56px;margin-bottom:16px}
+#success h2{font-size:26px;font-weight:900;color:var(--text);margin-bottom:8px}
+#success p{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6}
+.btn-vitrine{
+  display:inline-block;padding:12px 28px;background:var(--green);
+  color:var(--navy);border-radius:10px;font-weight:800;font-size:14px;
+  text-decoration:none;transition:.15s;
+}
+.btn-vitrine:hover{filter:brightness(1.08)}
+.share-box{
+  background:var(--light);border:1px solid var(--border);border-radius:10px;
+  padding:14px 18px;margin:20px auto;max-width:480px;text-align:left;
+}
+.share-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.share-url{font-size:13px;color:var(--text);word-break:break-all;margin-bottom:8px}
+.btn-copy{padding:7px 16px;border-radius:7px;border:1.5px solid var(--green);background:transparent;
+  color:var(--green);font-size:12px;font-weight:700;cursor:pointer;transition:.15s}
+.btn-copy:hover{background:var(--green);color:var(--navy)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/"><span>Viva</span>Auto</a>
+  <a class="back" href="/vitrine.html">← Ver vitrine de demandas</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">✦ Novo</div>
+  <h1>Publique o que você quer comprar.<br><span>Os lojistas vêm até você.</span></h1>
+  <p>Chega de perder horas garimpando anúncios. Diga qual carro você quer e receba ofertas de quem tem o que você precisa.</p>
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><p>Descreve o carro que você quer</p></div>
+    <div class="step"><div class="step-num">2</div><p>Seu anúncio vai para a vitrine pública</p></div>
+    <div class="step"><div class="step-num">3</div><p>Lojistas com oferta entram em contato</p></div>
+  </div>
+</div>
+
+<main>
+  <form id="form">
+
+    <!-- Contato -->
+    <div class="form-card">
+      <p class="section-title">Seus dados de contato</p>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:18px">Seu contato não aparece publicamente. Só lojistas que tiverem oferta compatível entram em contato.</p>
+      <div class="row2">
+        <div class="field">
+          <label>Nome <span class="req">*</span></label>
+          <input type="text" name="nome" placeholder="Seu nome" required>
+        </div>
+        <div class="field">
+          <label>WhatsApp <span class="req">*</span></label>
+          <input type="tel" name="whatsapp" placeholder="(11) 99999-9999" required>
+        </div>
+      </div>
+      <div class="field">
+        <label>E-mail <span style="color:var(--muted);font-weight:400">(opcional)</span></label>
+        <input type="email" name="email" placeholder="seu@email.com">
+      </div>
+    </div>
+
+    <!-- Carro -->
+    <div class="form-card">
+      <p class="section-title">O carro que você quer</p>
+      <div class="row2">
+        <div class="field">
+          <label>Marca <span class="req">*</span></label>
+          <input type="text" name="marca" placeholder="Ex: Volkswagen, Toyota…" required>
+        </div>
+        <div class="field">
+          <label>Modelo <span class="req">*</span></label>
+          <input type="text" name="modelo" placeholder="Ex: Polo, Corolla…" required>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Ano mínimo</label>
+          <input type="number" name="ano_min" placeholder="Ex: 2020" min="1990" max="2027">
+        </div>
+        <div class="field">
+          <label>Ano máximo</label>
+          <input type="number" name="ano_max" placeholder="Ex: 2024" min="1990" max="2027">
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>KM máximo</label>
+          <input type="number" name="km_max" placeholder="Ex: 60000">
+          <p class="hint">Deixe em branco se não importa</p>
+        </div>
+        <div class="field">
+          <label>Orçamento máximo (R$)</label>
+          <input type="number" name="orcamento_max" placeholder="Ex: 85000">
+        </div>
+      </div>
+      <div class="field">
+        <label>Cor preferida <span style="color:var(--muted);font-weight:400">(opcional)</span></label>
+        <input type="text" name="cor" placeholder="Ex: Prata, Branco, Qualquer">
+      </div>
+    </div>
+
+    <!-- Localização -->
+    <div class="form-card">
+      <p class="section-title">Localização</p>
+      <div class="row2">
+        <div class="field">
+          <label>Cidade <span class="req">*</span></label>
+          <input type="text" name="cidade" placeholder="Ex: São Paulo" required>
+        </div>
+        <div class="field">
+          <label>Estado <span class="req">*</span></label>
+          <select name="estado" required>
+            <option value="">Selecione…</option>
+            <option>AC</option><option>AL</option><option>AM</option><option>AP</option>
+            <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+            <option>GO</option><option>MA</option><option>MG</option><option>MS</option>
+            <option>MT</option><option>PA</option><option>PB</option><option>PE</option>
+            <option>PI</option><option>PR</option><option>RJ</option><option>RN</option>
+            <option>RO</option><option>RR</option><option>RS</option><option>SC</option>
+            <option>SE</option><option selected>SP</option><option>TO</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preferências -->
+    <div class="form-card">
+      <p class="section-title">Preferências de compra</p>
+
+      <div class="field">
+        <label>Prazo para compra <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="prazo" value="imediato" required><span>Imediato</span></label>
+          <label><input type="radio" name="prazo" value="1_mes"><span>Até 1 mês</span></label>
+          <label><input type="radio" name="prazo" value="3_meses"><span>Até 3 meses</span></label>
+          <label><input type="radio" name="prazo" value="sem_pressa"><span>Sem pressa</span></label>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom:0">
+        <label>Aceita financiamento? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="financiamento" value="sim" required><span>Sim</span></label>
+          <label><input type="radio" name="financiamento" value="nao"><span>Não, somente à vista</span></label>
+          <label><input type="radio" name="financiamento" value="indiferente"><span>Indiferente</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Observações -->
+    <div class="form-card">
+      <p class="section-title">Informações adicionais</p>
+      <div class="field" style="margin-bottom:0">
+        <label>Observações <span style="color:var(--muted);font-weight:400">(opcional)</span></label>
+        <textarea name="observacoes" placeholder="Ex: precisa ter revisão em dia, aceito receber o carro em outra cidade, quero manual e chave reserva…"></textarea>
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button class="btn-submit" type="submit" id="btn">Publicar meu anúncio de interesse</button>
+      <p class="privacy">🔒 Seu contato é privado. Só aparece para lojistas com oferta compatível.</p>
+    </div>
+
+  </form>
+
+  <!-- SUCCESS -->
+  <div id="success">
+    <div class="success-icon">✅</div>
+    <h2>Anúncio publicado!</h2>
+    <p>Seu interesse já está na vitrine. Lojistas com o carro que você procura vão entrar em contato pelo WhatsApp.</p>
+    <div class="share-box">
+      <p class="share-label">Link do seu anúncio</p>
+      <p class="share-url" id="share-url"></p>
+      <button class="btn-copy" onclick="copyLink()">Copiar link</button>
+    </div>
+    <a class="btn-vitrine" href="/vitrine.html">Ver todos os anúncios →</a>
+  </div>
+</main>
+
+<!-- Supabase JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.3/umd/supabase.min.js"></script>
+<script>
+// ── CONFIG — substitua pelas suas chaves ──────────────────
+const SUPA_URL  = 'https://yjwmotnpkwojcazmwgkb.supabase.co';
+const SUPA_ANON = 'sb_publishable_0coKU-DYdEcbHa6NPkUqag_vp_UOvuu';
+// ─────────────────────────────────────────────────────────
+
+const supa = supabase.createClient(SUPA_URL, SUPA_ANON);
+
+// Máscara WhatsApp
+document.querySelector('[name=whatsapp]').addEventListener('input', function(){
+  let v = this.value.replace(/\D/g,'').slice(0,11);
+  if(v.length>10) v=v.replace(/^(\d{2})(\d{5})(\d{4})$/,'($1) $2-$3');
+  else if(v.length>6) v=v.replace(/^(\d{2})(\d{4})(\d*)$/,'($1) $2-$3');
+  else if(v.length>2) v=v.replace(/^(\d{2})(\d*)$/,'($1) $2');
+  this.value=v;
+});
+
+function makeSlug(marca, modelo, estado){
+  const s = t => t.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const rand = Math.random().toString(36).slice(2,7);
+  return `${s(marca)}-${s(modelo)}-${s(estado)}-${rand}`;
+}
+
+document.getElementById('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('btn');
+  btn.disabled = true; btn.textContent = 'Publicando…';
+
+  const fd = new FormData(e.target);
+  const d  = Object.fromEntries(fd.entries());
+
+  // Limpa vazios
+  ['email','km_max','orcamento_max','cor','observacoes','ano_min','ano_max']
+    .forEach(k => { if(!d[k]) d[k] = null; });
+  ['km_max','orcamento_max','ano_min','ano_max']
+    .forEach(k => { if(d[k]) d[k] = Number(d[k]); });
+
+  d.slug = makeSlug(d.marca, d.modelo, d.estado);
+
+  const { error } = await supa
+    .from('interesse_compra')
+    .insert(d);
+
+  if(error){
+    alert('Erro ao publicar. Tente novamente.\n' + error.message);
+    btn.disabled = false; btn.textContent = 'Publicar meu anúncio de interesse';
+    return;
+  }
+
+  // Sucesso
+  const link = `${location.origin}/interesse.html?s=${d.slug}`;
+  document.getElementById('share-url').textContent = link;
+  document.getElementById('form').style.display = 'none';
+  document.getElementById('success').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+function copyLink(){
+  const txt = document.getElementById('share-url').textContent;
+  navigator.clipboard.writeText(txt).catch(()=>{
+    const r=document.createRange(); r.selectNode(document.getElementById('share-url'));
+    getSelection().removeAllRanges(); getSelection().addRange(r);
+  });
+  event.target.textContent='✓ Copiado!';
+  setTimeout(()=>event.target.textContent='Copiar link',2000);
+}
+</script>
+</body>
+</html>

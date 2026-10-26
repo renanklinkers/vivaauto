@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin — Demandas VivaAuto</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700;900&display=swap">
+<style>
+:root{
+  --navy:#0B1F3A;--n2:#132D4A;--n3:#1A3A5C;
+  --green:#00C27C;--blue:#5BB8F5;--red:#e05252;
+  --bg:#f5f7fa;--card:#fff;--border:#dde5f0;
+  --text:#0B1F3A;--muted:#6b7fa3;--light:#e8eef8;
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+/* NAV */
+nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{color:#fff;font-weight:900;font-size:20px}
+.logo span{color:var(--green)}
+.nav-right{display:flex;align-items:center;gap:16px}
+#user-email{color:#8BA7C0;font-size:13px}
+.btn-logout{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:#fff;
+  padding:6px 14px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:13px;
+  font-weight:700;cursor:pointer;transition:.15s}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
+
+/* LOGIN */
+#login-screen{
+  display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 60px);
+  padding:24px;
+}
+.login-box{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:36px 32px;max-width:400px;width:100%;text-align:center;
+}
+.login-box h2{font-size:22px;font-weight:900;margin-bottom:8px}
+.login-box p{color:var(--muted);font-size:14px;margin-bottom:24px}
+.field{margin-bottom:14px;text-align:left}
+.field label{display:block;font-size:12px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.field input{
+  width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:9px;
+  background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:15px;outline:none;transition:.15s;
+}
+.field input:focus{border-color:var(--green)}
+.btn-primary{
+  width:100%;padding:13px;border-radius:10px;border:none;
+  background:var(--green);color:var(--navy);font-family:'DM Sans',sans-serif;
+  font-size:15px;font-weight:900;cursor:pointer;transition:.15s;
+}
+.btn-primary:hover{filter:brightness(1.08)}
+.login-error{color:var(--red);font-size:13px;margin-top:10px;display:none}
+
+/* MAIN ADMIN */
+#admin-screen{display:none;padding:32px 20px 80px;max-width:1400px;margin:0 auto}
+
+/* STATS */
+.stats-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:28px}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:18px 22px;flex:1;min-width:160px;
+}
+.stat-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px}
+.stat-val{font-size:28px;font-weight:900;color:var(--text)}
+
+/* TOOLBAR */
+.toolbar{
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px;
+}
+.filter-input{
+  padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);
+  background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:13px;outline:none;min-width:140px;
+}
+.filter-input:focus{border-color:var(--green)}
+.toolbar-right{margin-left:auto;display:flex;gap:10px}
+.btn-export{
+  padding:9px 18px;border-radius:8px;background:var(--green);color:var(--navy);
+  border:none;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:900;
+  cursor:pointer;transition:.15s;
+}
+.btn-export:hover{filter:brightness(1.08)}
+
+/* TABLE */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:var(--light)}
+th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--muted);white-space:nowrap}
+tbody tr{border-top:1px solid var(--border);transition:.1s}
+tbody tr:hover{background:var(--light)}
+td{padding:11px 14px;vertical-align:top}
+td.contact{color:var(--text);font-weight:600}
+td.muted{color:var(--muted)}
+
+.status-badge{
+  display:inline-flex;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;
+}
+.status-ativo{background:rgba(0,194,124,.12);color:#00a868}
+.status-pausado{background:rgba(255,193,7,.12);color:#c8820a}
+.status-encerrado{background:rgba(224,82,82,.12);color:var(--red)}
+
+.prazo-imediato{background:rgba(0,194,124,.12);color:#00a868;display:inline-flex;
+  padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
+.prazo-1_mes{background:rgba(91,184,245,.12);color:#3a9fd6;display:inline-flex;
+  padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
+.prazo-3_meses{background:rgba(255,193,7,.12);color:#c8820a;display:inline-flex;
+  padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
+.prazo-sem_pressa{background:var(--light);color:var(--muted);display:inline-flex;
+  padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
+
+.btn-status{
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  padding:3px 8px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:11px;
+  cursor:pointer;font-weight:700;transition:.1s;
+}
+.btn-status:hover{border-color:var(--red);color:var(--red)}
+
+.link-slug{color:var(--green);text-decoration:none;font-size:11px;font-weight:700}
+.link-slug:hover{text-decoration:underline}
+
+#empty-table{text-align:center;padding:48px;color:var(--muted);font-size:14px}
+
+/* LOADING */
+#loading-data{text-align:center;padding:48px;color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo"><span>Viva</span>Auto Admin</span>
+  <div class="nav-right">
+    <span id="user-email"></span>
+    <button class="btn-logout" onclick="logout()">Sair</button>
+  </div>
+</nav>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h2>Área Administrativa</h2>
+    <p>Acesso restrito à equipe VivaAuto</p>
+    <div class="field">
+      <label>E-mail</label>
+      <input type="email" id="email" placeholder="seu@email.com" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Entrar</button>
+    <p class="login-error" id="login-error">E-mail ou senha incorretos.</p>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-screen">
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card"><div class="stat-label">Total</div><div class="stat-val" id="s-total">—</div></div>
+    <div class="stat-card"><div class="stat-label">Ativos</div><div class="stat-val" id="s-ativo">—</div></div>
+    <div class="stat-card"><div class="stat-label">Imediatos</div><div class="stat-val" id="s-imediato">—</div></div>
+    <div class="stat-card"><div class="stat-label">Essa semana</div><div class="stat-val" id="s-semana">—</div></div>
+  </div>
+
+  <div class="toolbar">
+    <input class="filter-input" id="f-busca" type="text" placeholder="Buscar…" oninput="applyFilters()">
+    <select class="filter-input" id="f-status" onchange="applyFilters()">
+      <option value="">Todos status</option>
+      <option value="ativo">Ativo</option>
+      <option value="pausado">Pausado</option>
+      <option value="encerrado">Encerrado</option>
+    </select>
+    <select class="filter-input" id="f-prazo" onchange="applyFilters()">
+      <option value="">Qualquer prazo</option>
+      <option value="imediato">Imediato</option>
+      <option value="1_mes">1 mês</option>
+      <option value="3_meses">3 meses</option>
+      <option value="sem_pressa">Sem pressa</option>
+    </select>
+    <select class="filter-input" id="f-estado" onchange="applyFilters()">
+      <option value="">Todos estados</option>
+      <option>AC</option><option>AL</option><option>AM</option><option>AP</option>
+      <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+      <option>GO</option><option>MA</option><option>MG</option><option>MS</option>
+      <option>MT</option><option>PA</option><option>PB</option><option>PE</option>
+      <option>PI</option><option>PR</option><option>RJ</option><option>RN</option>
+      <option>RO</option><option>RR</option><option>RS</option><option>SC</option>
+      <option>SE</option><option>SP</option><option>TO</option>
+    </select>
+    <div class="toolbar-right">
+      <button class="btn-export" onclick="exportCSV()">⬇ Exportar CSV</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div id="loading-data">Carregando dados…</div>
+    <div id="empty-table" style="display:none">Nenhum registro encontrado.</div>
+    <table id="main-table" style="display:none">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Nome</th>
+          <th>WhatsApp</th>
+          <th>E-mail</th>
+          <th>Carro</th>
+          <th>Ano</th>
+          <th>KM</th>
+          <th>Orçamento</th>
+          <th>Cor</th>
+          <th>Cidade</th>
+          <th>UF</th>
+          <th>Prazo</th>
+          <th>Financ.</th>
+          <th>Observações</th>
+          <th>Status</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.3/umd/supabase.min.js"></script>
+<script>
+const SUPA_URL  = 'https://yjwmotnpkwojcazmwgkb.supabase.co';
+const SUPA_ANON = 'sb_publishable_0coKU-DYdEcbHa6NPkUqag_vp_UOvuu';
+const SITE_ORIGIN = 'https://vivaauto.com.br'; // usado para link do slug
+
+const supa = supabase.createClient(SUPA_URL, SUPA_ANON);
+
+let allData = [];
+let filtered = [];
+
+// ─── AUTH ────────────────────────────────────────────────────────────────────
+
+async function init(){
+  const { data: { session } } = await supa.auth.getSession();
+  if(session){
+    showAdmin(session.user.email);
+    loadData();
+  }
+}
+
+async function doLogin(){
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const errEl    = document.getElementById('login-error');
+  errEl.style.display='none';
+
+  const { data, error } = await supa.auth.signInWithPassword({email, password});
+  if(error){errEl.style.display='block';return;}
+  showAdmin(data.user.email);
+  loadData();
+}
+
+async function logout(){
+  await supa.auth.signOut();
+  document.getElementById('admin-screen').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('user-email').textContent='';
+}
+
+function showAdmin(email){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('admin-screen').style.display='block';
+  document.getElementById('user-email').textContent=email;
+}
+
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
+async function loadData(){
+  const { data, error } = await supa
+    .from('interesse_compra')
+    .select('*')
+    .order('created_at',{ascending:false});
+
+  document.getElementById('loading-data').style.display='none';
+
+  if(error||!data){
+    document.getElementById('empty-table').textContent='Erro ao carregar dados: '+((error&&error.message)||'sem permissão');
+    document.getElementById('empty-table').style.display='block';
+    return;
+  }
+
+  allData = data;
+  updateStats(data);
+  applyFilters();
+}
+
+function updateStats(data){
+  const now = new Date();
+  const weekAgo = new Date(now - 7*24*3600*1000);
+  document.getElementById('s-total').textContent    = data.length;
+  document.getElementById('s-ativo').textContent    = data.filter(r=>r.status==='ativo').length;
+  document.getElementById('s-imediato').textContent = data.filter(r=>r.prazo==='imediato').length;
+  document.getElementById('s-semana').textContent   = data.filter(r=>new Date(r.created_at)>=weekAgo).length;
+}
+
+// ─── TABLE ───────────────────────────────────────────────────────────────────
+
+const prazoLabel={imediato:'Imediato','1_mes':'1 mês','3_meses':'3 meses',sem_pressa:'Sem pressa'};
+const finLabel={sim:'Sim',nao:'Não',indiferente:'Indiferente'};
+
+function fmt(n){return n?'R$ '+Number(n).toLocaleString('pt-BR'):'-'}
+function fmtKm(n){return n?Number(n).toLocaleString('pt-BR')+' km':'-'}
+function fmtAnos(min,max){
+  if(min&&max)return min===max?String(min):`${min}–${max}`;
+  if(min)return `≥${min}`;if(max)return `≤${max}`;return '-';
+}
+function fmtDate(ts){
+  const d=new Date(ts);
+  return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+function esc(s){
+  if(!s)return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function applyFilters(){
+  const busca  = document.getElementById('f-busca').value.toLowerCase();
+  const status = document.getElementById('f-status').value;
+  const prazo  = document.getElementById('f-prazo').value;
+  const estado = document.getElementById('f-estado').value;
+
+  filtered = allData;
+  if(status) filtered = filtered.filter(r=>r.status===status);
+  if(prazo)  filtered = filtered.filter(r=>r.prazo===prazo);
+  if(estado) filtered = filtered.filter(r=>r.estado===estado);
+  if(busca)  filtered = filtered.filter(r=>
+    [r.nome,r.marca,r.modelo,r.cidade,r.whatsapp,r.email||'',r.observacoes||'']
+      .join(' ').toLowerCase().includes(busca)
+  );
+
+  const tbody = document.getElementById('tbody');
+  const table = document.getElementById('main-table');
+  const empty = document.getElementById('empty-table');
+
+  if(!filtered.length){
+    table.style.display='none';
+    empty.style.display='block';
+    empty.textContent='Nenhum registro encontrado.';
+    return;
+  }
+  empty.style.display='none';
+  table.style.display='table';
+
+  tbody.innerHTML = filtered.map(r=>`
+    <tr id="row-${r.id}">
+      <td class="muted" style="white-space:nowrap">${fmtDate(r.created_at)}</td>
+      <td class="contact">${esc(r.nome)}</td>
+      <td class="contact"><a href="https://wa.me/55${r.whatsapp.replace(/\D/g,'')}" target="_blank"
+        style="color:var(--green);text-decoration:none">${esc(r.whatsapp)}</a></td>
+      <td class="muted">${r.email?`<a href="mailto:${esc(r.email)}" style="color:var(--green)">${esc(r.email)}</a>`:'-'}</td>
+      <td style="font-weight:700">${esc(r.marca)} ${esc(r.modelo)}</td>
+      <td class="muted">${fmtAnos(r.ano_min,r.ano_max)}</td>
+      <td class="muted">${fmtKm(r.km_max)}</td>
+      <td class="muted">${fmt(r.orcamento_max)}</td>
+      <td class="muted">${esc(r.cor)||'-'}</td>
+      <td class="muted">${esc(r.cidade)}</td>
+      <td class="muted">${esc(r.estado)}</td>
+      <td><span class="prazo-${r.prazo}">${prazoLabel[r.prazo]}</span></td>
+      <td class="muted">${finLabel[r.financiamento]}</td>
+      <td class="muted" style="max-width:200px;word-break:break-word">${esc(r.observacoes)||'-'}</td>
+      <td>
+        <span class="status-badge status-${r.status}">${r.status}</span>
+        <select style="margin-top:4px;font-size:11px;border:1px solid var(--border);
+          border-radius:5px;padding:2px 4px;background:var(--card);color:var(--text);
+          font-family:'DM Sans',sans-serif;cursor:pointer"
+          onchange="changeStatus('${r.id}',this.value)">
+          <option value="">alterar…</option>
+          <option value="ativo">ativo</option>
+          <option value="pausado">pausado</option>
+          <option value="encerrado">encerrado</option>
+        </select>
+      </td>
+      <td><a class="link-slug" href="${SITE_ORIGIN}/interesse.html?s=${esc(r.slug)}"
+        target="_blank">🔗 ver</a></td>
+    </tr>`).join('');
+}
+
+async function changeStatus(id, newStatus){
+  if(!newStatus) return;
+  const { error } = await supa
+    .from('interesse_compra')
+    .update({ status: newStatus })
+    .eq('id', id);
+  if(error){ alert('Erro ao atualizar: '+error.message); return; }
+  const idx = allData.findIndex(r=>r.id===id);
+  if(idx>=0) allData[idx].status = newStatus;
+  applyFilters();
+}
+
+// ─── EXPORT ──────────────────────────────────────────────────────────────────
+
+function csvEsc(v){
+  if(v===null||v===undefined) return '';
+  const s = String(v);
+  return s.includes(',')||s.includes('"')||s.includes('\n') ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+
+function exportCSV(){
+  const cols=[
+    ['Data','created_at'],['Status','status'],['Nome','nome'],['WhatsApp','whatsapp'],
+    ['E-mail','email'],['Marca','marca'],['Modelo','modelo'],
+    ['Ano mín','ano_min'],['Ano máx','ano_max'],['KM máx','km_max'],
+    ['Orçamento','orcamento_max'],['Cor','cor'],['Cidade','cidade'],['Estado','estado'],
+    ['Prazo','prazo'],['Financiamento','financiamento'],['Observações','observacoes'],['Slug','slug']
+  ];
+  const header = cols.map(c=>c[0]).join(',');
+  const rows   = filtered.map(r=>cols.map(c=>csvEsc(r[c[1]])).join(','));
+  const csv    = '﻿'+header+'\n'+rows.join('\n'); // BOM para Excel reconhecer UTF-8
+
+  const blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `demandas_vivaauto_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

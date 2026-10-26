@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vitrine de Demanda — VivaAuto</title>
+<meta name="description" content="Compradores buscando carro agora. Encontre a demanda certa para o seu estoque.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700;900&display=swap">
+<style>
+:root{
+  --navy:#0B1F3A;--n2:#132D4A;--n3:#1A3A5C;
+  --green:#00C27C;--blue:#5BB8F5;
+  --bg:#f5f7fa;--card:#fff;--border:#dde5f0;
+  --text:#0B1F3A;--muted:#6b7fa3;--light:#e8eef8;
+  color-scheme:light;
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --bg:#080f1c;--card:#0d1a2e;--border:#1e3550;
+  --text:#D0E0ED;--muted:#8BA7C0;--light:#132D4A;
+  color-scheme:dark;
+}}
+:root[data-theme=dark]{
+  --bg:#080f1c;--card:#0d1a2e;--border:#1e3550;
+  --text:#D0E0ED;--muted:#8BA7C0;--light:#132D4A;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+
+nav{background:var(--navy);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.logo{color:#fff;font-weight:900;font-size:20px;text-decoration:none}
+.logo span{color:var(--green)}
+.btn-pub{
+  background:var(--green);color:var(--navy);text-decoration:none;
+  padding:8px 18px;border-radius:8px;font-size:13px;font-weight:800;
+}
+
+.hero{background:var(--navy);padding:44px 24px 52px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,194,124,.12);
+  border:1px solid rgba(0,194,124,.25);border-radius:99px;padding:5px 14px;margin-bottom:16px;
+  font-size:12px;font-weight:700;color:var(--green);letter-spacing:.5px;text-transform:uppercase}
+.hero h1{color:#fff;font-size:clamp(22px,4vw,36px);font-weight:900;margin-bottom:10px;text-wrap:balance}
+.hero p{color:#8BA7C0;font-size:15px;max-width:500px;margin:0 auto 20px;line-height:1.6}
+.btn-hero{
+  display:inline-block;background:var(--green);color:var(--navy);
+  text-decoration:none;padding:13px 32px;border-radius:10px;font-weight:900;font-size:15px;
+}
+.btn-hero:hover{filter:brightness(1.08)}
+
+/* FILTROS */
+.filters-bar{
+  max-width:1080px;margin:28px auto 0;padding:0 20px;
+  display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+}
+.filter-select{
+  padding:8px 12px;border-radius:8px;border:1.5px solid var(--border);
+  background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:13px;outline:none;cursor:pointer;
+}
+.filter-select:focus{border-color:var(--green)}
+.count-label{margin-left:auto;font-size:13px;color:var(--muted)}
+
+/* GRID */
+.grid{
+  max-width:1080px;margin:20px auto 80px;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:16px;
+}
+
+/* CARD */
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:20px;display:flex;flex-direction:column;gap:12px;
+  transition:.15s;cursor:pointer;text-decoration:none;color:inherit;
+}
+.card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.car-name{font-size:18px;font-weight:900;color:var(--text);line-height:1.2}
+.prazo-badge{
+  flex-shrink:0;padding:4px 10px;border-radius:99px;font-size:11px;font-weight:700;
+}
+.prazo-imediato{background:rgba(0,194,124,.15);color:#00a868}
+.prazo-1_mes{background:rgba(91,184,245,.15);color:#3a9fd6}
+.prazo-3_meses{background:rgba(255,193,7,.15);color:#c8820a}
+.prazo-sem_pressa{background:var(--light);color:var(--muted)}
+
+.card-specs{display:flex;flex-wrap:wrap;gap:6px}
+.spec{
+  background:var(--light);border-radius:6px;padding:4px 10px;
+  font-size:12px;font-weight:600;color:var(--muted);
+}
+.spec.highlight{background:rgba(0,194,124,.1);color:var(--green)}
+
+.card-location{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.card-obs{font-size:13px;color:var(--muted);line-height:1.5;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+.card-footer{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:10px;border-top:1px solid var(--border);
+  font-size:12px;color:var(--muted);
+}
+.card-footer .date{}
+.btn-contact{
+  padding:7px 14px;border-radius:7px;background:var(--green);
+  color:var(--navy);font-size:12px;font-weight:800;text-decoration:none;
+  transition:.15s;
+}
+.btn-contact:hover{filter:brightness(1.08)}
+
+/* EMPTY */
+#empty{display:none;text-align:center;padding:60px 20px;color:var(--muted)}
+#empty p{font-size:16px;margin-bottom:8px}
+#empty small{font-size:13px}
+
+/* LOADING */
+#loading{text-align:center;padding:60px;color:var(--muted);font-size:14px}
+.spinner{display:inline-block;width:20px;height:20px;border:3px solid var(--border);
+  border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="/"><span>Viva</span>Auto</a>
+  <a class="btn-pub" href="/quero-comprar.html">+ Publicar interesse</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🔥 Compradores ativos agora</div>
+  <h1>Vitrine de Demanda VivaAuto</h1>
+  <p>Compradores que sabem o que querem. Eles publicaram o interesse — agora é a sua vez de aparecer com a oferta certa.</p>
+  <a class="btn-hero" href="/quero-comprar.html">Sou comprador — publicar meu interesse →</a>
+</div>
+
+<div class="filters-bar">
+  <select class="filter-select" id="f-estado" onchange="applyFilters()">
+    <option value="">Todos os estados</option>
+    <option>AC</option><option>AL</option><option>AM</option><option>AP</option>
+    <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+    <option>GO</option><option>MA</option><option>MG</option><option>MS</option>
+    <option>MT</option><option>PA</option><option>PB</option><option>PE</option>
+    <option>PI</option><option>PR</option><option>RJ</option><option>RN</option>
+    <option>RO</option><option>RR</option><option>RS</option><option>SC</option>
+    <option>SE</option><option>SP</option><option>TO</option>
+  </select>
+  <select class="filter-select" id="f-prazo" onchange="applyFilters()">
+    <option value="">Qualquer prazo</option>
+    <option value="imediato">Compra imediata</option>
+    <option value="1_mes">Até 1 mês</option>
+    <option value="3_meses">Até 3 meses</option>
+    <option value="sem_pressa">Sem pressa</option>
+  </select>
+  <input class="filter-select" id="f-busca" type="text" placeholder="Buscar marca ou modelo…"
+    oninput="applyFilters()" style="min-width:180px">
+  <span class="count-label" id="count-label"></span>
+</div>
+
+<div class="grid" id="grid">
+  <div id="loading"><span class="spinner"></span> Carregando…</div>
+</div>
+<div id="empty">
+  <p>Nenhum anúncio encontrado para este filtro.</p>
+  <small>Tente outros critérios ou <a href="/quero-comprar.html" style="color:var(--green)">publique seu interesse</a>.</small>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.3/umd/supabase.min.js"></script>
+<script>
+const SUPA_URL  = 'https://yjwmotnpkwojcazmwgkb.supabase.co';
+const SUPA_ANON = 'sb_publishable_0coKU-DYdEcbHa6NPkUqag_vp_UOvuu';
+
+const supa = supabase.createClient(SUPA_URL, SUPA_ANON);
+
+let allData = [];
+
+const prazoLabel = {
+  imediato:'Compra imediata', '1_mes':'Até 1 mês',
+  '3_meses':'Até 3 meses', sem_pressa:'Sem pressa'
+};
+const finLabel = {sim:'Aceita financ.',nao:'Somente à vista',indiferente:'Financ. indiferente'};
+
+function fmt(n){ return n ? 'R$ '+Number(n).toLocaleString('pt-BR') : null }
+function fmtKm(n){ return n ? Number(n).toLocaleString('pt-BR')+' km' : null }
+function fmtAnos(min,max){
+  if(min&&max) return min===max?String(min):`${min}–${max}`;
+  if(min) return `a partir de ${min}`;
+  if(max) return `até ${max}`;
+  return null;
+}
+function timeAgo(ts){
+  const d = Math.floor((Date.now()-new Date(ts))/86400000);
+  if(d===0) return 'hoje'; if(d===1) return 'ontem'; return `há ${d} dias`;
+}
+
+function buildCard(r){
+  const specs = [
+    fmtAnos(r.ano_min,r.ano_max),
+    fmtKm(r.km_max) ? 'até '+fmtKm(r.km_max) : null,
+    fmt(r.orcamento_max) ? 'até '+fmt(r.orcamento_max) : null,
+    r.cor||null,
+    finLabel[r.financiamento]
+  ].filter(Boolean);
+
+  return `
+  <a class="card" href="/interesse.html?s=${r.slug}">
+    <div class="card-header">
+      <div class="car-name">${r.marca} ${r.modelo}</div>
+      <span class="prazo-badge prazo-${r.prazo}">${prazoLabel[r.prazo]}</span>
+    </div>
+    <div class="card-specs">
+      ${specs.map((s,i)=>`<span class="spec${i<=2?' highlight':''}">${s}</span>`).join('')}
+    </div>
+    <div class="card-location">📍 ${r.cidade} — ${r.estado}</div>
+    ${r.observacoes?`<div class="card-obs">${r.observacoes}</div>`:''}
+    <div class="card-footer">
+      <span class="date">Publicado ${timeAgo(r.created_at)}</span>
+      <span class="btn-contact">Ver anúncio →</span>
+    </div>
+  </a>`;
+}
+
+function applyFilters(){
+  const estado = document.getElementById('f-estado').value;
+  const prazo  = document.getElementById('f-prazo').value;
+  const busca  = document.getElementById('f-busca').value.toLowerCase();
+
+  let data = allData;
+  if(estado) data = data.filter(r=>r.estado===estado);
+  if(prazo)  data = data.filter(r=>r.prazo===prazo);
+  if(busca)  data = data.filter(r=>
+    (r.marca+' '+r.modelo).toLowerCase().includes(busca)
+  );
+
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+  document.getElementById('count-label').textContent =
+    data.length ? `${data.length} anúncio${data.length>1?'s':''}` : '';
+
+  if(!data.length){
+    grid.innerHTML=''; empty.style.display='block'; return;
+  }
+  empty.style.display='none';
+  grid.innerHTML = data.map(buildCard).join('');
+}
+
+(async()=>{
+  const { data, error } = await supa
+    .from('vitrine_publica')
+    .select('*')
+    .order('created_at',{ascending:false});
+
+  document.getElementById('loading').remove();
+
+  if(error||!data){
+    document.getElementById('grid').innerHTML=
+      '<p style="color:var(--muted);grid-column:1/-1;padding:40px;text-align:center">Erro ao carregar. Tente recarregar a página.</p>';
+    return;
+  }
+
+  allData = data;
+  applyFilters();
+})();
+</script>
+</body>
+</html>
